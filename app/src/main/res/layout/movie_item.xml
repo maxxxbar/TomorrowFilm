@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="movieItem"
+            type="com.example.mymovies.entries.discover.movie.Result" />
+
+        <variable
+            name="bindingAdapters"
+            type="com.example.mymovies.adapters.BindingAdapters" />
+    </data>
+
+    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/imageViewSmallPoster"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/posetr_movie"
+        android:scaleType="centerCrop"
+        app:url="@{movieItem.posterPath}" />
+
+</layout>

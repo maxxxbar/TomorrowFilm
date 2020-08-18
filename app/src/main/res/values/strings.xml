@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">My Movies</string>
+    <string name="posetr_movie">Постер к фильму</string>
+    <string name="textview_popularity_switch">Популярные</string>
+    <string name="textview_vote_average_switch">Рейтинговые</string>
+    <string name="detail_activity_big_poster_description">Большой постер</string>
+    <string name="detail_activity_lbl_title">Название</string>
+    <string name="detail_activity_lbl_original_title">Оригинальное название:</string>
+    <string name="detail_activity_lbl_rating">Рейтинг:</string>
+    <string name="detail_activity_lbl_release_date">Дата выхода:</string>
+    <string name="detail_activity_lbl_description">Описание:</string>
+    <string name="detail_activity_add_to_favorite_description">Добавить в избранное</string>
+    <string name="main_menu_text_main">Главная</string>
+    <string name="main_menu_text_favorite">Избранное</string>
+    <string name="trailer_item_image_view_play_description">Воспроизвести</string>
+    <string name="detail_activity_lbl_reviews">Отзывы:</string>
+</resources>

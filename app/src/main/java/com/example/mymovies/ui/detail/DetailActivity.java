@@ -1,4 +1,4 @@
-package com.example.mymovies.activity.detail;
+package com.example.mymovies.ui.detail;
 
 import android.app.Application;
 import android.content.Intent;
@@ -18,8 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mymovies.BuildConfig;
 import com.example.mymovies.R;
-import com.example.mymovies.activity.favoriteactivity.FavoriteActivity;
-import com.example.mymovies.activity.mainactivity.MainActivity;
+import com.example.mymovies.ui.favoriteactivity.FavoriteActivity;
+import com.example.mymovies.ui.mainactivity.MainActivity;
 import com.example.mymovies.adapters.ReviewAdapter;
 import com.example.mymovies.adapters.TrailerAdapter;
 import com.example.mymovies.database.FavoriteMovie;

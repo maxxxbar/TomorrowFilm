@@ -8,19 +8,16 @@
             name="movieItem"
             type="com.example.mymovies.entries.discover.movie.Result" />
 
-        <variable
-            name="bindingAdapters"
-            type="com.example.mymovies.adapters.BindingAdapters" />
     </data>
 
 
-        <ImageView
-            android:id="@+id/imageViewSmallPoster"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:contentDescription="@string/poster_movie"
-            android:scaleType="fitXY"
-            app:url="@{movieItem.posterPath}" />
+    <ImageView
+        android:id="@+id/imageViewSmallPoster"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:contentDescription="@string/poster_movie"
+        android:scaleType="fitXY"
+        app:url="@{movieItem.posterPath}" />
 
 
 </layout>

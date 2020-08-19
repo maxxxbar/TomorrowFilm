@@ -1,4 +1,4 @@
-package com.example.mymovies.activity.mainactivity;
+package com.example.mymovies.ui.mainactivity;
 
 import android.app.Application;
 import android.content.Context;
@@ -17,15 +17,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mymovies.BuildConfig;
+import com.example.mymovies.Extra;
 import com.example.mymovies.R;
-import com.example.mymovies.activity.detail.DetailActivity;
-import com.example.mymovies.activity.favoriteactivity.FavoriteActivity;
+import com.example.mymovies.ui.detail.DetailActivity;
+import com.example.mymovies.ui.favoriteactivity.FavoriteActivity;
 import com.example.mymovies.adapters.MovieAdapter;
 import com.example.mymovies.database.MainViewModel;
 import com.example.mymovies.database.MovieDB;
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     public static final int ACTIVITY_ID = 0;
 
     private ActivityMainBinding binding;
+    private NavController navController;
     private RecyclerView recyclerViewPosters;
     private ProgressBar progressBar;
     private MovieAdapter movieAdapter;
@@ -50,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     private com.google.android.material.textview.MaterialTextView textViewPopularity;
     private com.google.android.material.textview.MaterialTextView textViewVoteAverage;
     private SharedPreferences sharedPreferences;
-    private static final String SHARED_PREFERENCES_NAME = "APP_PREFERENCES";
     private int sortBy = 0;
     private MainActivityViewModel mainActivityViewModel;
 
@@ -111,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        navController = Navigation.findNavController(this,R.id.nav_host_fragment);
 
         mainActivityViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(MainActivityViewModel.class);
 
@@ -135,35 +139,37 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             // Initialize Stetho with the Initializer
             Stetho.initialize(initializer);
         }
-        progressBar = binding.progressBar;
+/*        progressBar = binding.progressBar;
         textViewPopularity = binding.textViewPopularity;
-        textViewVoteAverage = binding.textViewVoteAverage;
+        textViewVoteAverage = binding.textViewVoteAverage;*/
         /*RecyclerView*/
+/*
         recyclerViewPosters = binding.recyclerViewPosters;
+*/
         movieAdapter = new MovieAdapter();
         mainActivityViewModel.getPagedListLiveData().observe(this, results -> movieAdapter.submitList(results));
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
 
-        recyclerViewPosters.setLayoutManager(gridLayoutManager);
+/*        recyclerViewPosters.setLayoutManager(gridLayoutManager);
         recyclerViewPosters.setAdapter(movieAdapter);
-        recyclerViewPosters.setHasFixedSize(true);
+        recyclerViewPosters.setHasFixedSize(true);*/
         /*RecyclerView*/
         /*Presenter*/
         presenter = new MainActivityPresenter(this);
         /*Presenter*/
         /*Switch*/
-        switchSortBy = binding.switchSortBy;
-        sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+        /*switchSortBy = binding.switchSortBy;*/
+        sharedPreferences = getSharedPreferences(Extra.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
         boolean checkSwitchState = sharedPreferences.getBoolean("switchState", false);
-        switchSortBy.setChecked(checkSwitchState);
-        switchSortBy.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
+        /*switchSortBy.setChecked(checkSwitchState);*/
+/*        switchSortBy.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 page = 1;
                 sortByChecked(isChecked);
             }
         });
-        /*Switch*/
+        *//*Switch*//*
 
         movieAdapter.setOnPosterClickListener(new MovieAdapter.OnPosterClickListener() {
             @Override
@@ -176,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             }
 
 
-        });
+        });*/
 
 
 /*        movieAdapter.setOnReachEndListener(new MovieAdapter.OnReachEndListener() {
@@ -189,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             }
         });*/
 
-        recyclerViewPosters.addOnScrollListener(new RecyclerView.OnScrollListener() {
+/*        recyclerViewPosters.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -198,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 totalItemCount = gridLayoutManager.getItemCount(); //сколько всего элементов
                 firstVisibleItem = gridLayoutManager.findFirstVisibleItemPosition(); //какая позиция первого элемента
 
- /*               if (getIsLoading()) {
+ *//*               if (getIsLoading()) {
                     if (totalItemCount > previousTotal) {
                         setIsLoading(false);
                         previousTotal = totalItemCount;
@@ -208,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                     Toast.makeText(MainActivity.this, "Конец списка", Toast.LENGTH_SHORT).show();
                     presenter.getMoviesList(sortBy, page);
 
-                }*/
+                }*//*
                 if (!getIsLoading()) {
                     if ((visibleItemCount + firstVisibleItem) >= totalItemCount) {
                         presenter.getMoviesList(sortBy, page);
@@ -216,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 }
 
             }
-        });
+        });*/
         presenter.showPostersOnStartActivity();
         viewModel1 = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(MainViewModel.class);
     }
@@ -280,8 +286,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     protected void onPause() {
         super.onPause();
         /*saved switch status in shared preferences*/
-        SharedPreferences.Editor editor = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE).edit();
+/*
+        SharedPreferences.Editor editor = getSharedPreferences(Extra.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE).edit();
         editor.putBoolean("switchState", switchSortBy.isChecked()).apply();
+*/
         /*saved switch status in shared preferences*/
     }
 

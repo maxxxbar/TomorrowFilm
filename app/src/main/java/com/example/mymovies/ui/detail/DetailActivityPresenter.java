@@ -1,12 +1,10 @@
-package com.example.mymovies.activity.detail;
+package com.example.mymovies.ui.detail;
 
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.mymovies.BuildConfig;
-import com.example.mymovies.adapters.ReviewAdapter;
 import com.example.mymovies.database.FavoriteMovie;
 import com.example.mymovies.database.MainViewModel;
 import com.example.mymovies.database.MovieDB;

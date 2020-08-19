@@ -1,4 +1,4 @@
-package com.example.mymovies.activity.detail;
+package com.example.mymovies.ui.detail;
 
 import android.app.Application;
 

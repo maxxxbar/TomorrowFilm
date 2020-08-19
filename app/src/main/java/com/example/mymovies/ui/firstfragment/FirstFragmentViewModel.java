@@ -1,4 +1,4 @@
-package com.example.mymovies.activity.mainactivity;
+package com.example.mymovies.ui.firstfragment;
 
 import android.app.Application;
 
@@ -17,7 +17,7 @@ import com.example.mymovies.network.RestAPI;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class MainActivityViewModel extends AndroidViewModel {
+public class FirstFragmentViewModel extends AndroidViewModel {
     private APIConnection connection;
     private RestAPI restAPI;
     private Executor executor;
@@ -25,8 +25,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     private LiveData<PagedList<Result>> pagedListLiveData;
     private DataSourceMovieFactory dataSourceMovieFactory;
 
-
-    public MainActivityViewModel(@NonNull Application application) {
+    public FirstFragmentViewModel(@NonNull Application application) {
         super(application);
         connection = APIConnection.getInstance();
         restAPI = connection.createGet();

@@ -1,23 +1,18 @@
-package com.example.mymovies.activity.mainactivity;
+package com.example.mymovies.ui.mainactivity;
 
 
 import android.util.Log;
 import android.widget.ProgressBar;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.mymovies.BuildConfig;
-import com.example.mymovies.adapters.MovieAdapter;
 import com.example.mymovies.database.MainViewModel;
 import com.example.mymovies.database.MovieDB;
 import com.example.mymovies.entries.discover.movie.Movies;
 import com.example.mymovies.entries.discover.movie.Result;
 import com.example.mymovies.network.APIConnection;
 import com.example.mymovies.network.RestAPI;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;

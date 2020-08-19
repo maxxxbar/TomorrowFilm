@@ -6,8 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.paging.PageKeyedDataSource;
 
-import com.example.mymovies.activity.mainactivity.MainActivityPresenter;
-import com.example.mymovies.database.MovieDB;
+import com.example.mymovies.ui.mainactivity.MainActivityPresenter;
 import com.example.mymovies.entries.discover.movie.Movies;
 import com.example.mymovies.network.APIConnection;
 import com.example.mymovies.network.RestAPI;

@@ -1,4 +1,4 @@
-package com.example.mymovies.activity.favoriteactivity;
+package com.example.mymovies.ui.favoriteactivity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,18 +10,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.mymovies.R;
-import com.example.mymovies.activity.detail.DetailActivity;
-import com.example.mymovies.activity.mainactivity.MainActivity;
+import com.example.mymovies.ui.detail.DetailActivity;
+import com.example.mymovies.ui.mainactivity.MainActivity;
 import com.example.mymovies.adapters.MovieAdapter;
 import com.example.mymovies.database.FavoriteMovie;
 import com.example.mymovies.database.MainViewModel;
 import com.example.mymovies.database.MovieDB;
-import com.example.mymovies.entries.discover.movie.Movies;
 
 import java.util.ArrayList;
 import java.util.List;

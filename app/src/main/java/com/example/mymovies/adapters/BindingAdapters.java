@@ -7,7 +7,6 @@ import androidx.databinding.BindingAdapter;
 import com.bumptech.glide.Glide;
 import com.example.mymovies.Extra;
 import com.example.mymovies.R;
-import com.squareup.picasso.Picasso;
 
 public class BindingAdapters {
 
@@ -20,12 +19,6 @@ public class BindingAdapters {
                 .placeholder(R.drawable.ic_placeholder)
                 .error(R.drawable.ic_placeholder)
                 .into(view);
-/*        Picasso picasso = Picasso.get();
-        picasso
-                .load(url)
-                .error(R.drawable.ic_placeholder)
-                .into(view);
-        picasso.setIndicatorsEnabled(true);*/
     }
 
 }

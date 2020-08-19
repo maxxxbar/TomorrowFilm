@@ -35,6 +35,7 @@ public interface RestAPI {
     public Single<Movies> getMovieNew(@Query("api_key") String API_KEY,
                                       @Query("language") String LANGUAGE,
                                       @Query("sort_by") String SORT_BY,
+                                      @Query("vote_count.gte") int VOTE_COUNT_GTE,
                                       @Query("page") int PAGE);
 
 

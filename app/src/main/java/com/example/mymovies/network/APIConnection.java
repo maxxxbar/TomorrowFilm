@@ -28,7 +28,7 @@ public class APIConnection {
 
     }
 
-    public static final class APIConnectionHolder {
+    private static final class APIConnectionHolder {
         public static final APIConnection HOLDER_INSTANCE = new APIConnection();
     }
 

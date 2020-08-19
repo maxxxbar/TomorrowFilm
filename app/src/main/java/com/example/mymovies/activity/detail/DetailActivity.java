@@ -39,7 +39,6 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     public static final String LANGUAGE = "ru-RU";
     public static final String YOUTUBE_URL = "https://www.youtube.com/watch?v=";
 
-
     private RecyclerView recyclerViewReviews;
     private RecyclerView recyclerViewTrailer;
     private TrailerAdapter trailerAdapter;

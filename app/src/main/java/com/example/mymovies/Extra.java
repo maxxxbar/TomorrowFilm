@@ -11,5 +11,5 @@ public class Extra {
     public static final boolean INCLUDE_VIDEO = false;
     public static final String SORT_BY_POPULARITY = "popularity.desc";
     public static final String SORT_BY_VOTE_AVERAGE = "vote_average.desc";
-    public static final int VOTE_COUNT_GTE = 1000;
+    public static final int VOTE_COUNT_GTE = 100;
 }

@@ -29,7 +29,7 @@ public class DataSourceMovie extends PageKeyedDataSource<Integer, Result> {
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Integer> params, @NonNull LoadInitialCallback<Integer, Result> callback) {
         List<Result> resultList = new ArrayList<>();
-        restAPI.getMovieNew(Extra.API_KEY, Extra.LANGUAGE, "POPULARITY", 1)
+        restAPI.getMovieNew(Extra.API_KEY, Extra.LANGUAGE, Extra.SORT_BY_POPULARITY, Extra.VOTE_COUNT_GTE,1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<Movies>() {
@@ -59,7 +59,7 @@ public class DataSourceMovie extends PageKeyedDataSource<Integer, Result> {
     @Override
     public void loadAfter(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Integer, Result> callback) {
         List<Result> resultList = new ArrayList<>();
-        restAPI.getMovieNew(Extra.API_KEY, Extra.LANGUAGE, "POPULARITY", params.key)
+        restAPI.getMovieNew(Extra.API_KEY, Extra.LANGUAGE, Extra.SORT_BY_POPULARITY, Extra.VOTE_COUNT_GTE,params.key)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<Movies>() {

@@ -9,9 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ProgressBar;
-import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +17,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -27,7 +26,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mymovies.BuildConfig;
 import com.example.mymovies.Extra;
 import com.example.mymovies.R;
-import com.example.mymovies.ui.detail.DetailActivity;
 import com.example.mymovies.ui.favoriteactivity.FavoriteActivity;
 import com.example.mymovies.adapters.MovieAdapter;
 import com.example.mymovies.database.MainViewModel;
@@ -114,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        navController = Navigation.findNavController(this,R.id.nav_host_fragment);
+
 
         mainActivityViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(MainActivityViewModel.class);
 
@@ -325,10 +323,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     }
 
     public void onCLickFirst(View view) {
-        navController.navigate(R.id.mainFragmentFragment);
+        navController.navigate(R.id.mainFragment);
     }
 
     public void onCLickSecond(View view) {
-        navController.navigate(R.id.movies);
+        navController.navigate(R.id.mainFragment);
     }
 }

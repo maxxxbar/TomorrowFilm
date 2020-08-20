@@ -9,7 +9,6 @@ import com.example.mymovies.Extra;
 import com.example.mymovies.R;
 
 public class BindingAdapters {
-
     @BindingAdapter({"app:url"})
     public static void loadImage(ImageView view, String url) {
         url = Extra.POSTER_BASE_URL + Extra.SMALL_POSTER_SIZE + url;
@@ -20,5 +19,4 @@ public class BindingAdapters {
                 .error(R.drawable.ic_placeholder)
                 .into(view);
     }
-
 }

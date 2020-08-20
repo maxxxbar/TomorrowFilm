@@ -14,7 +14,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.mymovies.R;
-import com.example.mymovies.databinding.FirstFragmentBinding;
 import com.example.mymovies.databinding.MainFragmentBinding;
 
 public class MainFragmentFragment extends Fragment {
@@ -40,7 +39,15 @@ public class MainFragmentFragment extends Fragment {
         navController = Navigation.findNavController(binding.getRoot());
 
         mViewModel = ViewModelProviders.of(this).get(MainFragmentViewModel.class);
-        // TODO: Use the ViewModel
+
+    }
+
+    public void onCLickFirst(View view) {
+        navController.navigate(R.id.firstFragment);
+    }
+
+    public void onCLickSecond(View view) {
+        navController.navigate(R.id.secondFragment);
     }
 
 }

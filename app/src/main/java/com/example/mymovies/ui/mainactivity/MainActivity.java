@@ -147,7 +147,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         recyclerViewPosters = binding.recyclerViewPosters;
 */
         movieAdapter = new MovieAdapter();
+/*
         mainActivityViewModel.getPagedListLiveData().observe(this, results -> movieAdapter.submitList(results));
+*/
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
 
 /*        recyclerViewPosters.setLayoutManager(gridLayoutManager);
@@ -320,5 +322,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     @Override
     public void setProgressBar(int visibility) {
         progressBar.setVisibility(visibility);
+    }
+
+    public void onCLickFirst(View view) {
+        navController.navigate(R.id.mainFragmentFragment);
+    }
+
+    public void onCLickSecond(View view) {
+        navController.navigate(R.id.movies);
     }
 }

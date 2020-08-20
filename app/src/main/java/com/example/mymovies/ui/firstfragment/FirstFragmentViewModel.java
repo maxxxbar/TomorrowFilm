@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
+import com.example.mymovies.Extra;
 import com.example.mymovies.datasource.movie.DataSourceMovie;
 import com.example.mymovies.datasource.movie.DataSourceMovieFactory;
 import com.example.mymovies.entries.discover.movie.Result;
@@ -29,7 +30,7 @@ public class FirstFragmentViewModel extends AndroidViewModel {
         super(application);
         connection = APIConnection.getInstance();
         restAPI = connection.createGet();
-        dataSourceMovieFactory = new DataSourceMovieFactory(restAPI);
+        dataSourceMovieFactory = new DataSourceMovieFactory(restAPI, Extra.SORT_BY_POPULARITY, Extra.VOTE_COUNT_GTE);
         dataSourceMovieLiveData = dataSourceMovieFactory.getMovieMutableLiveData();
 
         PagedList.Config config = new PagedList.Config.Builder()

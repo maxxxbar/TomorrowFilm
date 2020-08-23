@@ -17,25 +17,22 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mymovies.BindingExtra;
-import com.example.mymovies.BuildConfig;
 import com.example.mymovies.Extra;
 import com.example.mymovies.R;
 import com.example.mymovies.ui.favoriteactivity.FavoriteActivity;
 import com.example.mymovies.adapters.MovieAdapter;
-import com.example.mymovies.database.MainViewModel;
+import com.example.mymovies.database.MovieDataBaseViewModel;
 import com.example.mymovies.database.MovieDB;
 import com.example.mymovies.databinding.ActivityMainBinding;
 import com.example.mymovies.entries.discover.movie.Movies;
 import com.example.mymovies.entries.discover.movie.Result;
 import com.example.mymovies.etc.ProductDiffUtilCallback;
-import com.facebook.stetho.Stetho;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
@@ -67,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     private static boolean isLoading = true;
 
     private PagedList<Result> resultPagedList;
-    private MainViewModel viewModel1;
+    private MovieDataBaseViewModel viewModel1;
 
     @Override
     public int getPage() {
@@ -228,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             }
         });*/
         presenter.showPostersOnStartActivity();
-        viewModel1 = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(MainViewModel.class);
+        viewModel1 = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(MovieDataBaseViewModel.class);
     }
 
 

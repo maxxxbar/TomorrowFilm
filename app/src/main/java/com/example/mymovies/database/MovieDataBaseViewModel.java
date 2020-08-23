@@ -24,46 +24,25 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class MainViewModel extends AndroidViewModel {
+public class MovieDataBaseViewModel extends AndroidViewModel {
 
     private static MovieDatabase database;
     private LiveData<List<MovieDB>> movies;
     private LiveData<List<FavoriteMovie>> favoriteMovies;
 
-    private LiveData<DataSource> dataSourceLiveData;
-    private Executor executor;
-    private LiveData<PagedList<Movies>> pagedListLiveData;
-
     public LiveData<List<MovieDB>> getMovies() {
         return movies;
     }
 
-    public MainViewModel(@NonNull Application application) {
+    public MovieDataBaseViewModel(@NonNull Application application) {
         super(application);
         database = MovieDatabase.getInstance(application);
         movies = database.movieDao().getAllMovies();
         favoriteMovies = database.movieDao().getAllFavoriteMovie();
 
-        APIConnection connection = APIConnection.getInstance();
-        MovieDataSourceFactory dataSourceFactory = new MovieDataSourceFactory(connection);
-        dataSourceLiveData = dataSourceFactory.getMutableLiveData();
 
-        PagedList.Config config = new PagedList.Config.Builder()
-                .setEnablePlaceholders(true)
-                .setInitialLoadSizeHint(40)
-                .setPageSize(20)
-                .setPrefetchDistance(2)
-                .build();
-        executor = Executors.newCachedThreadPool();
-        pagedListLiveData = new LivePagedListBuilder<>(dataSourceFactory,
-                config)
-                .setFetchExecutor(executor)
-                .build();
     }
 
-    public LiveData<PagedList<Movies>> getPagedListLiveData() {
-        return pagedListLiveData;
-    }
 
     public MovieDB getMovieById(int id) {
         try {

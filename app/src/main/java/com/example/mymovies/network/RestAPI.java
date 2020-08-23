@@ -30,7 +30,6 @@ public interface RestAPI {
                                           @Query("api_key") String API_KEY,
                                           @Query("language") String LANGUAGE);
 
-
     @GET("/3/discover/movie")
     public Single<Movies> getMovieNew(@Query("api_key") String API_KEY,
                                       @Query("language") String LANGUAGE,

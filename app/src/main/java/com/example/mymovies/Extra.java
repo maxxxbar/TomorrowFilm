@@ -13,5 +13,6 @@ public class Extra {
     public static final String SORT_BY_VOTE_AVERAGE = "vote_average.desc";
     public static final int VOTE_COUNT_GTE = 100;
     public static final String SHARED_PREFERENCES_NAME = "APP_PREFERENCES";
+    public static final String DB_NAME = "movies.db";
 
 }

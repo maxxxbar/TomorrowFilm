@@ -18,7 +18,7 @@ import com.example.mymovies.ui.detail.DetailActivity;
 import com.example.mymovies.ui.mainactivity.MainActivity;
 import com.example.mymovies.adapters.MovieAdapter;
 import com.example.mymovies.database.FavoriteMovie;
-import com.example.mymovies.database.MainViewModel;
+import com.example.mymovies.database.MovieDataBaseViewModel;
 import com.example.mymovies.database.MovieDB;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class FavoriteActivity extends AppCompatActivity {
     private RecyclerView recyclerViewFavoriteMovies;
     private MovieAdapter adapter;
 
-    private MainViewModel viewModel;
+    private MovieDataBaseViewModel viewModel;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -60,7 +60,7 @@ public class FavoriteActivity extends AppCompatActivity {
         recyclerViewFavoriteMovies.setLayoutManager(new GridLayoutManager(this, 2));
         adapter = new MovieAdapter();
 
-        viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(MainViewModel.class);
+        viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(MovieDataBaseViewModel.class);
         LiveData<List<FavoriteMovie>> favoriteMovieLiveData = viewModel.getFavoriteMovies();
         favoriteMovieLiveData.observe(this, new Observer<List<FavoriteMovie>>() {
             @Override

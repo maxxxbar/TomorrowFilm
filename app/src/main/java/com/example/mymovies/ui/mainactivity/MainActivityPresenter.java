@@ -7,7 +7,7 @@ import android.widget.ProgressBar;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.mymovies.BuildConfig;
-import com.example.mymovies.database.MainViewModel;
+import com.example.mymovies.database.MovieDataBaseViewModel;
 import com.example.mymovies.database.MovieDB;
 import com.example.mymovies.entries.discover.movie.Movies;
 import com.example.mymovies.entries.discover.movie.Result;
@@ -26,7 +26,7 @@ public class MainActivityPresenter {
 
 
     /*ViewModel*/
-    private MainViewModel viewModel;
+    private MovieDataBaseViewModel viewModel;
     /*ViewModel*/
 
     /*Переменные для запроса фильма*/
@@ -63,7 +63,7 @@ public class MainActivityPresenter {
 
     public void deleteAllMovieForSwitch() {
         /*ViewModel*/
-        viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(activityView.getApp()).create(MainViewModel.class);
+        viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(activityView.getApp()).create(MovieDataBaseViewModel.class);
         /*ViewModel*/
         viewModel.deleteAllMovies();
     }
@@ -71,7 +71,7 @@ public class MainActivityPresenter {
     /*Запрос фильмов*/
     public void getMoviesList(int sortBy, int page) {
         /*ViewModel*/
-        viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(activityView.getApp()).create(MainViewModel.class);
+        viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(activityView.getApp()).create(MovieDataBaseViewModel.class);
         /*ViewModel*/
 
         String SORT_BY;
@@ -138,7 +138,6 @@ public class MainActivityPresenter {
                 }
                 activityView.setProgressBar(ProgressBar.GONE);
                 activityView.setIsLoading(false);
-                activityView.showPosters(viewModel.getPagedListLiveData() );
 
 
             }
@@ -149,9 +148,8 @@ public class MainActivityPresenter {
 
     public void showPostersOnStartActivity() {
         /*ViewModel*/
-        viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(activityView.getApp()).create(MainViewModel.class);
+        viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(activityView.getApp()).create(MovieDataBaseViewModel.class);
         /*ViewModel*/
-        activityView.showPosters(viewModel.getPagedListLiveData());
     }
 
     /*закрываем соединение*/

@@ -1,14 +1,8 @@
 package com.example.mymovies.database;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
-import com.example.mymovies.entries.discover.movie.Result;
-
-import java.io.Serializable;
 
 @Entity(tableName = "movies")
 public class MovieDB {

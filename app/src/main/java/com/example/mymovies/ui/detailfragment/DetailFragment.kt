@@ -1,12 +1,13 @@
 package com.example.mymovies.ui.detailfragment
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.mymovies.R
+import com.example.mymovies.databinding.DetailFragmentBinding
 
 class DetailFragment : Fragment() {
 
@@ -14,17 +15,17 @@ class DetailFragment : Fragment() {
         fun newInstance() = DetailFragment()
     }
 
-    private lateinit var viewModel: DetailFramentViewModel
-
+    private lateinit var viewModel: DetailFragmentViewModel
+    private lateinit var binding: DetailFragmentBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        binding = DetailFragmentBinding.inflate(layoutInflater)
         return inflater.inflate(R.layout.detail_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(DetailFramentViewModel::class.java)
-        // TODO: Use the ViewModel
+        viewModel = ViewModelProvider.AndroidViewModelFactory(requireActivity().application).create(DetailFragmentViewModel::class.java)
     }
 
 }

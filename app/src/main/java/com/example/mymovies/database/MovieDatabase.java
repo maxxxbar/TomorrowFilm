@@ -2,26 +2,25 @@ package com.example.mymovies.database;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.migration.Migration;
-import androidx.sqlite.db.SupportSQLiteDatabase;
+
+import com.example.mymovies.Extra;
 
 @Database(entities = {MovieDB.class, FavoriteMovie.class}, version = 4, exportSchema = false)
 public abstract class MovieDatabase extends RoomDatabase {
 
-    private static final String DB_NAME = "movies.db";
 
     private static volatile MovieDatabase INSTANCE;
+
     public abstract MovieDao movieDao();
 
-    public static MovieDatabase getInstance(Context context){
+    public static MovieDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (MovieDatabase.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context, MovieDatabase.class, DB_NAME).fallbackToDestructiveMigration().build();
+                    INSTANCE = Room.databaseBuilder(context, MovieDatabase.class, Extra.DB_NAME).fallbackToDestructiveMigration().build();
                 }
             }
         }

@@ -1,28 +1,5 @@
 package com.example.mymovies.ui.detail;
 
-import android.util.Log;
-
-import androidx.lifecycle.ViewModelProvider;
-
-import com.example.mymovies.BuildConfig;
-import com.example.mymovies.database.FavoriteMovie;
-import com.example.mymovies.database.MainViewModel;
-import com.example.mymovies.database.MovieDB;
-import com.example.mymovies.entries.discover.reviews.Result;
-import com.example.mymovies.entries.discover.reviews.Reviews;
-import com.example.mymovies.entries.discover.trailer.Trailer;
-import com.example.mymovies.network.APIConnection;
-import com.example.mymovies.network.RestAPI;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Observer;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-
 class DetailActivityPresenter {
 
    /* private int id = 0;

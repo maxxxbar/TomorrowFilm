@@ -8,10 +8,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ConnectionAPI {
-    private val httpLoggingInterceptor = HttpLoggingInterceptor()
-    private val client = OkHttpClient().newBuilder().addInterceptor(httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)).build()
-
-    fun retrofit(): Retrofit = Retrofit.Builder()
+    private val httpLoggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+    private val client = OkHttpClient().newBuilder().addInterceptor(httpLoggingInterceptor).build()
+    private fun retrofit(): Retrofit = Retrofit.Builder()
             .baseUrl(Extra.BASE_URL)
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())

@@ -25,7 +25,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 class DetailActivityPresenter {
 
-    private int id = 0;
+   /* private int id = 0;
     private boolean itsFavorite;
 
     private MainViewModel viewModel;
@@ -154,5 +154,5 @@ class DetailActivityPresenter {
         });
     }
 
-
+*/
 }

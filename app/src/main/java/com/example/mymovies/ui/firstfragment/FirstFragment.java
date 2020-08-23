@@ -48,8 +48,6 @@ public class FirstFragment extends Fragment {
         if (getArguments() != null) {
             String s = getArguments().getString("SORT_BY");
             int s2 = getArguments().getInt("VOTE_COUNT");
-            mViewModel.setSORT_BY(s);
-            mViewModel.setVOTE_COUNT(s2);
         }
         mViewModel.getPagedListLiveData().observe(getViewLifecycleOwner(), results -> adapter.submitList(results));
     }

@@ -33,8 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
-public class DetailActivity extends AppCompatActivity implements DetailActivityView {
+public class DetailActivity extends AppCompatActivity  {
     public static final String API_KEY = "74f19a7f035e1b43395bec79650b05a8";
     public static final String LANGUAGE = "ru-RU";
     public static final String YOUTUBE_URL = "https://www.youtube.com/watch?v=";
@@ -80,7 +79,6 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
     public Application getApp() {
         return getApplication();
     }
@@ -114,7 +112,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         });
         *//*RecyclerViewVideo*//*
 
-        *//*RecyclerViewReviews*//*
+         *//*RecyclerViewReviews*//*
         reviewAdapter = new ReviewAdapter();
         recyclerViewReviews = findViewById(R.id.recyclerViewReviews);
         recyclerViewReviews.setLayoutManager(new FlexboxLayoutManager(this, FlexDirection.COLUMN));
@@ -211,4 +209,6 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
             imageViewAddToFavorite.setImageResource(R.drawable.favourite_add_to);
         }
     }*/
+    }
 }
+

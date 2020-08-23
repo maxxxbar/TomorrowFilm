@@ -22,11 +22,9 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class DataSource extends PageKeyedDataSource<Integer, Movies> {
 
     private APIConnection connection;
-    private Application application;
 
-    public DataSource(APIConnection connection, Application application) {
+    public DataSource(APIConnection connection) {
         this.connection = connection;
-        this.application = application;
     }
 
     @Override

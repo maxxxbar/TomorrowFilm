@@ -17,6 +17,7 @@ import com.example.mymovies.entries.discover.movie.Result;
 import com.example.mymovies.etc.DataSource;
 import com.example.mymovies.etc.MovieDataSourceFactory;
 import com.example.mymovies.network.APIConnection;
+import com.example.mymovies.network.ConnectionAPI;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -44,7 +45,7 @@ public class MainViewModel extends AndroidViewModel {
         favoriteMovies = database.movieDao().getAllFavoriteMovie();
 
         APIConnection connection = APIConnection.getInstance();
-        MovieDataSourceFactory dataSourceFactory = new MovieDataSourceFactory(application, connection);
+        MovieDataSourceFactory dataSourceFactory = new MovieDataSourceFactory(connection);
         dataSourceLiveData = dataSourceFactory.getMutableLiveData();
 
         PagedList.Config config = new PagedList.Config.Builder()

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-<item android:title="Популярные" android:id="@+id/firstFragment"/>
-<item android:title="Рейтинговые" android:id="@+id/secondFragment"/>
+    <item
+        android:id="@+id/firstFragment"
+        android:enabled="true"
+        android:icon="@android:drawable/btn_star"
+        android:title="Популярные" />
+    <item
+        android:id="@+id/secondFragment"
+        android:enabled="true"
+        android:icon="@android:drawable/btn_star"
+        android:title="Рейтинговые" />
 </menu>

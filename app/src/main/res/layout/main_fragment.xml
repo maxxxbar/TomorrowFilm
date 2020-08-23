@@ -63,12 +63,7 @@
             </LinearLayout>
 
 
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/buttomNavView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:menu="@menu/main_fragment_menu" />
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

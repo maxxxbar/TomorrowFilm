@@ -30,11 +30,11 @@ public class FirstFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(
+            @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.first_fragment, container, false);
         recyclerView = binding.recyclerViewPosters;
-        gridLayoutManager = new GridLayoutManager(requireActivity().getApplicationContext(), 2, RecyclerView.VERTICAL, false);
+        gridLayoutManager = new GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(gridLayoutManager);
         return binding.getRoot();
     }
@@ -45,6 +45,12 @@ public class FirstFragment extends Fragment {
         adapter = new MovieAdapter();
         recyclerView.setAdapter(adapter);
         mViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().getApplication()).create(FirstFragmentViewModel.class);
+        if (getArguments() != null) {
+            String s = getArguments().getString("SORT_BY");
+            int s2 = getArguments().getInt("VOTE_COUNT");
+            mViewModel.setSORT_BY(s);
+            mViewModel.setVOTE_COUNT(s2);
+        }
         mViewModel.getPagedListLiveData().observe(getViewLifecycleOwner(), results -> adapter.submitList(results));
     }
 

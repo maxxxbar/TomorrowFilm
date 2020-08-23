@@ -1,23 +1,20 @@
 package com.example.mymovies.adapters;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.paging.PagedList;
 import androidx.paging.PagedListAdapter;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mymovies.BindingExtra;
 import com.example.mymovies.R;
 import com.example.mymovies.database.MovieDB;
 import com.example.mymovies.databinding.MovieItemBinding;
 import com.example.mymovies.entries.discover.movie.Movies;
 import com.example.mymovies.entries.discover.movie.Result;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +60,7 @@ public class MovieAdapter extends PagedListAdapter<Result, MovieAdapter.MovieAda
 /*        Picasso picasso = Picasso.get();
         picasso.load(movies.getPosterPath()).into(holder.imageViewSmallPoster);*/
         if (movies != null && movies.getPosterPath() != null && movies.getPosterPath().length() > 0) {
-            BindingAdapters.loadImage(holder.binding.imageViewSmallPoster, movies.getBackdropPath());
+            BindingExtra.loadImage(holder.binding.imageViewSmallPoster, movies.getBackdropPath());
             holder.binding.setMovieItem(movies);
         }
 

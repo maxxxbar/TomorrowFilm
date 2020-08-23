@@ -14,7 +14,7 @@ import com.example.mymovies.entries.discover.trailer.Result;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerAdapterViewHolder>{
+public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerAdapterViewHolder> {
 
     private List<Result> trailerList = new ArrayList<>();
     private OnClickWatchTrailer onClickWatchTrailer;
@@ -34,7 +34,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     @NonNull
     @Override
     public TrailerAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.trailer_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.trailer_item, parent, false);
         return new TrailerAdapterViewHolder(view);
     }
 
@@ -50,7 +50,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
         return trailerList.size();
     }
 
-    class TrailerAdapterViewHolder extends RecyclerView.ViewHolder{
+    class TrailerAdapterViewHolder extends RecyclerView.ViewHolder {
         TextView textViewVideoName;
 
         public TrailerAdapterViewHolder(@NonNull View itemView) {

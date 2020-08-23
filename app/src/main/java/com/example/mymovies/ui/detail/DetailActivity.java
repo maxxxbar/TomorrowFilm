@@ -90,17 +90,17 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        imageViewBigPoster = findViewById(R.id.imageViewBigPoster);
+ /*       imageViewBigPoster = findViewById(R.id.imageViewBigPoster);
         textViewTitle = findViewById(R.id.textViewTitle);
         textViewOriginalTitle = findViewById(R.id.textViewOriginalTitle);
         textViewTitleRating = findViewById(R.id.textViewTitleRating);
         textViewReleaseDate = findViewById(R.id.textViewReleaseDate);
         textViewDescription = findViewById(R.id.textViewDescription);
         imageViewAddToFavorite = findViewById(R.id.imageViewAddToFavorite);
-        /*FlexBox for RecyclerView*/
+        *//*FlexBox for RecyclerView*//*
         FlexboxLayoutManager flexboxLayoutManager = new FlexboxLayoutManager(this);
 
-        /*RecyclerViewVideo*/
+        *//*RecyclerViewVideo*//*
         recyclerViewTrailer = findViewById(R.id.recyclerViewVideo);
         recyclerViewTrailer.setLayoutManager(new FlexboxLayoutManager(this, FlexDirection.COLUMN));
         recyclerViewTrailer.setHasFixedSize(true);
@@ -112,14 +112,14 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
                 startActivity(intent);
             }
         });
-        /*RecyclerViewVideo*/
+        *//*RecyclerViewVideo*//*
 
-        /*RecyclerViewReviews*/
+        *//*RecyclerViewReviews*//*
         reviewAdapter = new ReviewAdapter();
         recyclerViewReviews = findViewById(R.id.recyclerViewReviews);
         recyclerViewReviews.setLayoutManager(new FlexboxLayoutManager(this, FlexDirection.COLUMN));
         recyclerViewReviews.setHasFixedSize(true);
-        /*RecyclerViewReviews*/
+        *//*RecyclerViewReviews*//*
 
         presenter = new DetailActivityPresenter(this);
 
@@ -210,5 +210,5 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         } else {
             imageViewAddToFavorite.setImageResource(R.drawable.favourite_add_to);
         }
-    }
+    }*/
 }

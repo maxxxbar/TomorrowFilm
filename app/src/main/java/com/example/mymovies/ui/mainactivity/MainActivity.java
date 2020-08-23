@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mymovies.BindingExtra;
 import com.example.mymovies.BuildConfig;
 import com.example.mymovies.Extra;
 import com.example.mymovies.R;
@@ -35,6 +36,7 @@ import com.example.mymovies.entries.discover.movie.Movies;
 import com.example.mymovies.entries.discover.movie.Result;
 import com.example.mymovies.etc.ProductDiffUtilCallback;
 import com.facebook.stetho.Stetho;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     private ActivityMainBinding binding;
     private NavController navController;
+    private BottomNavigationView bottomNavigationView;
     private RecyclerView recyclerViewPosters;
     private ProgressBar progressBar;
     private MovieAdapter movieAdapter;
@@ -112,11 +115,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-
+        navController = Navigation.findNavController(this, R.id.nav_host);
+        BindingExtra bindingExtra = new BindingExtra(navController);
+        binding.setBindingExtra(bindingExtra);
         mainActivityViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(MainActivityViewModel.class);
-
-        if (BuildConfig.DEBUG) {
+ /*       if (BuildConfig.DEBUG) {
             // Create an InitializerBuilder
             Stetho.InitializerBuilder initializerBuilder =
                     Stetho.newInitializerBuilder(this);
@@ -136,12 +139,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
             // Initialize Stetho with the Initializer
             Stetho.initialize(initializer);
-        }
+        }*/
 /*        progressBar = binding.progressBar;
         textViewPopularity = binding.textViewPopularity;
         textViewVoteAverage = binding.textViewVoteAverage;*/
         /*RecyclerView*/
 /*
+
         recyclerViewPosters = binding.recyclerViewPosters;
 */
         movieAdapter = new MovieAdapter();
@@ -322,11 +326,5 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         progressBar.setVisibility(visibility);
     }
 
-    public void onCLickFirst(View view) {
-        navController.navigate(R.id.mainFragment);
-    }
 
-    public void onCLickSecond(View view) {
-        navController.navigate(R.id.mainFragment);
-    }
 }

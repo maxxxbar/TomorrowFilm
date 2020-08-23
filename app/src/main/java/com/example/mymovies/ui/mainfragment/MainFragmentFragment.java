@@ -2,7 +2,6 @@ package com.example.mymovies.ui.mainfragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -34,7 +33,6 @@ public class MainFragmentFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false);
-        bottomNavigationView = binding.buttomNavView;
         return binding.getRoot();
     }
 
@@ -42,7 +40,6 @@ public class MainFragmentFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(MainFragmentViewModel.class);
-
     }
 
 

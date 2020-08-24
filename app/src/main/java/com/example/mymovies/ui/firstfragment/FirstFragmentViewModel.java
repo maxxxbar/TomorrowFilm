@@ -14,7 +14,6 @@ import com.example.mymovies.datasource.movie.DataSourceMovieFactory;
 import com.example.mymovies.entries.discover.movie.Result;
 import com.example.mymovies.network.ConnectionAPI;
 import com.example.mymovies.network.Rest;
-import com.example.mymovies.network.RestAPI;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -39,7 +38,6 @@ public class FirstFragmentViewModel extends AndroidViewModel {
                 .setInitialLoadSizeHint(2)
                 .build();
         executor = Executors.newCachedThreadPool();
-
         pagedListLiveData = new LivePagedListBuilder<>(dataSourceMovieFactory, config)
                 .setFetchExecutor(executor)
                 .build();

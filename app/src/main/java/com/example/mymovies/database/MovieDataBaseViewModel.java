@@ -2,27 +2,13 @@ package com.example.mymovies.database;
 
 import android.app.Application;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.paging.LivePagedListBuilder;
-import androidx.paging.PagedList;
-
-import com.example.mymovies.entries.discover.movie.Movies;
-import com.example.mymovies.entries.discover.movie.Result;
-import com.example.mymovies.etc.DataSource;
-import com.example.mymovies.etc.MovieDataSourceFactory;
-import com.example.mymovies.network.APIConnection;
-import com.example.mymovies.network.ConnectionAPI;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class MovieDataBaseViewModel extends AndroidViewModel {
 
@@ -39,8 +25,6 @@ public class MovieDataBaseViewModel extends AndroidViewModel {
         database = MovieDatabase.getInstance(application);
         movies = database.movieDao().getAllMovies();
         favoriteMovies = database.movieDao().getAllFavoriteMovie();
-
-
     }
 
 

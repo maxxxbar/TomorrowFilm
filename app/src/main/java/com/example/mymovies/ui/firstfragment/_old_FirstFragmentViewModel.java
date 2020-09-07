@@ -38,7 +38,6 @@ public class _old_FirstFragmentViewModel extends AndroidViewModel {
                 .setInitialLoadSizeHint(2)
                 .build();
         executor = Executors.newCachedThreadPool();
-
         pagedListLiveData = new LivePagedListBuilder<>(dataSourceMovieFactory, config)
                 .setFetchExecutor(executor)
                 .build();

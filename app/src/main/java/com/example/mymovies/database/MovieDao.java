@@ -1,7 +1,6 @@
 package com.example.mymovies.database;
 
 
-
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -9,14 +8,18 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import java.util.List;
+import com.example.mymovies.etc.DataSource;
 
+import java.util.List;
 
 
 @Dao
 public interface MovieDao {
     @Query("SELECT * FROM movies")
-    LiveData<List<MovieDB>> getAllMovies();
+    LiveData<MovieDB> getAllMovies();
+
+    @Query("SELECT * FROM movies")
+    DataSource.Factory<Integer, MovieDB> getAllMoviesNew();
 
     @Query("SELECT * FROM favorite_movies")
     LiveData<List<FavoriteMovie>> getAllFavoriteMovie();

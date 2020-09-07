@@ -17,7 +17,7 @@ import com.example.mymovies.R;
 import com.example.mymovies.adapters.MovieAdapter;
 import com.example.mymovies.databinding.FirstFragmentBinding;
 
-public class FirstFragment extends Fragment {
+public class _old_FirstFragment extends Fragment {
 
     private FirstFragmentViewModel mViewModel;
     private FirstFragmentBinding binding;
@@ -45,10 +45,6 @@ public class FirstFragment extends Fragment {
         adapter = new MovieAdapter();
         recyclerView.setAdapter(adapter);
         mViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().getApplication()).create(FirstFragmentViewModel.class);
-        if (getArguments() != null) {
-            String s = getArguments().getString("SORT_BY");
-            int s2 = getArguments().getInt("VOTE_COUNT");
-        }
         mViewModel.getPagedListLiveData().observe(getViewLifecycleOwner(), results -> adapter.submitList(results));
     }
 

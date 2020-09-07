@@ -15,7 +15,7 @@ import android.view.MenuItem;
 
 import com.example.mymovies.R;
 import com.example.mymovies.ui.detail.DetailActivity;
-import com.example.mymovies.ui.mainactivity.MainActivity;
+import com.example.mymovies.ui.mainactivity.MainActivityJ;
 import com.example.mymovies.adapters.MovieAdapter;
 import com.example.mymovies.database.FavoriteMovie;
 import com.example.mymovies.database.MovieDataBaseViewModel;
@@ -43,7 +43,7 @@ public class FavoriteActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.itemMain:
-                startActivity(new Intent(this, MainActivity.class));
+                startActivity(new Intent(this, MainActivityJ.class));
                 break;
             case R.id.itemFavorite:
                 startActivity(new Intent(this, FavoriteActivity.class));

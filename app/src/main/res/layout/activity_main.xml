@@ -7,7 +7,7 @@
 
         <variable
             name="activityMain"
-            type="com.example.mymovies.ui.mainactivity.MainActivity" />
+            type="com.example.mymovies.ui.mainactivity.MainActivityJ" />
 
         <variable
             name="bindingExtra"
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimaryDark"
-        tools:context=".ui.mainactivity.MainActivity">
+        tools:context=".ui.mainactivity.MainActivityJ">
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -37,7 +37,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:onClick="@{bindingExtra::onCLickFirst}"
+                android:onClick="onClickFirst"
                 android:text="@string/textview_popularity_switch"
                 android:textColor="@color/whiteColor" />
 
@@ -65,7 +65,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:onClick="@{bindingExtra::onCLickSecond}"
+                android:onClick="onClickSecond"
                 android:text="@string/textview_vote_average_switch"
                 android:textColor="@color/whiteColor" />
 

@@ -25,20 +25,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mymovies.BindingExtra;
 import com.example.mymovies.Extra;
 import com.example.mymovies.R;
-import com.example.mymovies.ui.favoriteactivity.FavoriteActivity;
 import com.example.mymovies.adapters.MovieAdapter;
-import com.example.mymovies.database.MovieDataBaseViewModel;
 import com.example.mymovies.database.MovieDB;
+import com.example.mymovies.database.MovieDataBaseViewModel;
 import com.example.mymovies.databinding.ActivityMainBinding;
 import com.example.mymovies.entries.discover.movie.Movies;
 import com.example.mymovies.entries.discover.movie.Result;
 import com.example.mymovies.etc.ProductDiffUtilCallback;
+import com.example.mymovies.ui.favoriteactivity.FavoriteActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements MainActivityView {
+public class MainActivityJ extends AppCompatActivity implements MainActivityView {
     public static final int ACTIVITY_ID = 0;
 
     private ActivityMainBinding binding;
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     @Override
     public void setPage(int page) {
-        MainActivity.page = page;
+        MainActivityJ.page = page;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     @Override
     public void setIsLoading(boolean isLoading) {
-        MainActivity.isLoading = isLoading;
+        MainActivityJ.isLoading = isLoading;
     }
 
     @Override
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         int id = item.getItemId();
         switch (id) {
             case R.id.itemMain:
-                startActivity(new Intent(this, MainActivity.class));
+                startActivity(new Intent(this, MainActivityJ.class));
                 break;
             case R.id.itemFavorite:
                 startActivity(new Intent(this, FavoriteActivity.class));

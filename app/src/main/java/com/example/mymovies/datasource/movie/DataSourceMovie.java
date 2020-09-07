@@ -9,7 +9,6 @@ import com.example.mymovies.Extra;
 import com.example.mymovies.entries.discover.movie.Movies;
 import com.example.mymovies.entries.discover.movie.Result;
 import com.example.mymovies.network.Rest;
-import com.example.mymovies.network.RestAPI;
 
 import java.util.ArrayList;
 import java.util.List;

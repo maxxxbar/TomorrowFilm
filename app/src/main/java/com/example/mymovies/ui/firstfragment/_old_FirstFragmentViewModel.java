@@ -14,12 +14,11 @@ import com.example.mymovies.datasource.movie.DataSourceMovieFactory;
 import com.example.mymovies.entries.discover.movie.Result;
 import com.example.mymovies.network.ConnectionAPI;
 import com.example.mymovies.network.Rest;
-import com.example.mymovies.network.RestAPI;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class FirstFragmentViewModel extends AndroidViewModel {
+public class _old_FirstFragmentViewModel extends AndroidViewModel {
     private ConnectionAPI connection;
     private Rest rest;
     private Executor executor;
@@ -27,7 +26,7 @@ public class FirstFragmentViewModel extends AndroidViewModel {
     private LiveData<PagedList<Result>> pagedListLiveData;
     private DataSourceMovieFactory dataSourceMovieFactory;
 
-    public FirstFragmentViewModel(@NonNull Application application) {
+    public _old_FirstFragmentViewModel(@NonNull Application application) {
         super(application);
         connection = ConnectionAPI.INSTANCE;
         rest = connection.getCreate();

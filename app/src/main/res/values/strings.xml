@@ -14,4 +14,6 @@
     <string name="main_menu_text_favorite">Избранное</string>
     <string name="trailer_item_image_view_play_description">Воспроизвести</string>
     <string name="detail_activity_lbl_reviews">Отзывы:</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -28,4 +28,5 @@ class MainActivity : AppCompatActivity() {
     fun onClickSecond(view: View) {
         navController.navigate(R.id.secondFragment)
     }
+
 }

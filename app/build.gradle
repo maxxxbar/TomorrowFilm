@@ -4,8 +4,8 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion 30
+    buildToolsVersion '30.0.2'
 
     buildFeatures {
         dataBinding = true
@@ -13,8 +13,8 @@ android {
 
     defaultConfig {
         applicationId "com.example.mymovies"
-        minSdkVersion 23
-        targetSdkVersion 29
+        minSdkVersion 21
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
@@ -63,14 +63,14 @@ dependencies {
     /*RxJava Retrofit Adapter*/
     implementation 'com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0'
     /*OkHttp3 inspector*/
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.7.2'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.8.1'
     /*Retrofit Gson Converter*/
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     /*Retrofit*/
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     /*Gson*/
     implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.0-alpha05'
     /*Picasso*/
     implementation 'com.squareup.picasso:picasso:2.71828'
     /*ReactiveNetwork*/
@@ -84,7 +84,7 @@ dependencies {
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
     // Annotation processor
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    implementation "android.arch.lifecycle:common-java8:$lifecycle_version"
     // optional - ReactiveStreams support for LiveData
     implementation "androidx.lifecycle:lifecycle-reactivestreams:$lifecycle_version"
     // optional - Test helpers for LiveData

@@ -7,11 +7,6 @@
 
 
     <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.example.mymovies.ui.mainfragment.MainFragmentFragment"
-        android:label="main_fragment"
-        tools:layout="@layout/main_fragment" />
-    <fragment
         android:id="@+id/firstFragment"
         android:name="com.example.mymovies.ui.firstfragment.FirstFragment"
         android:label="FirstFragment" >
@@ -28,5 +23,10 @@
         android:id="@+id/secondFragment"
         android:name="com.example.mymovies.ui.secondfragment.SecondFragment"
         android:label="SecondFragment" />
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.example.mymovies.ui.detailfragment.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/detail_fragment" />
 
 </navigation>

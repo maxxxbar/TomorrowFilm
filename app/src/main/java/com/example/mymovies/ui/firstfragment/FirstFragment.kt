@@ -4,15 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mymovies.R
 import com.example.mymovies.adapters.MovieAdapterNew
 import com.example.mymovies.databinding.FirstFragmentBinding
+import com.google.gson.Gson
 
 class FirstFragment : Fragment() {
 
@@ -20,6 +22,7 @@ class FirstFragment : Fragment() {
         fun newInstance() = FirstFragment()
     }
 
+    private lateinit var navController: NavController
     private lateinit var viewModel: FirstFragmentViewModel
     private lateinit var binding: FirstFragmentBinding
     private lateinit var recyclerView: RecyclerView
@@ -37,11 +40,17 @@ class FirstFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val adapter = MovieAdapterNew()
+        adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         viewModel = ViewModelProvider.AndroidViewModelFactory(requireActivity().application).create(FirstFragmentViewModel::class.java)
+        navController = Navigation.findNavController(requireActivity(), R.id.nav_host)
         recyclerView.adapter = adapter
         viewModel.pagedListLiveData.observe(viewLifecycleOwner, { adapter.submitList(it) })
         adapter.setOnFilmClickListener {
-            Toast.makeText(requireContext(), it.title, Toast.LENGTH_SHORT).show()
+            val bundle = Bundle()
+            val gson = Gson()
+            val s = gson.toJson(it)
+            bundle.putString("FILM", s)
+            navController.navigate(R.id.detailFragment, bundle)
         }
     }
 }

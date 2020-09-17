@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-<data>
-    <variable
-        name="detailFragment"
-        type="com.example.mymovies.entries.discover.movie.Result" />
-</data>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="detailFragment"
+            type="com.example.mymovies.entries.discover.movie.Result" />
+    </data>
 
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,11 +23,12 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="#E8DBDB">
 
 
             <ImageView
-                android:id="@+id/imageViewBigPoster"
+                android:id="@+id/ivBigPoster"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
@@ -33,6 +36,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:url="@{detailFragment.posterPath}"
                 tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
             <LinearLayout
@@ -45,7 +49,7 @@
                 app:layout_constraintTop_toBottomOf="@id/imageViewAddToFavorite">
 
                 <TextView
-                    android:id="@+id/textViewLblTitle"
+                    android:id="@+id/lblTitle"
                     style="@style/ActivityDetailTextViewLbl"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -54,12 +58,13 @@
                     android:text="@string/detail_activity_lbl_title" />
 
                 <TextView
-                    android:id="@+id/textViewTitle"
+                    android:id="@+id/tvTitle"
                     style="@style/ActivityDetailTextView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="end" />
+                    android:gravity="end"
+                    android:text="@{detailFragment.title}" />
 
             </LinearLayout>
 
@@ -73,7 +78,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayoutTitle">
 
                 <TextView
-                    android:id="@+id/textViewLblOriginalTitle"
+                    android:id="@+id/lblOriginalTitle"
                     style="@style/ActivityDetailTextViewLbl"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -82,12 +87,13 @@
                     android:text="@string/detail_activity_lbl_original_title" />
 
                 <TextView
-                    android:id="@+id/textViewOriginalTitle"
+                    android:id="@+id/tvOriginalTitle"
                     style="@style/ActivityDetailTextView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="end" />
+                    android:gravity="end"
+                    android:text="@{detailFragment.originalTitle}"/>
             </LinearLayout>
 
             <LinearLayout
@@ -100,7 +106,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayoutOriginalTitle">
 
                 <TextView
-                    android:id="@+id/textViewLblRating"
+                    android:id="@+id/lblRating"
                     style="@style/ActivityDetailTextViewLbl"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -109,12 +115,13 @@
                     android:text="@string/detail_activity_lbl_rating" />
 
                 <TextView
-                    android:id="@+id/textViewTitleRating"
+                    android:id="@+id/tvTitleRating"
                     style="@style/ActivityDetailTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="end" />
+                    android:gravity="end"
+                    android:text="@{detailFragment.voteAverage.toString()}"/>
 
             </LinearLayout>
 
@@ -128,7 +135,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayoutRating">
 
                 <TextView
-                    android:id="@+id/textViewLblReleaseDate"
+                    android:id="@+id/lblReleaseDate"
                     style="@style/ActivityDetailTextViewLbl"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -137,16 +144,17 @@
                     android:text="@string/detail_activity_lbl_release_date" />
 
                 <TextView
-                    android:id="@+id/textViewReleaseDate"
+                    android:id="@+id/tvReleaseDate"
                     style="@style/ActivityDetailTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="end" />
+                    android:gravity="end"
+                    android:text="@{detailFragment.releaseDate}"/>
             </LinearLayout>
 
             <TextView
-                android:id="@+id/textViewLblDescription"
+                android:id="@+id/lblDescription"
                 style="@style/ActivityDetailTextViewLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -156,14 +164,15 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayoutReleaseDate" />
 
             <TextView
-                android:id="@+id/textViewDescription"
+                android:id="@+id/tvDescription"
                 style="@style/ActivityDetailTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewLblDescription" />
+                app:layout_constraintTop_toBottomOf="@+id/lblDescription"
+                android:text="@{detailFragment.overview}"/>
 
             <TextView
                 android:id="@+id/textViewLblReviews"
@@ -180,10 +189,10 @@
                 android:layout_height="@dimen/detail_activity_size_favorite_star"
                 android:layout_marginEnd="10dp"
                 android:contentDescription="@string/detail_activity_add_to_favorite_description"
-                app:layout_constraintBottom_toBottomOf="@+id/imageViewBigPoster"
-                app:layout_constraintEnd_toEndOf="@+id/imageViewBigPoster"
-                app:layout_constraintTop_toBottomOf="@+id/imageViewBigPoster"
-                app:srcCompat="@drawable/favourite_remove" />
+                app:layout_constraintBottom_toBottomOf="@+id/ivBigPoster"
+                app:layout_constraintEnd_toEndOf="@+id/ivBigPoster"
+                app:layout_constraintTop_toBottomOf="@+id/ivBigPoster"
+                app:srcCompat="@android:drawable/btn_star_big_on" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewVideo"
@@ -191,7 +200,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewDescription">
+                app:layout_constraintTop_toBottomOf="@+id/tvDescription">
 
             </androidx.recyclerview.widget.RecyclerView>
 

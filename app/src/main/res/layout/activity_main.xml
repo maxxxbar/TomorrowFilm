@@ -36,26 +36,12 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="1"
+                android:background="@drawable/rounded"
                 android:gravity="center"
                 android:onClick="onClickFirst"
+                android:padding="10dp"
                 android:text="@string/textview_popularity_switch"
                 android:textColor="@color/whiteColor" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/switchSortBy"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:theme="@style/SwitchTheme" />
-            </LinearLayout>
 
 
             <com.google.android.material.textview.MaterialTextView
@@ -64,8 +50,10 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="1"
+                android:background="@drawable/rounded"
                 android:gravity="center"
                 android:onClick="onClickSecond"
+                android:padding="10dp"
                 android:text="@string/textview_vote_average_switch"
                 android:textColor="@color/whiteColor" />
 

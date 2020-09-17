@@ -1,31 +1,46 @@
 package com.example.mymovies.ui.detailfragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.example.mymovies.R
 import com.example.mymovies.databinding.DetailFragmentBinding
+import com.example.mymovies.entries.discover.movie.Result
+import com.example.mymovies.ui.firstfragment.FirstFragment
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class DetailFragment : Fragment() {
 
     companion object {
-        fun newInstance() = DetailFragment()
+        fun newInstance() = FirstFragment()
     }
 
-    private lateinit var viewModel: DetailFragmentViewModel
     private lateinit var binding: DetailFragmentBinding
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        binding = DetailFragmentBinding.inflate(layoutInflater)
-        return inflater.inflate(R.layout.detail_fragment, container, false)
+    private val TAG = javaClass.simpleName
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = DataBindingUtil.inflate(inflater, R.layout.detail_fragment, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider.AndroidViewModelFactory(requireActivity().application).create(DetailFragmentViewModel::class.java)
+        var s: String? = null
+        val type = object : TypeToken<Result>() {}.type
+        val gson = Gson()
+        val result: Result
+        arguments?.let { bundle ->
+            bundle.getString("FILM")?.let { s = it }
+        }
+        if (s != null) {
+            result = gson.fromJson(s, type)
+            binding.detailFragment = result
+            Log.d(TAG, result.backdropPath)
+        }
     }
-
 }

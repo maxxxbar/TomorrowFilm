@@ -5,7 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.paging.PageKeyedDataSource;
 
-import com.example.mymovies.Extra;
+import com.example.mymovies.utils.Extra;
 import com.example.mymovies.entries.discover.movie.Movies;
 import com.example.mymovies.entries.discover.movie.Result;
 import com.example.mymovies.network.Rest;

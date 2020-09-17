@@ -10,7 +10,7 @@ import java.util.List;
 public class Repository {
     private MovieDatabase database;
     private MovieDao movieDao;
-    private DataSource.Factory<Integer, List<MovieDB>> moviesListLiveData;
+    private DataSource.Factory<Integer, MovieDB> moviesListLiveData;
     private LiveData<List<FavoriteMovie>> favoriteMoviesListLiveData;
 
     Repository(Application application) {
@@ -20,7 +20,7 @@ public class Repository {
         favoriteMoviesListLiveData = movieDao.getAllFavoriteMovie();
     }
 
-    public DataSource.Factory<Integer, List<MovieDB>> getMoviesListLiveData() {
+    public DataSource.Factory<Integer, MovieDB> getMoviesListLiveData() {
         return moviesListLiveData;
     }
 

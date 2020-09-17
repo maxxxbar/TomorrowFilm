@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.paging.Config
 import androidx.paging.PagedList
 import androidx.paging.toLiveData
-import com.example.mymovies.Extra
+import com.example.mymovies.utils.Extra
 import com.example.mymovies.datasource.movie.DataSourceMovieFactory
 import com.example.mymovies.entries.discover.movie.Result
 import com.example.mymovies.network.ConnectionAPI

@@ -22,8 +22,8 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mymovies.BindingExtra;
-import com.example.mymovies.Extra;
+import com.example.mymovies.utils.BindingExtra;
+import com.example.mymovies.utils.Extra;
 import com.example.mymovies.R;
 import com.example.mymovies.adapters.MovieAdapter;
 import com.example.mymovies.database.MovieDB;

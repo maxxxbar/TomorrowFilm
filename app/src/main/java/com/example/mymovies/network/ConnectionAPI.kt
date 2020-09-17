@@ -1,6 +1,6 @@
 package com.example.mymovies.network
 
-import com.example.mymovies.Extra
+import com.example.mymovies.utils.Extra
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

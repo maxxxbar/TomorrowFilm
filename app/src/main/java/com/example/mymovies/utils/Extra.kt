@@ -1,4 +1,4 @@
-package com.example.mymovies
+package com.example.mymovies.utils
 
 class Extra {
     companion object{

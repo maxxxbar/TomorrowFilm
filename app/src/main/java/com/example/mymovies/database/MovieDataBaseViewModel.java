@@ -13,10 +13,10 @@ import java.util.concurrent.ExecutionException;
 public class MovieDataBaseViewModel extends AndroidViewModel {
 
     private static MovieDatabase database;
-    private LiveData<List<MovieDB>> movies;
+    private LiveData<MovieDB> movies;
     private LiveData<List<FavoriteMovie>> favoriteMovies;
 
-    public LiveData<List<MovieDB>> getMovies() {
+    public LiveData<MovieDB> getMovies() {
         return movies;
     }
 

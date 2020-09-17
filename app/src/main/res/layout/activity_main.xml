@@ -11,7 +11,7 @@
 
         <variable
             name="bindingExtra"
-            type="com.example.mymovies.BindingExtra" />
+            type="com.example.mymovies.utils.BindingExtra" />
     </data>
 
 

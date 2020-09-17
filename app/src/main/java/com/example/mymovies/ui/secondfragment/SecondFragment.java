@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mymovies.R;
-import com.example.mymovies.adapters.MovieAdapter;
+import com.example.mymovies.adapters.MovieAdapterNew;
 import com.example.mymovies.databinding.SecondFragmentBinding;
 
 public class SecondFragment extends Fragment {
@@ -23,7 +23,7 @@ public class SecondFragment extends Fragment {
     private SecondFragmentViewModel mViewModel;
     private SecondFragmentBinding binding;
     private RecyclerView recyclerView;
-    private MovieAdapter adapter;
+    private MovieAdapterNew adapter;
     private GridLayoutManager gridLayoutManager;
 
     public static SecondFragment newInstance() {
@@ -32,7 +32,7 @@ public class SecondFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.second_fragment, container, false);
         recyclerView = binding.recyclerViewPostersF2;
         gridLayoutManager = new GridLayoutManager(requireActivity().getApplicationContext(), 2, RecyclerView.VERTICAL, false);
@@ -44,10 +44,8 @@ public class SecondFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().getApplication()).create(SecondFragmentViewModel.class);
-        adapter = new MovieAdapter();
+        adapter = new MovieAdapterNew();
         recyclerView.setAdapter(adapter);
         mViewModel.getPagedListLiveData().observe(getViewLifecycleOwner(), results -> adapter.submitList(results));
-
     }
-
 }

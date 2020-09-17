@@ -12,7 +12,7 @@ import java.util.List;
 public class MovieDataBaseViewModelNew extends AndroidViewModel {
 
     private Repository repository;
-    private DataSource.Factory<Integer, List<MovieDB>> movies;
+    private DataSource.Factory<Integer, MovieDB> movies;
     private LiveData<List<FavoriteMovie>> favoriteMovies;
 
     public MovieDataBaseViewModelNew(@NonNull Application application) {
@@ -22,7 +22,7 @@ public class MovieDataBaseViewModelNew extends AndroidViewModel {
         favoriteMovies = repository.getFavoriteMoviesListLiveData();
     }
 
-    public DataSource.Factory<Integer, List<MovieDB>> getAllMovies() {
+    public DataSource.Factory<Integer, MovieDB> getAllMovies() {
         return movies;
     }
 

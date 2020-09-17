@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
-import com.example.mymovies.Extra;
+import com.example.mymovies.utils.Extra;
 import com.example.mymovies.datasource.movie.DataSourceMovie;
 import com.example.mymovies.datasource.movie.DataSourceMovieFactory;
 import com.example.mymovies.entries.discover.movie.Result;

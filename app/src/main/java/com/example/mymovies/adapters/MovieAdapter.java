@@ -9,7 +9,7 @@ import androidx.paging.PagedList;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mymovies.BindingExtra;
+import com.example.mymovies.utils.BindingExtra;
 import com.example.mymovies.R;
 import com.example.mymovies.database.MovieDB;
 import com.example.mymovies.databinding.MovieItemBinding;

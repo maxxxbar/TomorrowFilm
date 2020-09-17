@@ -1,4 +1,4 @@
-package com.example.mymovies;
+package com.example.mymovies.utils;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -7,6 +7,7 @@ import androidx.databinding.BindingAdapter;
 import androidx.navigation.NavController;
 
 import com.bumptech.glide.Glide;
+import com.example.mymovies.R;
 
 public class BindingExtra {
     private NavController navController;

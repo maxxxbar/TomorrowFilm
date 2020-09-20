@@ -1,15 +1,19 @@
 package com.example.mymovies.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import com.example.mymovies.R
 import com.example.mymovies.databinding.MovieItemBinding
 import com.example.mymovies.entries.discover.movie.Result
 import com.example.mymovies.utils.BindingExtra
+import com.google.android.flexbox.AlignSelf
+import com.google.android.flexbox.FlexboxLayoutManager
+import kotlin.jvm.internal.Intrinsics
 
-class MovieAdapterNew : PagedListAdapter<Result, MovieAdapterViewHolderNew>(Result.CALLBACK) {
+class MovieAdapterNew : PagingDataAdapter<Result, MovieAdapterViewHolderNew>(Result.CALLBACK) {
 
   var onFilmClickListener: OnFilmClickListener? = null
 
@@ -22,7 +26,18 @@ class MovieAdapterNew : PagedListAdapter<Result, MovieAdapterViewHolderNew>(Resu
         return MovieAdapterViewHolderNew(binding)
     }
 
+    @SuppressLint("WrongConstant")
     override fun onBindViewHolder(holder: MovieAdapterViewHolderNew, position: Int) {
+
+        val lp  =holder.binding.imageViewSmallPoster.layoutParams
+        if (lp is FlexboxLayoutManager.LayoutParams) {
+            var i = kotlin.random.Random.nextInt(1,5).toFloat()
+            lp.flexGrow = 1f
+            lp.alignSelf = AlignSelf.FLEX_END
+            lp.flexShrink = 1f;
+
+        }
+
         val movies = getItem(position)
         if (movies != null && movies.posterPath != null && movies.posterPath.isNotEmpty()) {
             BindingExtra.loadImage(holder.binding.imageViewSmallPoster, movies.backdropPath)

@@ -7,7 +7,7 @@
 
         <variable
             name="activityMain"
-            type="com.example.mymovies.ui.mainactivity.MainActivityJ" />
+            type="com.example.mymovies.ui.mainactivity.MainActivity" />
 
         <variable
             name="bindingExtra"
@@ -19,45 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimaryDark"
-        tools:context=".ui.mainactivity.MainActivityJ">
-
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/textViewPopularity"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:background="@drawable/rounded"
-                android:gravity="center"
-                android:onClick="onClickFirst"
-                android:padding="10dp"
-                android:text="@string/textview_popularity_switch"
-                android:textColor="@color/whiteColor" />
-
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/textViewVoteAverage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:background="@drawable/rounded"
-                android:gravity="center"
-                android:onClick="onClickSecond"
-                android:padding="10dp"
-                android:text="@string/textview_vote_average_switch"
-                android:textColor="@color/whiteColor" />
-
-        </LinearLayout>
+        tools:context=".ui.mainactivity.MainActivity">
 
         <fragment
             android:id="@+id/nav_host"
@@ -65,12 +27,23 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:defaultNavHost="true"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout"
+            app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/main_graph" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/main_menu" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

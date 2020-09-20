@@ -20,7 +20,7 @@ import com.example.mymovies.databinding.SecondFragmentBinding;
 
 public class SecondFragment extends Fragment {
 
-    private SecondFragmentViewModel mViewModel;
+/*    private SecondFragmentViewModel mViewModel;
     private SecondFragmentBinding binding;
     private RecyclerView recyclerView;
     private MovieAdapterNew adapter;
@@ -46,6 +46,8 @@ public class SecondFragment extends Fragment {
         mViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().getApplication()).create(SecondFragmentViewModel.class);
         adapter = new MovieAdapterNew();
         recyclerView.setAdapter(adapter);
+*//*
         mViewModel.getPagedListLiveData().observe(getViewLifecycleOwner(), results -> adapter.submitList(results));
-    }
+*//*
+    }*/
 }

@@ -1,20 +1,35 @@
 package com.example.mymovies.ui.firstfragment
 
+import android.content.Context
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mymovies.R
+import com.example.mymovies.adapters.LoadStateAdapter
 import com.example.mymovies.adapters.MovieAdapterNew
 import com.example.mymovies.databinding.FirstFragmentBinding
+import com.example.mymovies.entries.discover.movie.Result
+import com.google.android.flexbox.AlignItems
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.gson.Gson
+import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class FirstFragment : Fragment() {
 
@@ -27,31 +42,78 @@ class FirstFragment : Fragment() {
     private lateinit var binding: FirstFragmentBinding
     private lateinit var recyclerView: RecyclerView
     private val TAG = javaClass.simpleName
+    private val adapter = MovieAdapterNew()
+    private var searchJob: Job? = null
 
+    private fun search() {
+        // Make sure we cancel the previous job before creating a new one
+        searchJob?.cancel()
+        searchJob = lifecycleScope.launch {
+            viewModel.searchResult().collectLatest {
+                adapter.submitData(it)
+            }
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val gridLayoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
+        val flexboxLayoutManager = FlexboxLayoutManager(requireContext())
+        flexboxLayoutManager.flexWrap = FlexWrap.WRAP
+        flexboxLayoutManager.alignItems = AlignItems.STRETCH
+        flexboxLayoutManager.flexDirection = FlexDirection.ROW
         binding = DataBindingUtil.inflate(inflater, R.layout.first_fragment, container, false)
         recyclerView = binding.recyclerViewPosters
-        recyclerView.layoutManager = gridLayoutManager
+        recyclerView.layoutManager = flexboxLayoutManager
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val adapter = MovieAdapterNew()
-        adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         viewModel = ViewModelProvider.AndroidViewModelFactory(requireActivity().application).create(FirstFragmentViewModel::class.java)
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host)
-        recyclerView.adapter = adapter
-        viewModel.pagedListLiveData.observe(viewLifecycleOwner, { adapter.submitList(it) })
+
+
+        initAdapter()
+        recyclerView.applySystemWindowInsetsToPadding(top = true)
+    }
+
+    private fun initAdapter() {
+        viewModel.pagedListLiveData2.observe(viewLifecycleOwner, { adapter.submitData(lifecycle, it) })
+        binding.retryButton.setOnClickListener { adapter.retry() }
         adapter.setOnFilmClickListener {
-            val bundle = Bundle()
-            val gson = Gson()
-            val s = gson.toJson(it)
-            bundle.putString("FILM", s)
-            navController.navigate(R.id.detailFragment, bundle)
+            setFilmFromIntent(it)
         }
+        recyclerView.adapter = adapter.withLoadStateHeaderAndFooter(
+                header = LoadStateAdapter { adapter.retry() },
+                footer = LoadStateAdapter { adapter.retry() }
+        )
+        adapter.addLoadStateListener { loadState ->
+            binding.recyclerViewPosters.isVisible = loadState.source.refresh is LoadState.NotLoading
+            binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
+            binding.retryButton.isVisible = loadState.source.refresh is LoadState.Error
+
+/*            val errorState = loadState.source.refresh as? LoadState.Error
+                    ?: loadState.source.prepend as? LoadState.Error
+                    ?: loadState.append as? LoadState.Error
+                    ?: loadState.prepend as? LoadState.Error
+            errorState?.let {
+                Toast.makeText(
+                        requireContext(),
+                        "\uD83D\uDE28 Wooops ${it.error}",
+                        Toast.LENGTH_LONG
+                ).show()
+            }*/
+        }
+    }
+
+
+
+    private fun setFilmFromIntent(result: Result) {
+        val bundle = Bundle()
+        val gson = Gson()
+        val s = gson.toJson(result)
+        bundle.putString("FILM", s)
+        navController.navigate(R.id.detailFragment, bundle)
     }
 }
 

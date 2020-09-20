@@ -13,6 +13,8 @@ import com.example.mymovies.entries.discover.movie.Result
 import com.example.mymovies.ui.firstfragment.FirstFragment
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import dev.chrisbanes.insetter.applySystemWindowInsetsToMargin
+import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 
 class DetailFragment : Fragment() {
 
@@ -30,6 +32,10 @@ class DetailFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+/*
+        binding.ivBigPoster.applySystemWindowInsetsToMargin(top = true)
+*/
+
         var s: String? = null
         val type = object : TypeToken<Result>() {}.type
         val gson = Gson()

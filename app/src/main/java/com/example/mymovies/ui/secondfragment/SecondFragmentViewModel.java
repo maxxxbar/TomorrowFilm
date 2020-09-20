@@ -28,7 +28,7 @@ public class SecondFragmentViewModel extends AndroidViewModel {
 
     public SecondFragmentViewModel(@NonNull Application application) {
         super(application);
-        connection = ConnectionAPI.INSTANCE;
+/*        connection = ConnectionAPI.INSTANCE;
         restAPI = connection.getCreate();
         dataSourceMovieFactory = new DataSourceMovieFactory(restAPI, Extra.SORT_BY_VOTE_AVERAGE, 0);
         dataSourceMovieLiveData = dataSourceMovieFactory.getMovieMutableLiveData();
@@ -41,10 +41,10 @@ public class SecondFragmentViewModel extends AndroidViewModel {
 
         pagedListLiveData = new LivePagedListBuilder<>(dataSourceMovieFactory, config)
                 .setFetchExecutor(executor)
-                .build();
+                .build();*/
     }
 
-    public LiveData<PagedList<Result>> getPagedListLiveData() {
+/*    public LiveData<PagedList<Result>> getPagedListLiveData() {
         return pagedListLiveData;
-    }
+    }*/
 }

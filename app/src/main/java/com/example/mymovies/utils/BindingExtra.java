@@ -7,6 +7,7 @@ import androidx.databinding.BindingAdapter;
 import androidx.navigation.NavController;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.mymovies.R;
 
 public class BindingExtra {
@@ -22,6 +23,7 @@ public class BindingExtra {
         Glide
                 .with(view)
                 .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.ic_placeholder)
                 .error(R.drawable.ic_placeholder)
                 .into(view);

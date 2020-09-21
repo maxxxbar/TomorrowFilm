@@ -20,7 +20,7 @@ class FirstFragmentViewModel() : ViewModel() {
     private val rest = connectionApi.create
     private val executor = Executors.newCachedThreadPool()
     private val dataSourceMovieFactory = DataSourceMovieFactory(rest, Extra.SORT_BY_POPULARITY, Extra.VOTE_COUNT_GTE)
-    private val config = PagingConfig(pageSize = 20)
+    private val config = PagingConfig(pageSize = 100)
 
 
 /*

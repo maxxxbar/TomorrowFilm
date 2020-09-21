@@ -1,8 +1,6 @@
 package com.example.mymovies.ui.firstfragment
 
-import android.content.Context
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +18,7 @@ import com.example.mymovies.adapters.LoadStateAdapter
 import com.example.mymovies.adapters.MovieAdapterNew
 import com.example.mymovies.databinding.FirstFragmentBinding
 import com.example.mymovies.entries.discover.movie.Result
+import com.example.mymovies.utils.findNavController
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -28,7 +26,10 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.gson.Gson
 import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 class FirstFragment : Fragment() {
@@ -70,11 +71,22 @@ class FirstFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider.AndroidViewModelFactory(requireActivity().application).create(FirstFragmentViewModel::class.java)
-        navController = Navigation.findNavController(requireActivity(), R.id.nav_host)
+/*
+        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_container)
+*/
 
 
         initAdapter()
         recyclerView.applySystemWindowInsetsToPadding(top = true)
+        lifecycleScope.launch {
+            adapter.loadStateFlow
+                    // Only emit when REFRESH LoadState for RemoteMediator changes.
+                    .distinctUntilChangedBy { it.refresh }
+                    // Only react to cases where Remote REFRESH completes i.e., NotLoading.
+                    .filter { it.refresh is LoadState.NotLoading }.collect {
+                        recyclerView.scrollToPosition(0)
+                    }
+        }
     }
 
     private fun initAdapter() {
@@ -87,6 +99,7 @@ class FirstFragment : Fragment() {
                 header = LoadStateAdapter { adapter.retry() },
                 footer = LoadStateAdapter { adapter.retry() }
         )
+        adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         adapter.addLoadStateListener { loadState ->
             binding.recyclerViewPosters.isVisible = loadState.source.refresh is LoadState.NotLoading
             binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
@@ -113,7 +126,7 @@ class FirstFragment : Fragment() {
         val gson = Gson()
         val s = gson.toJson(result)
         bundle.putString("FILM", s)
-        navController.navigate(R.id.detailFragment, bundle)
+        findNavController().navigate(R.id.action_firstFragment_to_detailFragment,bundle)
     }
 }
 

@@ -15,7 +15,6 @@ import android.view.MenuItem;
 
 import com.example.mymovies.R;
 import com.example.mymovies.ui.detail.DetailActivity;
-import com.example.mymovies.ui.mainactivity.MainActivityJ;
 import com.example.mymovies.adapters.MovieAdapter;
 import com.example.mymovies.database.FavoriteMovie;
 import com.example.mymovies.database.MovieDataBaseViewModel;
@@ -42,12 +41,12 @@ public class FavoriteActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.itemMain:
+/*            case R.id.itemMain:
                 startActivity(new Intent(this, MainActivityJ.class));
                 break;
             case R.id.itemFavorite:
                 startActivity(new Intent(this, FavoriteActivity.class));
-                break;
+                break;*/
         }
         return super.onOptionsItemSelected(item);
     }
@@ -56,7 +55,7 @@ public class FavoriteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
-        recyclerViewFavoriteMovies = findViewById(R.id.recyclerViewFavoriteMovies);
+/*        recyclerViewFavoriteMovies = findViewById(R.id.recyclerViewFavoriteMovies);
         recyclerViewFavoriteMovies.setLayoutManager(new GridLayoutManager(this, 2));
         adapter = new MovieAdapter();
 
@@ -84,6 +83,6 @@ public class FavoriteActivity extends AppCompatActivity {
                 intent.putExtra("ACTIVITY_ID", ACTIVITY_ID);
                 startActivity(intent);
             }
-        });
+        });*/
     }
 }

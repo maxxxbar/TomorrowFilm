@@ -1,67 +1,78 @@
 package com.example.mymovies.ui.mainactivity
 
 import android.os.Bundle
-import android.os.Parcelable
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.updatePadding
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import com.example.mymovies.R
 import com.example.mymovies.databinding.ActivityMainBinding
+import com.example.mymovies.utils.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.yariksoffice.connectivityplayground.connectivity.base.ConnectivityProvider
 import dev.chrisbanes.insetter.applySystemWindowInsetsToMargin
-import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 import dev.chrisbanes.insetter.setEdgeToEdgeSystemUiFlags
 
 class MainActivity : AppCompatActivity(), ConnectivityProvider.ConnectivityStateListener {
+    private var currentNavController: LiveData<NavController>? = null
     private val TAG = javaClass.simpleName
     private val provider: ConnectivityProvider by lazy { ConnectivityProvider.createProvider(this) }
     private lateinit var viewModel: MainActivityViewModel
-    private lateinit var navController: NavController
     private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        navController = Navigation.findNavController(this, R.id.nav_host)
+        if (savedInstanceState == null) {
+            setupBottomNavigationBar()
+        }
         viewModel = ViewModelProvider.AndroidViewModelFactory(application).create(MainActivityViewModel::class.java)
-
-
         setMyInsets()
     }
 
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        // Now that BottomNavigationBar has restored its instance state
+        // and its selectedItemId, we can proceed with setting up the
+        // BottomNavigationBar with Navigation
+        setupBottomNavigationBar()
+    }
+
+    /**
+     * Called on first creation and when restoring state.
+     */
+    private fun setupBottomNavigationBar() {
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav)
+
+        val navGraphIds = listOf(R.navigation.main_graph, R.navigation.favorite_graph)
+
+        // Setup the bottom navigation view with a list of navigation graphs
+        val controller = bottomNavigationView.setupWithNavController(
+                navGraphIds = navGraphIds,
+                fragmentManager = supportFragmentManager,
+                containerId = R.id.nav_host_container,
+                intent = intent
+        )
+
+/*        // Whenever the selected controller changes, setup the action bar.
+        controller.observe(this, Observer { navController ->
+            setupActionBarWithNavController(navController)
+        })*/
+        currentNavController = controller
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return currentNavController?.value?.navigateUp() ?: false
+    }
+
+
     private fun setMyInsets() {
         val view = binding.root.rootView
-        val fragmentView = binding.root.findViewById<View>(R.id.nav_host)
-/*
-        fragmentView.applySystemWindowInsetsToMargin(top = true)
-*/
         view.setEdgeToEdgeSystemUiFlags(true)
-/*
-        binding.bottomNavigation.applySystemWindowInsetsToMargin(bottom = true)
-*/
-/*        val view = binding.root.rootView
-        view.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-        val fragment: View = binding.root.findViewById(R.id.nav_host)
-        view.setOnApplyWindowInsetsListener { v, insets ->
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                Log.d(TAG, "${insets.stableInsets} ")
-            }
-            return@setOnApplyWindowInsetsListener insets }
-
-        ViewCompat.setOnApplyWindowInsetsListener(fragment) { v, insets ->
-            v.setPadding(insets.stableInsetLeft, insets.stableInsetTop, insets.stableInsetRight, 0)
-            return@setOnApplyWindowInsetsListener insets
-        }
-        ViewCompat.setOnApplyWindowInsetsListener(binding.bottomNavigation) { v, insets ->
-            v.updatePadding(bottom = 132)
-            return@setOnApplyWindowInsetsListener insets
-        }*/
+        binding.bottomNav.applySystemWindowInsetsToMargin(bottom = true)
     }
 
     override fun onStart() {
@@ -84,14 +95,6 @@ class MainActivity : AppCompatActivity(), ConnectivityProvider.ConnectivityState
 
     private fun ConnectivityProvider.NetworkState.hasInternet(): Boolean {
         return (this as? ConnectivityProvider.NetworkState.ConnectedState)?.hasInternet == true
-    }
-
-    fun onClickFirst(view: View) {
-        navController.navigate(R.id.firstFragment)
-    }
-
-    fun onClickSecond(view: View) {
-        navController.navigate(R.id.secondFragment)
     }
 
 }

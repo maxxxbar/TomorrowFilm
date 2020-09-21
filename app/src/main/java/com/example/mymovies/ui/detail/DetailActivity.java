@@ -1,7 +1,6 @@
 package com.example.mymovies.ui.detail;
 
 import android.app.Application;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,8 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mymovies.R;
-import com.example.mymovies.ui.favoriteactivity.FavoriteActivity;
-import com.example.mymovies.ui.mainactivity.MainActivityJ;
 import com.example.mymovies.adapters.ReviewAdapter;
 import com.example.mymovies.adapters.TrailerAdapter;
 
@@ -56,14 +53,14 @@ public class DetailActivity extends AppCompatActivity  {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
+/*        switch (id) {
             case R.id.itemMain:
                 startActivity(new Intent(this, MainActivityJ.class));
                 break;
             case R.id.itemFavorite:
                 startActivity(new Intent(this, FavoriteActivity.class));
                 break;
-        }
+        }*/
         return super.onOptionsItemSelected(item);
     }
 

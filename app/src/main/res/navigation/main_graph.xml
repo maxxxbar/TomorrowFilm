@@ -5,24 +5,15 @@
     android:id="@+id/main_graph"
     app:startDestination="@id/firstFragment">
 
-
     <fragment
         android:id="@+id/firstFragment"
         android:name="com.example.mymovies.ui.firstfragment.FirstFragment"
         android:label="FirstFragment" >
-        <argument
-            android:name="SORT_BY"
-            app:argType="string"
-            android:defaultValue="popularity.desc" />
-        <argument
-            android:name="VOTE_COUNT"
-            app:argType="integer"
-            android:defaultValue="100" />
+        <action
+            android:id="@+id/action_firstFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/secondFragment"
-        android:name="com.example.mymovies.ui.secondfragment.SecondFragment"
-        android:label="SecondFragment" />
+
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.example.mymovies.ui.detailfragment.DetailFragment"

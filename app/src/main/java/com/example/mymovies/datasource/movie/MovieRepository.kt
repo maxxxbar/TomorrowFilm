@@ -1,18 +1,30 @@
 package com.example.mymovies.datasource.movie
 
+import androidx.lifecycle.LiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.example.mymovies.entries.discover.movie.Result
+import androidx.paging.liveData
+import com.example.mymovies.entries.discover.moviesnew.DiscoverMovieResultsItem
 import com.example.mymovies.network.Rest
 import com.example.mymovies.utils.Extra
 import kotlinx.coroutines.flow.Flow
 
 class MovieRepository(private val rest: Rest) {
+    companion object {
+        private const val NETWORK_PAGE_SIZE = 100
+    }
 
-    fun getResult(): Flow<PagingData<Result>> {
+    fun resultAsLiveData(): LiveData<PagingData<DiscoverMovieResultsItem>> {
         return Pager(
-                config = PagingConfig(pageSize = 30),
+                config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = true),
+                pagingSourceFactory = { MoviePagingSource(rest, Extra.SORT_BY_POPULARITY, Extra.VOTE_COUNT_GTE) }
+        ).liveData
+    }
+
+    fun getResultAsFlow(): Flow<PagingData<DiscoverMovieResultsItem>> {
+        return Pager(
+                config = PagingConfig(pageSize = NETWORK_PAGE_SIZE),
                 pagingSourceFactory = { MoviePagingSource(rest, Extra.SORT_BY_POPULARITY, Extra.VOTE_COUNT_GTE) }
         ).flow
     }

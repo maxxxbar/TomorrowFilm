@@ -1,7 +1,7 @@
 package com.example.mymovies.adapters
 
-import com.example.mymovies.entries.discover.movie.Result
+import com.example.mymovies.entries.discover.moviesnew.DiscoverMovieResultsItem
 
 fun interface OnFilmClickListener {
-    fun onClickListener(result: Result)
+    fun onClickListener(result: DiscoverMovieResultsItem)
 }

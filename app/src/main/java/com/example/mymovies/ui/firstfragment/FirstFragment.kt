@@ -17,7 +17,7 @@ import com.example.mymovies.R
 import com.example.mymovies.adapters.LoadStateAdapter
 import com.example.mymovies.adapters.MovieAdapterNew
 import com.example.mymovies.databinding.FirstFragmentBinding
-import com.example.mymovies.entries.discover.movie.Result
+import com.example.mymovies.entries.discover.moviesnew.DiscoverMovieResultsItem
 import com.example.mymovies.utils.findNavController
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
@@ -26,10 +26,7 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.gson.Gson
 import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 class FirstFragment : Fragment() {
@@ -44,12 +41,21 @@ class FirstFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private val TAG = javaClass.simpleName
     private val adapter = MovieAdapterNew()
-    private var searchJob: Job? = null
+    private var getMoviesJob: Job? = null
+
+    private fun getMovies() {
+        getMoviesJob?.cancel()
+        getMoviesJob = lifecycleScope.launch {
+            viewModel.getMoviesAsLiveData().observe(viewLifecycleOwner) {
+                adapter.submitData(lifecycle, it)
+            }
+        }
+    }
 
     private fun search() {
         // Make sure we cancel the previous job before creating a new one
-        searchJob?.cancel()
-        searchJob = lifecycleScope.launch {
+        getMoviesJob?.cancel()
+        getMoviesJob = lifecycleScope.launch {
             viewModel.searchResult().collectLatest {
                 adapter.submitData(it)
             }
@@ -59,9 +65,7 @@ class FirstFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val gridLayoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
         val flexboxLayoutManager = FlexboxLayoutManager(requireContext())
-        flexboxLayoutManager.flexWrap = FlexWrap.WRAP
-        flexboxLayoutManager.alignItems = AlignItems.STRETCH
-        flexboxLayoutManager.flexDirection = FlexDirection.ROW
+        setupFlexLayoutManager(flexboxLayoutManager)
         binding = DataBindingUtil.inflate(inflater, R.layout.first_fragment, container, false)
         recyclerView = binding.recyclerViewPosters
         recyclerView.layoutManager = flexboxLayoutManager
@@ -71,26 +75,21 @@ class FirstFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider.AndroidViewModelFactory(requireActivity().application).create(FirstFragmentViewModel::class.java)
-/*
-        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_container)
-*/
-
-
         initAdapter()
         recyclerView.applySystemWindowInsetsToPadding(top = true)
-        lifecycleScope.launch {
-            adapter.loadStateFlow
-                    // Only emit when REFRESH LoadState for RemoteMediator changes.
-                    .distinctUntilChangedBy { it.refresh }
-                    // Only react to cases where Remote REFRESH completes i.e., NotLoading.
-                    .filter { it.refresh is LoadState.NotLoading }.collect {
-                        recyclerView.scrollToPosition(0)
-                    }
-        }
+        getMovies()
+    }
+
+    private fun setupFlexLayoutManager(flexboxLayoutManager: FlexboxLayoutManager) {
+        flexboxLayoutManager.flexWrap = FlexWrap.WRAP
+        flexboxLayoutManager.alignItems = AlignItems.STRETCH
+        flexboxLayoutManager.flexDirection = FlexDirection.ROW
     }
 
     private fun initAdapter() {
+/*
         viewModel.pagedListLiveData2.observe(viewLifecycleOwner, { adapter.submitData(lifecycle, it) })
+*/
         binding.retryButton.setOnClickListener { adapter.retry() }
         adapter.setOnFilmClickListener {
             setFilmFromIntent(it)
@@ -120,14 +119,14 @@ class FirstFragment : Fragment() {
     }
 
 
-
-    private fun setFilmFromIntent(result: Result) {
+    private fun setFilmFromIntent(result: DiscoverMovieResultsItem) {
         val bundle = Bundle()
         val gson = Gson()
         val s = gson.toJson(result)
         bundle.putString("FILM", s)
-        findNavController().navigate(R.id.action_firstFragment_to_detailFragment,bundle)
+        findNavController().navigate(R.id.action_firstFragment_to_detailFragment, bundle)
     }
+
 }
 
 

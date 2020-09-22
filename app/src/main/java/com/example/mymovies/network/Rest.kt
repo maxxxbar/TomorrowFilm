@@ -1,6 +1,7 @@
 package com.example.mymovies.network
 
 import com.example.mymovies.entries.discover.movie.Movies
+import com.example.mymovies.entries.discover.moviesnew.DiscoverMovie
 import com.example.mymovies.entries.discover.reviews.Reviews
 import com.example.mymovies.entries.discover.trailer.Trailer
 import io.reactivex.rxjava3.core.Single
@@ -22,7 +23,7 @@ interface Rest {
                   @Query("language") language: String,
                   @Query("sort_by") sortBy: String,
                   @Query("vote_count.gte") voteCount: Int,
-                  @Query("page") page: Int): Response<Movies>
+                  @Query("page") page: Int): Response<DiscoverMovie>
 
     @GET("/3/movie/{movie_id}/videos")
     fun getTrailer(

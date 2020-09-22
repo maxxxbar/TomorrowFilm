@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -11,6 +11,9 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:navigationBarColor">#80FFFFFF</item>
+        <item name="android:statusBarColor" tools:targetApi="21">?attr/colorControlNormal</item>
+<!--        <item name="android:windowLightStatusBar" tools:targetApi="m">?attr/isLightTheme</item>-->
+
 
 
         <item name="snackbarStyle">@style/Widget.App.Snackbar</item>

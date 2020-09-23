@@ -78,7 +78,10 @@ class FirstFragment : Fragment() {
         initAdapter()
         recyclerView.applySystemWindowInsetsToPadding(top = true)
         getMovies()
+
+
     }
+
 
     private fun setupFlexLayoutManager(flexboxLayoutManager: FlexboxLayoutManager) {
         flexboxLayoutManager.flexWrap = FlexWrap.WRAP

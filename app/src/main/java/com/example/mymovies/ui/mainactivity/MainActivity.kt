@@ -14,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.yariksoffice.connectivityplayground.connectivity.base.ConnectivityProvider
 import dev.chrisbanes.insetter.applySystemWindowInsetsToMargin
 import dev.chrisbanes.insetter.setEdgeToEdgeSystemUiFlags
+import kotlinx.android.synthetic.main.detail_fragment.*
 
 class MainActivity : AppCompatActivity(), ConnectivityProvider.ConnectivityStateListener {
     private var currentNavController: LiveData<NavController>? = null
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity(), ConnectivityProvider.ConnectivityState
         }
         viewModel = ViewModelProvider.AndroidViewModelFactory(application).create(MainActivityViewModel::class.java)
         setMyInsets()
+
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {

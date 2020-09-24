@@ -10,7 +10,10 @@ import com.example.mymovies.network.Rest
 import com.example.mymovies.utils.Extra
 import kotlinx.coroutines.flow.Flow
 
-class MovieRepository(private val rest: Rest) {
+class MovieRepository(
+        private val rest: Rest,
+        private val sortBy: String,
+        private val voteCount: Int = Extra.VOTE_COUNT_GTE) {
     companion object {
         private const val NETWORK_PAGE_SIZE = 100
     }
@@ -18,7 +21,7 @@ class MovieRepository(private val rest: Rest) {
     fun resultAsLiveData(): LiveData<PagingData<DiscoverMovieResultsItem>> {
         return Pager(
                 config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = true),
-                pagingSourceFactory = { MoviePagingSource(rest, Extra.SORT_BY_POPULARITY, Extra.VOTE_COUNT_GTE) }
+                pagingSourceFactory = { MoviePagingSource(rest, sortBy, voteCount) }
         ).liveData
     }
 

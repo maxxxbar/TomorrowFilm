@@ -1,7 +1,6 @@
 package com.example.mymovies.datasource.movie
 
 import androidx.paging.PagingSource
-import com.example.mymovies.entries.discover.movie.Result
 import com.example.mymovies.entries.discover.moviesnew.DiscoverMovieResultsItem
 import com.example.mymovies.network.Rest
 import com.example.mymovies.utils.Extra
@@ -30,9 +29,10 @@ class MoviePagingSource(
                 nextKey = if (result.isEmpty()) null else page + 1
         )*/
 
-        val position = params.key ?: 1
+        val page = params.key ?: 1
         return try {
-            val response = restAPI.getMovies2(Extra.API_KEY, Extra.LANGUAGE, sortBy, voteCount, position)
+            val response = restAPI
+                    .getMovies2(sortBy =  sortBy, voteCount =  voteCount,page =  page)
             val repos = response.body()
             var list = listOf<DiscoverMovieResultsItem>()
             repos?.let { discoverMovie ->
@@ -40,13 +40,10 @@ class MoviePagingSource(
                     list = it
                 }
             }
-/*            if (repos != null) {
-                list = repos.results
-            }*/
             LoadResult.Page(
                     data = list,
-                    prevKey = if (position == 1) null else position - 1,
-                    nextKey = if (list.isEmpty()) null else position + 1
+                    prevKey = if (page == 1) null else page - 1,
+                    nextKey = if (list.isEmpty()) null else page + 1
             )
         } catch (exception: IOException) {
             LoadResult.Error(exception)

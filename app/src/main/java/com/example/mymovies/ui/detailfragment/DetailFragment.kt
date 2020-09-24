@@ -16,7 +16,6 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import dev.chrisbanes.insetter.applySystemWindowInsetsToMargin
 import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 
 class DetailFragment : Fragment() {
@@ -32,30 +31,31 @@ class DetailFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.detail_fragment, container, false)
         binding.appbar.applySystemWindowInsetsToPadding(top = true)
+        setupToolbar()
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-/*
-        binding.ivBigPoster.applySystemWindowInsetsToMargin(top = true)
-*/
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        getArgumentsFromActivity()
+    }
+
+    private fun getArgumentsFromActivity() {
         var s: String? = null
         val type = object : TypeToken<Result>() {}.type
         val gson = Gson()
-
         arguments?.let { bundle ->
             bundle.getString("FILM")?.let { s = it }
+        }.also {
+            s?.let {
+                result = gson.fromJson(s, type)
+                binding.movie = result
+                Log.d(TAG, result.backdropPath)
+            }
         }
-        if (s != null) {
-            result = gson.fromJson(s, type)
-            binding.movie = result
-            Log.d(TAG, result.backdropPath)
-        }
-
-        setupToolbar()
     }
+
 
     private fun setupToolbar() {
         val toolbar = binding.toolbar

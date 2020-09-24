@@ -63,25 +63,28 @@ class FirstFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val gridLayoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
-        val flexboxLayoutManager = FlexboxLayoutManager(requireContext())
-        setupFlexLayoutManager(flexboxLayoutManager)
         binding = DataBindingUtil.inflate(inflater, R.layout.first_fragment, container, false)
+        val flexboxLayoutManager = FlexboxLayoutManager(requireContext())
         recyclerView = binding.recyclerViewPosters
-        recyclerView.layoutManager = flexboxLayoutManager
+        setupRecyclerView(flexboxLayoutManager)
+        setupFlexLayoutManager(flexboxLayoutManager)
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider.AndroidViewModelFactory(requireActivity().application).create(FirstFragmentViewModel::class.java)
         initAdapter()
-        recyclerView.applySystemWindowInsetsToPadding(top = true)
         getMovies()
-
-
     }
 
+
+    private fun setupRecyclerView(flexboxLayoutManager: FlexboxLayoutManager) {
+        recyclerView.applySystemWindowInsetsToPadding(top = true)
+        recyclerView = binding.recyclerViewPosters
+        recyclerView.layoutManager = flexboxLayoutManager
+        recyclerView.setHasFixedSize(true)
+    }
 
     private fun setupFlexLayoutManager(flexboxLayoutManager: FlexboxLayoutManager) {
         flexboxLayoutManager.flexWrap = FlexWrap.WRAP
@@ -90,9 +93,6 @@ class FirstFragment : Fragment() {
     }
 
     private fun initAdapter() {
-/*
-        viewModel.pagedListLiveData2.observe(viewLifecycleOwner, { adapter.submitData(lifecycle, it) })
-*/
         binding.retryButton.setOnClickListener { adapter.retry() }
         adapter.setOnFilmClickListener {
             setFilmFromIntent(it)
@@ -106,21 +106,8 @@ class FirstFragment : Fragment() {
             binding.recyclerViewPosters.isVisible = loadState.source.refresh is LoadState.NotLoading
             binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
             binding.retryButton.isVisible = loadState.source.refresh is LoadState.Error
-
-/*            val errorState = loadState.source.refresh as? LoadState.Error
-                    ?: loadState.source.prepend as? LoadState.Error
-                    ?: loadState.append as? LoadState.Error
-                    ?: loadState.prepend as? LoadState.Error
-            errorState?.let {
-                Toast.makeText(
-                        requireContext(),
-                        "\uD83D\uDE28 Wooops ${it.error}",
-                        Toast.LENGTH_LONG
-                ).show()
-            }*/
         }
     }
-
 
     private fun setFilmFromIntent(result: DiscoverMovieResultsItem) {
         val bundle = Bundle()

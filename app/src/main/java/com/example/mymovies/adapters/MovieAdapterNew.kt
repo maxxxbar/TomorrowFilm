@@ -8,7 +8,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.example.mymovies.R
 import com.example.mymovies.databinding.MovieItemBinding
-import com.example.mymovies.entries.discover.moviesnew.DiscoverMovieResultsItem
+import com.example.mymovies.model.DiscoverMovieResultsItem
 import com.example.mymovies.utils.BindingExtra
 import com.google.android.flexbox.AlignSelf
 import com.google.android.flexbox.FlexboxLayoutManager

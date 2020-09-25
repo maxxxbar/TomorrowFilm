@@ -1,11 +1,10 @@
 package com.example.mymovies.network
 
 import com.example.mymovies.entries.discover.movie.Movies
-import com.example.mymovies.entries.discover.moviesnew.DiscoverMovie
+import com.example.mymovies.model.DiscoverMovie
 import com.example.mymovies.entries.discover.reviews.Reviews
 import com.example.mymovies.entries.discover.trailer.Trailer
 import com.example.mymovies.utils.Extra
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Response
 import retrofit2.http.GET
@@ -38,14 +37,6 @@ interface Rest {
             @Query(SORT_BY) sortBy: String,
             @Query(VOTE_COUNT_GTE) voteCount: Int,
             @Query(PAGE) page: Int): Response<DiscoverMovie>
-
-    @GET("/3/discover/movie")
-    suspend fun getMovies3(
-            @Query(API_KEY) apikey: String = Extra.API_KEY,
-            @Query(LANGUAGE) language: String = Extra.LANGUAGE,
-            @Query(SORT_BY) sortBy: String,
-            @Query(VOTE_COUNT_GTE) voteCount: Int,
-            @Query(PAGE) page: Int): Observable<DiscoverMovie>
 
     @GET("/3/movie/{movie_id}/videos")
     fun getTrailer(

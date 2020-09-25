@@ -7,7 +7,7 @@
 
         <variable
             name="movieItem"
-            type="com.example.mymovies.entries.discover.moviesnew.DiscoverMovieResultsItem" />
+            type="com.example.mymovies.model.DiscoverMovieResultsItem" />
     </data>
 
 

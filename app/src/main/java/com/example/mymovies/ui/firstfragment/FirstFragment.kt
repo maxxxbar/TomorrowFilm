@@ -9,15 +9,18 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mymovies.R
 import com.example.mymovies.adapters.LoadStateAdapter
 import com.example.mymovies.adapters.MovieAdapterNew
+import com.example.mymovies.data.MovieRepository
 import com.example.mymovies.databinding.FirstFragmentBinding
-import com.example.mymovies.entries.discover.moviesnew.DiscoverMovieResultsItem
+import com.example.mymovies.db.MovieDatabaseNew
+import com.example.mymovies.model.DiscoverMovieResultsItem
+import com.example.mymovies.network.ConnectionAPI
+import com.example.mymovies.ui.detailfragment.DetailFragment.Companion.BUNDLE_MOVIE_KEY
 import com.example.mymovies.utils.findNavController
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
@@ -29,13 +32,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@ExperimentalPagingApi
+
 class FirstFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = FirstFragment()
-    }
-
-    private lateinit var navController: NavController
     private lateinit var viewModel: FirstFragmentViewModel
     private lateinit var binding: FirstFragmentBinding
     private lateinit var recyclerView: RecyclerView
@@ -78,7 +78,6 @@ class FirstFragment : Fragment() {
         getMovies()
     }
 
-
     private fun setupRecyclerView(flexboxLayoutManager: FlexboxLayoutManager) {
         recyclerView.applySystemWindowInsetsToPadding(top = true)
         recyclerView = binding.recyclerViewPosters
@@ -109,11 +108,11 @@ class FirstFragment : Fragment() {
         }
     }
 
-    private fun setFilmFromIntent(result: DiscoverMovieResultsItem) {
+    private fun setFilmFromIntent(movie: DiscoverMovieResultsItem) {
         val bundle = Bundle()
         val gson = Gson()
-        val s = gson.toJson(result)
-        bundle.putString("FILM", s)
+        val value = gson.toJson(movie)
+        bundle.putString(BUNDLE_MOVIE_KEY, value)
         findNavController().navigate(R.id.action_firstFragment_to_detailFragment, bundle)
     }
 

@@ -1,5 +1,7 @@
-package com.example.mymovies.entries.discover.moviesnew
+package com.example.mymovies.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 data class DiscoverMovie(
@@ -17,7 +19,11 @@ data class DiscoverMovie(
 		val totalResults: Int? = null
 )
 
+@Entity(tableName = "discover_movies")
 data class DiscoverMovieResultsItem(
+
+		@PrimaryKey @field:SerializedName("id")
+		val id: Int,
 
 		@field:SerializedName("overview")
 		val overview: String? = null,
@@ -51,9 +57,6 @@ data class DiscoverMovieResultsItem(
 
 		@field:SerializedName("vote_average")
 		val voteAverage: Float? = null,
-
-		@field:SerializedName("id")
-		val id: Int? = null,
 
 		@field:SerializedName("adult")
 		val adult: Boolean? = null,

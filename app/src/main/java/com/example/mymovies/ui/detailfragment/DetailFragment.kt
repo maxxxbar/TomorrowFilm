@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import com.example.mymovies.R
 import com.example.mymovies.databinding.DetailFragmentBinding
 import com.example.mymovies.entries.discover.movie.Result
-import com.example.mymovies.ui.firstfragment.FirstFragment
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import com.google.gson.Gson
@@ -21,8 +20,8 @@ import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 class DetailFragment : Fragment() {
     private lateinit var result: Result
 
-    companion object {
-        fun newInstance() = FirstFragment()
+    companion object{
+        const val BUNDLE_MOVIE_KEY = "MOVIE"
     }
 
     private lateinit var binding: DetailFragmentBinding
@@ -38,10 +37,10 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        getArgumentsFromActivity()
+        getArgumentsFromFirstFragment()
     }
 
-    private fun getArgumentsFromActivity() {
+    private fun getArgumentsFromFirstFragment() {
         var s: String? = null
         val type = object : TypeToken<Result>() {}.type
         val gson = Gson()
@@ -55,7 +54,6 @@ class DetailFragment : Fragment() {
             }
         }
     }
-
 
     private fun setupToolbar() {
         val toolbar = binding.toolbar

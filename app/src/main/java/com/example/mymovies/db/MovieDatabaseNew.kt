@@ -28,8 +28,8 @@ abstract class MovieDatabaseNew : RoomDatabase() {
         private fun buildDatabase(context: Context) =
                 Room.databaseBuilder(
                         context.applicationContext,
-                        MovieDatabaseNew::class.java, "qweqwe.db"
-                )
+                        MovieDatabaseNew::class.java, "qweqwe.db")
+                        .fallbackToDestructiveMigration()
                         .build()
     }
 }

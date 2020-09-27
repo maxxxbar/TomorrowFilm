@@ -22,7 +22,10 @@ data class DiscoverMovie(
 @Entity(tableName = "discover_movies")
 data class DiscoverMovieResultsItem(
 
-		@PrimaryKey @field:SerializedName("id")
+		@PrimaryKey(autoGenerate = true)
+		val uniqueId: Int,
+
+		@field:SerializedName("id")
 		val id: Int,
 
 		@field:SerializedName("overview")
@@ -40,8 +43,8 @@ data class DiscoverMovieResultsItem(
 		@field:SerializedName("title")
 		val title: String? = null,
 
-		@field:SerializedName("genre_ids")
-		val genreIds: List<Int?>? = null,
+/*		@field:SerializedName("genre_ids")
+		val genreIds: List<Int?>? = null,*/
 
 		@field:SerializedName("poster_path")
 		val posterPath: String? = null,

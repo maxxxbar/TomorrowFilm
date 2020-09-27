@@ -1,21 +1,20 @@
-package com.example.mymovies.ui.firstfragment
+package com.example.mymovies.ui.firstfragmentLi
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.ExperimentalPagingApi
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
+import androidx.paging.*
 import com.example.mymovies.data.MovieRepository
 import com.example.mymovies.datasource.movie.MoviePagingSource
 import com.example.mymovies.db.MovieDatabaseNew
+import com.example.mymovies.entries.discover.movie.Result
 import com.example.mymovies.model.DiscoverMovieResultsItem
 import com.example.mymovies.network.ConnectionAPI
+import com.example.mymovies.paging2.DataSourceMovieFactory
 import com.example.mymovies.utils.Extra
 import kotlinx.coroutines.flow.Flow
+import java.util.concurrent.Executors
 
 @ExperimentalPagingApi
 class FirstFragmentViewModel(application: Application) : AndroidViewModel(application) {
@@ -28,6 +27,21 @@ class FirstFragmentViewModel(application: Application) : AndroidViewModel(applic
             sortBy = Extra.SORT_BY_POPULARITY,
             voteCount = Extra.VOTE_COUNT_GTE,
             database)
+
+    /*Paging 2 Start*/
+    private val dataSourceMovieFactory = DataSourceMovieFactory(rest, Extra.SORT_BY_POPULARITY, Extra.VOTE_COUNT_GTE)
+    private val dataSourceMovieAsLiveData = dataSourceMovieFactory.movieMutableLiveData
+    private val executor = Executors.newCachedThreadPool()
+    private val config = PagedList.Config.Builder()
+            .setEnablePlaceholders(true)
+            .setInitialLoadSizeHint(40)
+            .setPageSize(50)
+            .build()
+    val pagedListAsLiveData = LivePagedListBuilder(dataSourceMovieFactory, config)
+            .setFetchExecutor(executor)
+            .build()
+
+    /*Paging 2 End*/
 
     private val pagingSourceFactory = { MoviePagingSource(rest, Extra.SORT_BY_POPULARITY, Extra.VOTE_COUNT_GTE) }
 

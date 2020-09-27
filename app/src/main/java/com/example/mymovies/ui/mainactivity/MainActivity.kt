@@ -9,6 +9,7 @@ import androidx.navigation.NavController
 import com.example.mymovies.R
 import com.example.mymovies.databinding.ActivityMainBinding
 import com.example.mymovies.utils.setupWithNavController
+import com.facebook.stetho.Stetho
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.yariksoffice.connectivityplayground.connectivity.base.ConnectivityProvider
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity(), ConnectivityProvider.ConnectivityState
         }
         viewModel = ViewModelProvider.AndroidViewModelFactory(application).create(MainActivityViewModel::class.java)
         setMyInsets()
+        Stetho.initializeWithDefaults(this);
 
     }
 

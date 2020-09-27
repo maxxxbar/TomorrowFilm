@@ -5,18 +5,15 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
-import com.example.mymovies.utils.Extra;
-import com.example.mymovies.datasource.movie.DataSourceMovie;
-import com.example.mymovies.datasource.movie.DataSourceMovieFactory;
+import com.example.mymovies.paging2.DataSourceMovie;
+import com.example.mymovies.paging2.DataSourceMovieFactory;
 import com.example.mymovies.entries.discover.movie.Result;
 import com.example.mymovies.network.ConnectionAPI;
 import com.example.mymovies.network.Rest;
 
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class SecondFragmentViewModel extends AndroidViewModel {
     private ConnectionAPI connection;

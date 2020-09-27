@@ -1,5 +1,6 @@
 package com.example.mymovies.data
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -20,11 +21,14 @@ class MovieRemoteMediator(
         private val sortBy: String,
         private val voteCount: Int
 ) : RemoteMediator<Int, DiscoverMovieResultsItem>() {
+    private val TAG = javaClass.simpleName
+
     companion object {
         private const val START_PAGE = 1
     }
 
     override suspend fun load(loadType: LoadType, state: PagingState<Int, DiscoverMovieResultsItem>): MediatorResult {
+
         val page = when (loadType) {
             LoadType.REFRESH -> {
                 val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
@@ -44,9 +48,11 @@ class MovieRemoteMediator(
         }
 
         try {
-            val response = restAPI.getMovies2(sortBy = sortBy, voteCount = voteCount, page = page)
-            var movies = listOf<DiscoverMovieResultsItem>()
-            response.body()?.results?.let { movies = it }
+            val movies = restAPI.getMovies2(
+                    sortBy = sortBy,
+                    voteCount = voteCount,
+                    page = page)
+                    .body()?.results.orEmpty()
             val endOfPaginationReached = movies.isEmpty()
             database.withTransaction {
                 // clear all tables in the database
@@ -56,12 +62,15 @@ class MovieRemoteMediator(
                 }
                 val prevKey = if (page == START_PAGE) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
+                Log.d(TAG, "prevKey: $prevKey nextKey: $nextKey")
+                Log.d(TAG, "endOfPaginationReached $endOfPaginationReached")
                 val keys = movies.map {
-                    RemoteKeys(it.id, prevKey = prevKey, nextKey = nextKey)
+                    RemoteKeys(movieId = it.id, prevKey = prevKey, nextKey = nextKey)
                 }
                 database.remoteKeysDao().insertAll(keys)
                 database.movieDao().insertAll(movies)
             }
+
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (exception: IOException) {
             return MediatorResult.Error(exception)
@@ -71,19 +80,26 @@ class MovieRemoteMediator(
 
     }
 
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, DiscoverMovieResultsItem>): RemoteKeys? {
+        // Get the last page that was retrieved, that contained items.
+        // From that last page, get the last item
+
+        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
+                ?.let { movie ->
+                    // Get the remote keys of the last item retrieved
+                    database.remoteKeysDao().remoteKeysMovieId(movie.id)
+                }
+    }
+
     private suspend fun getRemoteKeyClosestToCurrentPosition(
             state: PagingState<Int, DiscoverMovieResultsItem>
     ): RemoteKeys? {
+        // The paging library is trying to load data after the anchor position
+        // Get the item closest to the anchor position
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { movieId ->
                 database.remoteKeysDao().remoteKeysMovieId(movieId)
             }
-        }
-    }
-
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, DiscoverMovieResultsItem>): RemoteKeys? {
-        return state.pages.lastOrNull() { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { movie ->
-            database.remoteKeysDao().remoteKeysMovieId(movie.id)
         }
     }
 

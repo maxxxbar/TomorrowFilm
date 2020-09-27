@@ -3,19 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_graph"
-    app:startDestination="@id/firstFragment">
+    app:startDestination="@id/firstFragment"
+    tools:ignore="UnusedNavigation">
 
     <fragment
         android:id="@+id/firstFragment"
         android:name="com.example.mymovies.ui.firstfragment.FirstFragment"
-        android:label="FirstFragment" >
+        android:label="FirstFragment">
         <action
             android:id="@+id/action_firstFragment_to_detailFragment"
-            app:destination="@id/detailFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:destination="@id/detailFragment" />
     </fragment>
 
     <fragment

@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-
-        <variable
-            name="movieItem"
-            type="com.example.mymovies.model.DiscoverMovieResultsItem" />
-    </data>
-
 
     <ImageView
         android:id="@+id/imageViewSmallPoster"
@@ -17,7 +8,6 @@
         android:layout_height="300dp"
         android:contentDescription="@string/poster_movie"
         android:scaleType="fitXY"
-        app:url="@{movieItem.posterPath}"
         tools:srcCompat="@tools:sample/avatars" />
 
 

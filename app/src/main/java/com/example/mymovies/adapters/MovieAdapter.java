@@ -60,7 +60,7 @@ public class MovieAdapter extends PagedListAdapter<Result, MovieAdapter.MovieAda
 /*        Picasso picasso = Picasso.get();
         picasso.load(movies.getPosterPath()).into(holder.imageViewSmallPoster);*/
         if (movies != null && movies.getPosterPath() != null && movies.getPosterPath().length() > 0) {
-            BindingExtra.loadImage(holder.binding.imageViewSmallPoster, movies.getBackdropPath());
+            /*BindingExtra.loadImage(holder.binding.imageViewSmallPoster, movies.getBackdropPath());*/
 /*
             holder.binding.setMovieItem(movies);
 */

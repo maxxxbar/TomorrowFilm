@@ -45,7 +45,7 @@ class DetailFragment : Fragment() {
         val type = object : TypeToken<Result>() {}.type
         val gson = Gson()
         arguments?.let { bundle ->
-            bundle.getString("FILM")?.let { s = it }
+            bundle.getString(BUNDLE_MOVIE_KEY)?.let { s = it }
         }.also {
             s?.let {
                 result = gson.fromJson(s, type)

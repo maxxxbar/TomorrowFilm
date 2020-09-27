@@ -1,5 +1,9 @@
 package com.example.mymovies.utils
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.example.mymovies.network.NetworkState
+
 class Extra {
     companion object{
         const val BASE_URL = "https://api.themoviedb.org"

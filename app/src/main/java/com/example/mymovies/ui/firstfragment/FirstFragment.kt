@@ -1,6 +1,8 @@
 package com.example.mymovies.ui.firstfragment
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +23,7 @@ import com.example.mymovies.db.MovieDatabaseNew
 import com.example.mymovies.model.DiscoverMovieResultsItem
 import com.example.mymovies.network.ConnectionAPI
 import com.example.mymovies.ui.detailfragment.DetailFragment.Companion.BUNDLE_MOVIE_KEY
+import com.example.mymovies.ui.firstfragmentLi.FirstFragmentViewModel
 import com.example.mymovies.utils.findNavController
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
@@ -62,27 +65,35 @@ class FirstFragment : Fragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider.AndroidViewModelFactory(requireActivity().application).create(FirstFragmentViewModel::class.java)
+
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.first_fragment, container, false)
         val flexboxLayoutManager = FlexboxLayoutManager(requireContext())
         recyclerView = binding.recyclerViewPosters
-        setupRecyclerView(flexboxLayoutManager)
+        recyclerView.adapter = adapter
         setupFlexLayoutManager(flexboxLayoutManager)
+        setupRecyclerView(flexboxLayoutManager)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider.AndroidViewModelFactory(requireActivity().application).create(FirstFragmentViewModel::class.java)
         initAdapter()
         getMovies()
     }
+
+
 
     private fun setupRecyclerView(flexboxLayoutManager: FlexboxLayoutManager) {
         recyclerView.applySystemWindowInsetsToPadding(top = true)
         recyclerView = binding.recyclerViewPosters
         recyclerView.layoutManager = flexboxLayoutManager
-        recyclerView.setHasFixedSize(true)
+
     }
 
     private fun setupFlexLayoutManager(flexboxLayoutManager: FlexboxLayoutManager) {
@@ -96,13 +107,13 @@ class FirstFragment : Fragment() {
         adapter.setOnFilmClickListener {
             setFilmFromIntent(it)
         }
-        recyclerView.adapter = adapter.withLoadStateHeaderAndFooter(
-                header = LoadStateAdapter { adapter.retry() },
+//        adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        recyclerView.adapter = adapter.withLoadStateFooter(
                 footer = LoadStateAdapter { adapter.retry() }
         )
         adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         adapter.addLoadStateListener { loadState ->
-            binding.recyclerViewPosters.isVisible = loadState.source.refresh is LoadState.NotLoading
+//            binding.recyclerViewPosters.isVisible = loadState.source.refresh is LoadState.NotLoading
             binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
             binding.retryButton.isVisible = loadState.source.refresh is LoadState.Error
         }

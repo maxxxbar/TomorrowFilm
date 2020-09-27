@@ -15,7 +15,7 @@ import java.util.List;
 
 @Dao
 public interface MovieDao {
-    @Query("SELECT * FROM movies")
+    @Query("SELECT * FROM movies ORDER BY uniqueId")
     LiveData<MovieDB> getAllMovies();
 
     @Query("SELECT * FROM movies")

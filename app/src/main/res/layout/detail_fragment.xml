@@ -7,7 +7,7 @@
 
         <variable
             name="movie"
-            type="com.example.mymovies.entries.discover.movie.Result" />
+            type="com.example.mymovies.model.DiscoverMovieResultsItem" />
     </data>
 
 
@@ -15,6 +15,7 @@
         style="@style/Widget.Support.CoordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/shrine_pink_100"
         tools:context=".ui.mainactivity.MainActivity">
 
         <com.google.android.material.appbar.AppBarLayout

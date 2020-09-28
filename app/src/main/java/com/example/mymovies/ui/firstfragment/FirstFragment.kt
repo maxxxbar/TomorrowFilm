@@ -124,6 +124,7 @@ class FirstFragment : Fragment() {
         val gson = Gson()
         val value = gson.toJson(movie)
         bundle.putString(BUNDLE_MOVIE_KEY, value)
+        Log.d(TAG, "setFilmFromIntent: $value")
         findNavController().navigate(R.id.action_firstFragment_to_detailFragment, bundle)
     }
 

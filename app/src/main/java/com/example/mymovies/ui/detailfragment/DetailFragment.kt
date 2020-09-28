@@ -1,7 +1,7 @@
 package com.example.mymovies.ui.detailfragment
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +10,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.mymovies.R
 import com.example.mymovies.databinding.DetailFragmentBinding
-import com.example.mymovies.entries.discover.movie.Result
+import com.example.mymovies.model.DiscoverMovieResultsItem
+import com.example.mymovies.ui.mainactivity.MainActivity
+import com.example.mymovies.utils.loadImageWithGlide
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import com.google.gson.Gson
@@ -18,9 +20,9 @@ import com.google.gson.reflect.TypeToken
 import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 
 class DetailFragment : Fragment() {
-    private lateinit var result: Result
+    private lateinit var result: DiscoverMovieResultsItem
 
-    companion object{
+    companion object {
         const val BUNDLE_MOVIE_KEY = "MOVIE"
     }
 
@@ -36,22 +38,24 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         getArgumentsFromFirstFragment()
     }
 
     private fun getArgumentsFromFirstFragment() {
-        var s: String? = null
-        val type = object : TypeToken<Result>() {}.type
+        var value: String? = null
+        val type = object : TypeToken<DiscoverMovieResultsItem>() {}.type
         val gson = Gson()
         arguments?.let { bundle ->
-            bundle.getString(BUNDLE_MOVIE_KEY)?.let { s = it }
-        }.also {
-            s?.let {
-                result = gson.fromJson(s, type)
-                binding.movie = result
-                Log.d(TAG, result.backdropPath)
+            bundle.getString(BUNDLE_MOVIE_KEY)?.let {
+                value = it
             }
+        }
+        if (value != null) {
+            result = gson.fromJson(value, type)
+            binding.movie = result
+            result.posterPath?.let { binding.ivBigPoster.loadImageWithGlide(it) }
+        } else {
+            startActivity(Intent(requireContext(), MainActivity::class.java))
         }
     }
 
@@ -60,7 +64,6 @@ class DetailFragment : Fragment() {
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true).let { handleCollapsedToolbarTitle() }
-
     }
 
     private fun handleCollapsedToolbarTitle() {

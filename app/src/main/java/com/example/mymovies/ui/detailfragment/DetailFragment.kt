@@ -5,16 +5,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TableLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.mymovies.R
+import com.example.mymovies.adapters.DetailFragmentTabsAdapter
 import com.example.mymovies.databinding.DetailFragmentBinding
 import com.example.mymovies.model.DiscoverMovieResultsItem
 import com.example.mymovies.ui.mainactivity.MainActivity
 import com.example.mymovies.utils.loadImageWithGlide
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
@@ -39,6 +42,12 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getArgumentsFromFirstFragment()
+        val tabLayout = binding.detailFragmentTabLayout
+        val viewPager = binding.detailFragmentViewPager
+        viewPager.adapter = DetailFragmentTabsAdapter(this)
+        TabLayoutMediator(tabLayout,viewPager) {tab, position ->
+            tab.text = "TAB ${position +1}"
+        }.attach()
     }
 
     private fun getArgumentsFromFirstFragment() {
@@ -53,7 +62,7 @@ class DetailFragment : Fragment() {
         if (value != null) {
             result = gson.fromJson(value, type)
             binding.movie = result
-            result.posterPath?.let { binding.ivBigPoster.loadImageWithGlide(it) }
+            result.posterPath?.let { binding.ivPoster.loadImageWithGlide(it) }
         } else {
             startActivity(Intent(requireContext(), MainActivity::class.java))
         }

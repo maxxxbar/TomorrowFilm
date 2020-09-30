@@ -5,7 +5,7 @@
         android:icon="@drawable/ic_home_24px"
         android:title="@string/main_menu_text_main" />
     <item
-        android:id="@+id/favorite_graph"
+        android:id="@+id/test_graph"
         android:icon="@drawable/ic_favorite_border_24px"
         android:title="@string/main_menu_text_favorite" />
 

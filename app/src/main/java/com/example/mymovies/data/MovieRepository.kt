@@ -15,15 +15,20 @@ class MovieRepository(
         private val sortBy: String = Extra.SORT_BY_POPULARITY,
         private val voteCount: Int = Extra.VOTE_COUNT_GTE,
         private val database: MovieDatabaseNew) {
+
     companion object {
         private const val NETWORK_PAGE_SIZE = 50
     }
 
+    private val config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = true, initialLoadSize = 50)
+    private val remoteMediator = MovieRemoteMediator(rest, database, sortBy, voteCount)
+    private val pagingSourceFactory = { database.movieDao().getAllMovies() }
+
     fun resultAsLiveData(): LiveData<PagingData<DiscoverMovieResultsItem>> {
         return Pager(
-                config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = true, initialLoadSize = 50),
-                remoteMediator = MovieRemoteMediator(rest, database, sortBy, voteCount),
-                pagingSourceFactory = { database.movieDao().getAllMovies() }
+                config = config,
+                remoteMediator = remoteMediator,
+                pagingSourceFactory = pagingSourceFactory
         ).liveData
     }
 

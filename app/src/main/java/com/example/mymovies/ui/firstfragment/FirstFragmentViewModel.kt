@@ -28,30 +28,8 @@ class FirstFragmentViewModel(application: Application) : AndroidViewModel(applic
             voteCount = Extra.VOTE_COUNT_GTE,
             database)
 
-    /*Paging 2 Start*/
-    private val dataSourceMovieFactory = DataSourceMovieFactory(rest, Extra.SORT_BY_POPULARITY, Extra.VOTE_COUNT_GTE)
-    private val dataSourceMovieAsLiveData = dataSourceMovieFactory.movieMutableLiveData
-    private val executor = Executors.newCachedThreadPool()
-    private val config = PagedList.Config.Builder()
-            .setEnablePlaceholders(true)
-            .setInitialLoadSizeHint(40)
-            .setPageSize(50)
-            .build()
-    val pagedListAsLiveData = LivePagedListBuilder(dataSourceMovieFactory, config)
-            .setFetchExecutor(executor)
-            .build()
-
-    /*Paging 2 End*/
-
-    private val pagingSourceFactory = { MoviePagingSource(rest, Extra.SORT_BY_POPULARITY, Extra.VOTE_COUNT_GTE) }
-
-    val pagedListLiveData: LiveData<PagingData<DiscoverMovieResultsItem>> = repository.resultAsLiveData()
-
     fun getMoviesAsLiveData(): LiveData<PagingData<DiscoverMovieResultsItem>> {
         return repository.resultAsLiveData().cachedIn(viewModelScope)
     }
 
-    fun searchResult(): Flow<PagingData<DiscoverMovieResultsItem>> {
-        return repository.getResultAsFlow().cachedIn(viewModelScope)
-    }
 }

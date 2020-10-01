@@ -17,10 +17,10 @@ class MovieRepository(
         private val database: MovieDatabaseNew) {
 
     companion object {
-        private const val NETWORK_PAGE_SIZE = 50
+        private const val NETWORK_PAGE_SIZE = 20
     }
 
-    private val config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = true, initialLoadSize = 50)
+    private val config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = true, initialLoadSize = 40)
     private val remoteMediator = MovieRemoteMediator(rest, database, sortBy, voteCount)
     private val pagingSourceFactory = { database.movieDao().getAllMovies() }
 

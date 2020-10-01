@@ -1,8 +1,6 @@
 package com.example.mymovies.ui.detailfragment
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,43 +8,44 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
+import androidx.viewpager2.widget.ViewPager2
 import com.example.mymovies.R
 import com.example.mymovies.adapters.DetailFragmentTabsAdapter
-import com.example.mymovies.databinding.DetailFragmentBinding
-import com.example.mymovies.model.DiscoverMovieResultsItem
-import com.example.mymovies.ui.mainactivity.MainActivity
+import com.example.mymovies.databinding.FragmentDetailBinding
 import com.example.mymovies.utils.loadImageWithGlide
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 class DetailFragment : Fragment() {
-    private var result: DiscoverMovieResultsItem? = null
-    private lateinit var viewmodel: DetailFragmentViewModel
-    private var job: Job? = null
+    private lateinit var viewModel: DetailFragmentViewModel
 
     companion object {
-        const val BUNDLE_MOVIE_KEY_AS_STRING = "MOVIE_STRING_KEY"
         const val BUNDLE_MOVIE_KEY_AS_INT = "MOVIE_INT_KEY"
+        private const val BUNDLE_MOVIE_POSTER_PATH = "MOVIE_POSTER_PATH"
+        private const val BUNDLE_MOVIE_MOVIE_TITLE = "MOVIE_TITLE"
+
+        fun setMovieBundle(movieId: Int, posterPath: String, movieTitle: String): Bundle {
+            val bundle = Bundle()
+            bundle.putString(BUNDLE_MOVIE_POSTER_PATH, posterPath)
+            bundle.putString(BUNDLE_MOVIE_MOVIE_TITLE, movieTitle)
+            bundle.putInt(BUNDLE_MOVIE_KEY_AS_INT, movieId)
+            return bundle
+        }
     }
 
-    private lateinit var binding: DetailFragmentBinding
+    private lateinit var binding: FragmentDetailBinding
     private val TAG = javaClass.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewmodel = ViewModelProvider.AndroidViewModelFactory(requireActivity().application).create(DetailFragmentViewModel::class.java)
+        viewModel = ViewModelProvider.AndroidViewModelFactory(requireActivity().application).create(DetailFragmentViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.detail_fragment, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail, container, false)
         binding.appbar.applySystemWindowInsetsToPadding(top = true)
         setupToolbar()
         return binding.root
@@ -54,51 +53,32 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //getArgumentsFromFirstFragment()
-        getMovieFromDatabase()
         val tabLayout = binding.detailFragmentTabLayout
         val viewPager = binding.detailFragmentViewPager
-        viewPager.adapter = DetailFragmentTabsAdapter(this)
+        val adapterTabsAdapter = DetailFragmentTabsAdapter(this)
+        viewPager.adapter = adapterTabsAdapter
+        getMovieIdFromFirstFragment(adapterTabsAdapter)
+        setTabLayoutMediator(tabLayout, viewPager)
+    }
+
+    private fun setTabLayoutMediator(tabLayout: TabLayout, viewPager: ViewPager2) {
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = "TAB ${position + 1}"
+            when (position) {
+                0 -> tab.text = "Описание"
+                1 -> tab.text = "Трейлеры"
+            }
         }.attach()
     }
 
-    private fun getMovieFromDatabase() {
-        job?.cancel()
-        job = lifecycleScope.launch {
-            var movieId: Int? = null
-            Log.d(TAG, "getMovieFromDatabase: ${Thread.currentThread().name}")
-            val bundle = arguments
-            if (bundle != null) {
-                movieId = bundle.getInt(BUNDLE_MOVIE_KEY_AS_INT)
-            }
-            if (movieId != null) {
-                viewmodel.getMovieFromDatabase(movieId).collect {
-                    result = it
-                    binding.movie = result
-                    it.posterPath?.let { binding.ivPoster.loadImageWithGlide(it) }
-                }
-            }
-        }
-    }
 
-
-    private fun getArgumentsFromFirstFragment() {
-        var value: String? = null
-        val type = object : TypeToken<DiscoverMovieResultsItem>() {}.type
-        val gson = Gson()
+    private fun getMovieIdFromFirstFragment(adapter: DetailFragmentTabsAdapter) {
         arguments?.let { bundle ->
-            bundle.getString(BUNDLE_MOVIE_KEY_AS_STRING)?.let {
-                value = it
+            bundle.getInt(BUNDLE_MOVIE_KEY_AS_INT).let {
+                adapter.movieId = it
             }
-        }
-        if (value != null) {
-            result = gson.fromJson(value, type)
-            binding.movie = result
-            result?.posterPath?.let { binding.ivPoster.loadImageWithGlide(it) }
-        } else {
-            startActivity(Intent(requireContext(), MainActivity::class.java))
+            bundle.getString(BUNDLE_MOVIE_POSTER_PATH).let {
+                it?.let { binding.ivPoster.loadImageWithGlide(it) }
+            }
         }
     }
 
@@ -119,7 +99,9 @@ class DetailFragment : Fragment() {
                 }
                 // verify if the toolbar is completely collapsed and set the movie name as the title
                 if (scrollRange + verticalOffset == 0) {
-                    binding.collapsingToolbar.title = result?.title
+                    val title = arguments?.getString(BUNDLE_MOVIE_MOVIE_TITLE)
+                    binding.collapsingToolbar.title = title
+                            ?: resources.getString(R.string.app_name)
                     isShow = true
                 } else if (isShow) {
                     // display an empty string when toolbar is expanded
@@ -129,5 +111,6 @@ class DetailFragment : Fragment() {
             }
         })
     }
+
 }
 

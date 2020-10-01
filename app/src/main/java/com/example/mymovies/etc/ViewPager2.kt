@@ -46,6 +46,7 @@ private class DemoCollectionAdapter(fragment: Fragment) : FragmentStateAdapter(f
         return fragment
     }*/
 
+
         when (position) {
             0 -> return DemoFragmentFirst()
             1 -> return DemoFragmentTwo()

@@ -19,6 +19,6 @@
         android:id="@+id/detailFragment"
         android:name="com.example.mymovies.ui.detailfragment.DetailFragment"
         android:label="fragment_detail"
-        tools:layout="@layout/detail_fragment" />
+        tools:layout="@layout/fragment_detail" />
 
 </navigation>

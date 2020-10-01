@@ -19,5 +19,4 @@ class DetailFragmentViewModel(application: Application) : AndroidViewModel(appli
             databasse.movieDao().getOneMovieAsLiveData(id)
         }
     }
-
 }

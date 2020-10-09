@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -16,8 +15,6 @@ import com.example.mymovies.R
 import com.example.mymovies.adapters.LoadStateAdapter
 import com.example.mymovies.adapters.MovieAdapterNew
 import com.example.mymovies.databinding.FirstFragmentBinding
-import com.example.mymovies.ui.detailfragment.DetailFragment
-import com.example.mymovies.ui.firstfragmentLi.FirstFragmentViewModel
 import com.example.mymovies.utils.findNavController
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
@@ -28,11 +25,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @ExperimentalPagingApi
-class FirstFragment : Fragment() {
+class FirstFragment : Fragment(R.layout.first_fragment) {
 
     private lateinit var viewModel: FirstFragmentViewModel
     private lateinit var binding: FirstFragmentBinding
     private lateinit var recyclerView: RecyclerView
+    private lateinit var flexboxLayoutManager: FlexboxLayoutManager
+
     private val TAG = javaClass.simpleName
     private val adapter = MovieAdapterNew()
     private var getMoviesJob: Job? = null
@@ -43,11 +42,11 @@ class FirstFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.first_fragment, container, false)
-        val flexboxLayoutManager = FlexboxLayoutManager(requireContext())
+        binding = FirstFragmentBinding.inflate(layoutInflater)
+        flexboxLayoutManager = FlexboxLayoutManager(requireContext())
         recyclerView = binding.recyclerViewPosters
-        setupFlexLayoutManager(flexboxLayoutManager)
-        setupRecyclerView(flexboxLayoutManager)
+        setupFlexLayoutManager()
+        setupRecyclerView()
         return binding.root
     }
 
@@ -66,14 +65,14 @@ class FirstFragment : Fragment() {
         }
     }
 
-    private fun setupRecyclerView(flexboxLayoutManager: FlexboxLayoutManager) {
+    private fun setupRecyclerView() {
         recyclerView.adapter = adapter
         recyclerView.applySystemWindowInsetsToPadding(top = true)
         recyclerView = binding.recyclerViewPosters
         recyclerView.layoutManager = flexboxLayoutManager
     }
 
-    private fun setupFlexLayoutManager(flexboxLayoutManager: FlexboxLayoutManager) {
+    private fun setupFlexLayoutManager() {
         flexboxLayoutManager.flexWrap = FlexWrap.WRAP
         flexboxLayoutManager.alignItems = AlignItems.STRETCH
         flexboxLayoutManager.flexDirection = FlexDirection.ROW
@@ -82,13 +81,12 @@ class FirstFragment : Fragment() {
     private fun initAdapter() {
         binding.retryButton.setOnClickListener { adapter.retry() }
         adapter.setOnFilmClickListener {
-            if (it.title != null && it.posterPath != null) {
-                setFilmFromIntent(
+                viewModel.setFilmForDetailFragment(
                         movieId = it.id,
                         posterPath = it.posterPath,
-                        movieTitle = it.title
-                )
-            }
+                        movieTitle = it.title)?.let { bundle ->
+                    findNavController().navigate(R.id.action_firstFragment_to_detailFragment, bundle)
+                }
         }
         recyclerView.adapter = adapter.withLoadStateFooter(
                 footer = LoadStateAdapter { adapter.retry() }
@@ -98,14 +96,6 @@ class FirstFragment : Fragment() {
             binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
             binding.retryButton.isVisible = loadState.source.refresh is LoadState.Error
         }
-    }
-
-    private fun setFilmFromIntent(movieId: Int, posterPath: String, movieTitle: String) {
-        val bundle = DetailFragment.setMovieBundle(
-                movieId = movieId,
-                posterPath = posterPath,
-                movieTitle = movieTitle)
-        findNavController().navigate(R.id.action_firstFragment_to_detailFragment, bundle)
     }
 
 }

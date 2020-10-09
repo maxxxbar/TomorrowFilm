@@ -27,6 +27,10 @@ class MovieRemoteMediator(
         private const val START_PAGE = 1
     }
 
+    override suspend fun initialize(): InitializeAction {
+        return InitializeAction.SKIP_INITIAL_REFRESH
+    }
+
     override suspend fun load(loadType: LoadType, state: PagingState<Int, DiscoverMovieResultsItem>): MediatorResult {
 
         val page = when (loadType) {
@@ -39,11 +43,7 @@ class MovieRemoteMediator(
                 val remoteKeys = getRemoteKeyForLastItem(state)
                 if (remoteKeys == null) {
                     START_PAGE
-                } else if (remoteKeys.nextKey == null) {
-                    throw InvalidObjectException("Remote key should not be null for $loadType")
-                } else {
-                    remoteKeys.nextKey
-                }
+                } else remoteKeys.nextKey ?: throw InvalidObjectException("Remote key should not be null for $loadType")
             }
         }
 

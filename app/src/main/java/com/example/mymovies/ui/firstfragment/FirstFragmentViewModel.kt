@@ -1,20 +1,19 @@
-package com.example.mymovies.ui.firstfragmentLi
+package com.example.mymovies.ui.firstfragment
 
 import android.app.Application
+import android.os.Bundle
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import androidx.paging.*
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.mymovies.data.MovieRepository
-import com.example.mymovies.datasource.movie.MoviePagingSource
 import com.example.mymovies.db.MovieDatabaseNew
-import com.example.mymovies.entries.discover.movie.Result
 import com.example.mymovies.model.DiscoverMovieResultsItem
 import com.example.mymovies.network.ConnectionAPI
-import com.example.mymovies.paging2.DataSourceMovieFactory
+import com.example.mymovies.ui.detailfragment.DetailFragment
 import com.example.mymovies.utils.Extra
-import kotlinx.coroutines.flow.Flow
-import java.util.concurrent.Executors
 
 @ExperimentalPagingApi
 class FirstFragmentViewModel(application: Application) : AndroidViewModel(application) {
@@ -30,6 +29,15 @@ class FirstFragmentViewModel(application: Application) : AndroidViewModel(applic
 
     fun getMoviesAsLiveData(): LiveData<PagingData<DiscoverMovieResultsItem>> {
         return repository.resultAsLiveData().cachedIn(viewModelScope)
+    }
+
+    fun setFilmForDetailFragment(movieId: Int?, posterPath: String?, movieTitle: String?): Bundle? {
+        if (movieId != null && posterPath != null && movieTitle != null) {
+            return DetailFragment.setMovieBundle(
+                    movieId = movieId,
+                    posterPath = posterPath,
+                    movieTitle = movieTitle)
+        } else return Bundle()
     }
 
 }

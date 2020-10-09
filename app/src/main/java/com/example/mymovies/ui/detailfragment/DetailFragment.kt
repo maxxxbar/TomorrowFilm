@@ -1,6 +1,7 @@
 package com.example.mymovies.ui.detailfragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,9 +19,9 @@ import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
+import io.reactivex.rxjava3.kotlin.subscribeBy
 
 class DetailFragment : Fragment() {
-    private lateinit var viewModel: DetailFragmentViewModel
 
     companion object {
         const val BUNDLE_MOVIE_KEY_AS_INT = "MOVIE_INT_KEY"
@@ -36,6 +37,7 @@ class DetailFragment : Fragment() {
         }
     }
 
+    private lateinit var viewModel: DetailFragmentViewModel
     private lateinit var binding: FragmentDetailBinding
     private val TAG = javaClass.simpleName
 
@@ -57,6 +59,7 @@ class DetailFragment : Fragment() {
         val viewPager = binding.detailFragmentViewPager
         val adapterTabsAdapter = DetailFragmentTabsAdapter(this)
         viewPager.adapter = adapterTabsAdapter
+        viewPager.offscreenPageLimit = 2
         getMovieIdFromFirstFragment(adapterTabsAdapter)
         setTabLayoutMediator(tabLayout, viewPager)
     }
@@ -75,6 +78,10 @@ class DetailFragment : Fragment() {
         arguments?.let { bundle ->
             bundle.getInt(BUNDLE_MOVIE_KEY_AS_INT).let {
                 adapter.movieId = it
+                viewModel.getTrailers(it).subscribeBy(
+                        onSuccess = { Log.d(TAG, "getMovieIdFromFirstFragment: ${it[0].id}") },
+                        onError = { throwable -> throwable.stackTrace }
+                )
             }
             bundle.getString(BUNDLE_MOVIE_POSTER_PATH).let {
                 it?.let { binding.ivPoster.loadImageWithGlide(it) }

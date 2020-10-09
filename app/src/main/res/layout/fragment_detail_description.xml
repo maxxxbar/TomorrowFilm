@@ -136,8 +136,7 @@
                 style="@style/ActivityDetailTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{movie.overview}"
-                android:textSize="42sp" />
+                android:text="@{movie.overview}"/>
 
         </LinearLayout>
 

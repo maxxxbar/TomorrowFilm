@@ -23,7 +23,6 @@ class DetailFragmentTabsAdapter(fragment: Fragment) : FragmentStateAdapter(fragm
         movieId?.let {
             detailFragmentDescription.arguments = Bundle().apply {
                 putInt(BUNDLE_MOVIE_KEY_AS_INT, it)
-                Log.d(TAG, "createFragment: $it")
             }
         }
             return when (position) {

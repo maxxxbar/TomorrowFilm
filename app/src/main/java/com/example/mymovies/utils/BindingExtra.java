@@ -10,7 +10,7 @@ import com.example.mymovies.R;
 
 public class BindingExtra {
 
-    @BindingAdapter({"app:url"})
+/*    @BindingAdapter({"app:url"})
     public static void loadImage(ImageView view, String url) {
         url = Extra.POSTER_BASE_URL + Extra.SMALL_POSTER_SIZE + url;
         Glide
@@ -20,6 +20,6 @@ public class BindingExtra {
                 .placeholder(R.drawable.ic_placeholder)
                 .error(R.drawable.ic_placeholder)
                 .into(view);
-    }
+    }*/
 
 }

@@ -14,13 +14,12 @@ import retrofit2.http.Query
 interface Rest {
 
     companion object {
-        private const val API_KEY = "api_key"
-        private const val LANGUAGE = "language"
-        private const val SORT_BY = "sort_by"
-        private const val VOTE_COUNT_GTE = "vote_count.gte"
-        private const val PAGE = "page"
-
-
+        private const val API_KEY_QUERY = "api_key"
+        private const val LANGUAGE_QUERY = "language"
+        private const val SORT_BY_QUERY = "sort_by"
+        private const val VOTE_COUNT_GTE_QUERY = "vote_count.gte"
+        private const val PAGE_QUERY = "page"
+        private const val MOVIE_ID_QUERY = "movie_id"
     }
 
     @GET("/3/discover/movie")
@@ -32,17 +31,17 @@ interface Rest {
 
     @GET("/3/discover/movie")
     suspend fun getMovies2(
-            @Query(API_KEY) apikey: String = Extra.API_KEY,
-            @Query(LANGUAGE) language: String = Extra.LANGUAGE,
-            @Query(SORT_BY) sortBy: String,
-            @Query(VOTE_COUNT_GTE) voteCount: Int,
-            @Query(PAGE) page: Int): Response<DiscoverMovie>
+            @Query(API_KEY_QUERY) apikey: String = Extra.API_KEY,
+            @Query(LANGUAGE_QUERY) language: String = Extra.LANGUAGE,
+            @Query(SORT_BY_QUERY) sortBy: String,
+            @Query(VOTE_COUNT_GTE_QUERY) voteCount: Int,
+            @Query(PAGE_QUERY) page: Int): Response<DiscoverMovie>
 
     @GET("/3/movie/{movie_id}/videos")
     fun getTrailer(
-            @Path("movie_id") movieId: Int,
-            @Query("api_key") apikey: String,
-            @Query("language") language: String
+            @Path(MOVIE_ID_QUERY) movieId: Int,
+            @Query(API_KEY_QUERY) apikey: String = Extra.API_KEY,
+            @Query(LANGUAGE_QUERY) language: String = Extra.LANGUAGE
     ): Single<Trailer>
 
     @GET("")

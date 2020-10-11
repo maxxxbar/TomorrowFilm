@@ -21,6 +21,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
 
     public void setTrailerList(List<Result> trailerList) {
         this.trailerList = trailerList;
+        notifyDataSetChanged();
     }
 
     public interface OnClickWatchTrailer {

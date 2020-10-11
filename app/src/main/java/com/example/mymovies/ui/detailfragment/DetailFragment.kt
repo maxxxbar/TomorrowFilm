@@ -78,13 +78,9 @@ class DetailFragment : Fragment() {
         arguments?.let { bundle ->
             bundle.getInt(BUNDLE_MOVIE_KEY_AS_INT).let {
                 adapter.movieId = it
-                viewModel.getTrailers(it).subscribeBy(
-                        onSuccess = { Log.d(TAG, "getMovieIdFromFirstFragment: ${it[0].id}") },
-                        onError = { throwable -> throwable.stackTrace }
-                )
             }
-            bundle.getString(BUNDLE_MOVIE_POSTER_PATH).let {
-                it?.let { binding.ivPoster.loadImageWithGlide(it) }
+            bundle.getString(BUNDLE_MOVIE_POSTER_PATH)?.let {
+                it.let { binding.ivPoster.loadImageWithGlide(it) }
             }
         }
     }
@@ -112,7 +108,7 @@ class DetailFragment : Fragment() {
                     isShow = true
                 } else if (isShow) {
                     // display an empty string when toolbar is expanded
-                    binding.collapsingToolbar.title = " "
+                    binding.collapsingToolbar.title = getString(R.string.empty_string)
                     isShow = false
                 }
             }

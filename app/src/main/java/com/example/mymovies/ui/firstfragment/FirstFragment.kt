@@ -30,7 +30,7 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
     private lateinit var viewModel: FirstFragmentViewModel
     private lateinit var binding: FirstFragmentBinding
     private lateinit var recyclerView: RecyclerView
-    private lateinit var flexboxLayoutManager: FlexboxLayoutManager
+    private lateinit var flexBoxLayoutManager: FlexboxLayoutManager
 
     private val TAG = javaClass.simpleName
     private val adapter = MovieAdapterNew()
@@ -43,7 +43,7 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FirstFragmentBinding.inflate(layoutInflater)
-        flexboxLayoutManager = FlexboxLayoutManager(requireContext())
+        flexBoxLayoutManager = FlexboxLayoutManager(requireContext())
         recyclerView = binding.recyclerViewPosters
         setupFlexLayoutManager()
         setupRecyclerView()
@@ -69,13 +69,13 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
         recyclerView.adapter = adapter
         recyclerView.applySystemWindowInsetsToPadding(top = true)
         recyclerView = binding.recyclerViewPosters
-        recyclerView.layoutManager = flexboxLayoutManager
+        recyclerView.layoutManager = flexBoxLayoutManager
     }
 
     private fun setupFlexLayoutManager() {
-        flexboxLayoutManager.flexWrap = FlexWrap.WRAP
-        flexboxLayoutManager.alignItems = AlignItems.STRETCH
-        flexboxLayoutManager.flexDirection = FlexDirection.ROW
+        flexBoxLayoutManager.flexWrap = FlexWrap.WRAP
+        flexBoxLayoutManager.alignItems = AlignItems.STRETCH
+        flexBoxLayoutManager.flexDirection = FlexDirection.ROW
     }
 
     private fun initAdapter() {

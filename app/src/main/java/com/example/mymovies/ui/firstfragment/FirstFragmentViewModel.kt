@@ -32,12 +32,12 @@ class FirstFragmentViewModel(application: Application) : AndroidViewModel(applic
     }
 
     fun setFilmForDetailFragment(movieId: Int?, posterPath: String?, movieTitle: String?): Bundle? {
-        if (movieId != null && posterPath != null && movieTitle != null) {
-            return DetailFragment.setMovieBundle(
+        return if (movieId != null && posterPath != null && movieTitle != null) {
+            DetailFragment.setMovieBundle(
                     movieId = movieId,
                     posterPath = posterPath,
                     movieTitle = movieTitle)
-        } else return Bundle()
+        } else Bundle()
     }
 
 }

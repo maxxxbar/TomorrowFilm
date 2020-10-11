@@ -9,6 +9,7 @@ import com.example.mymovies.ui.DemoFragmentFirst
 import com.example.mymovies.ui.DemoFragmentTwo
 import com.example.mymovies.ui.detailfragment.DetailFragment.Companion.BUNDLE_MOVIE_KEY_AS_INT
 import com.example.mymovies.ui.detailfragment.DetailFragmentDescription
+import com.example.mymovies.ui.detailfragment.DetailFragmentTrailers
 
 class DetailFragmentTabsAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     private val TAG = javaClass.simpleName
@@ -25,10 +26,21 @@ class DetailFragmentTabsAdapter(fragment: Fragment) : FragmentStateAdapter(fragm
                 putInt(BUNDLE_MOVIE_KEY_AS_INT, it)
             }
         }
-            return when (position) {
+        return when (position) {
             0 -> detailFragmentDescription
-            1 -> DemoFragmentTwo()
+            1 -> createFragmentForTrailers()
             else -> DemoObjectFragment()
         }
+    }
+
+    private fun createFragmentForTrailers(): Fragment {
+        val detailFragmentTrailers = DetailFragmentTrailers()
+        val bundle = Bundle()
+        movieId?.let {
+            Log.d(TAG, "createFragmentForTrailers: $movieId")
+            bundle.putInt(BUNDLE_MOVIE_KEY_AS_INT, it)
+            detailFragmentTrailers.arguments = bundle
+        }
+        return detailFragmentTrailers
     }
 }

@@ -87,6 +87,7 @@ class DetailFragment : Fragment() {
 
     private fun setupToolbar() {
         val toolbar = binding.toolbar
+        toolbar.title = getString(R.string.empty_string)
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true).let { handleCollapsedToolbarTitle() }

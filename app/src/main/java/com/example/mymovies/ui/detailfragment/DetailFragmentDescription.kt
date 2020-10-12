@@ -1,8 +1,6 @@
 package com.example.mymovies.ui.detailfragment
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +11,6 @@ import androidx.lifecycle.lifecycleScope
 import com.example.mymovies.R
 import com.example.mymovies.databinding.FragmentDetailDescriptionBinding
 import com.example.mymovies.model.DiscoverMovieResultsItem
-import com.example.mymovies.ui.mainactivity.MainActivity
-import com.example.mymovies.utils.loadImageWithGlide
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -38,18 +34,17 @@ class DetailFragmentDescription : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.let { bundle ->
-            getMovieFromDatabase(bundle.getInt(DetailFragment.BUNDLE_MOVIE_KEY_AS_INT))
-        }
+        getMovieFromDatabase()
     }
 
-    private fun getMovieFromDatabase(movieId: Int) {
+    private fun getMovieFromDatabase() {
         job?.cancel()
         job = lifecycleScope.launch {
-            Log.d(TAG, "getMovieFromDatabase: ${Thread.currentThread().name}")
-            viewmodel.getMovieFromDatabase(movieId).collect {
-                result = it
-                binding.movie = result
+            arguments?.let { bundle ->
+                viewmodel.getMovieFromDatabase(bundle.getInt(DetailFragment.BUNDLE_MOVIE_KEY_AS_INT)).collect {
+                    result = it
+                    binding.movie = result
+                }
             }
         }
     }

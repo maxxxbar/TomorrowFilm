@@ -1,5 +1,6 @@
 package com.example.mymovies.network
 
+import com.example.mymovies.BuildConfig
 import com.example.mymovies.entries.discover.movie.Movies
 import com.example.mymovies.model.DiscoverMovie
 import com.example.mymovies.entries.discover.reviews.Reviews
@@ -20,6 +21,7 @@ interface Rest {
         private const val VOTE_COUNT_GTE_QUERY = "vote_count.gte"
         private const val PAGE_QUERY = "page"
         private const val MOVIE_ID_QUERY = "movie_id"
+        private const val API_KEY_VALUE = BuildConfig.API_KEY_TMDB
     }
 
     @GET("/3/discover/movie")
@@ -31,7 +33,7 @@ interface Rest {
 
     @GET("/3/discover/movie")
     suspend fun getMovies2(
-            @Query(API_KEY_QUERY) apikey: String = Extra.API_KEY,
+            @Query(API_KEY_QUERY) apikey: String = API_KEY_VALUE,
             @Query(LANGUAGE_QUERY) language: String = Extra.LANGUAGE,
             @Query(SORT_BY_QUERY) sortBy: String,
             @Query(VOTE_COUNT_GTE_QUERY) voteCount: Int,
@@ -40,7 +42,7 @@ interface Rest {
     @GET("/3/movie/{movie_id}/videos")
     fun getTrailer(
             @Path(MOVIE_ID_QUERY) movieId: Int,
-            @Query(API_KEY_QUERY) apikey: String = Extra.API_KEY,
+            @Query(API_KEY_QUERY) apikey: String = API_KEY_VALUE,
             @Query(LANGUAGE_QUERY) language: String = Extra.LANGUAGE
     ): Single<Trailer>
 

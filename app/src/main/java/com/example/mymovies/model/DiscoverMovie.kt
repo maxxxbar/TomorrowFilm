@@ -26,7 +26,7 @@ data class DiscoverMovieResultsItem(
 		val uniqueId: Int,
 
 		@field:SerializedName("id")
-		val id: Int,
+		 val id: Int,
 
 		@field:SerializedName("overview")
 		val overview: String? = null,

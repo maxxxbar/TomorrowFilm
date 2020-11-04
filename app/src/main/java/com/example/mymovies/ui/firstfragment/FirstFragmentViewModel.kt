@@ -31,13 +31,8 @@ class FirstFragmentViewModel(application: Application) : AndroidViewModel(applic
         return repository.resultAsLiveData().cachedIn(viewModelScope)
     }
 
-    fun setFilmForDetailFragment(movieId: Int?, posterPath: String?, movieTitle: String?): Bundle? {
-        return if (movieId != null && posterPath != null && movieTitle != null) {
-            DetailFragment.setMovieBundle(
-                    movieId = movieId,
-                    posterPath = posterPath,
-                    movieTitle = movieTitle)
-        } else Bundle()
+    fun setFilmForDetailFragment(movie: DiscoverMovieResultsItem): Bundle? {
+        return DetailFragment.setMovieBundle(movie)
     }
 
 }

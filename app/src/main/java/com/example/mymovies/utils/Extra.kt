@@ -1,9 +1,5 @@
 package com.example.mymovies.utils
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.example.mymovies.network.NetworkState
-
 class Extra {
     companion object{
         const val BASE_URL = "https://api.themoviedb.org"
@@ -18,6 +14,6 @@ class Extra {
         const val SORT_BY_VOTE_AVERAGE = "vote_average.desc"
         const val VOTE_COUNT_GTE = 100
         const val SHARED_PREFERENCES_NAME = "APP_PREFERENCES"
-        const val DB_NAME = "movies.db"
+        const val DB_NAME = "moviess.db"
     }
 }

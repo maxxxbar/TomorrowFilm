@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(), ConnectivityProvider.ConnectivityState
     private fun setupBottomNavigationBar() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav)
 
-        val navGraphIds = listOf(R.navigation.main_graph, R.navigation.favorite_graph, R.navigation.test_graph)
+        val navGraphIds = listOf(R.navigation.main_graph, R.navigation.favorite_graph)
 
         // Setup the bottom navigation view with a list of navigation graphs
         val controller = bottomNavigationView.setupWithNavController(
@@ -70,6 +70,10 @@ class MainActivity : AppCompatActivity(), ConnectivityProvider.ConnectivityState
 
     override fun onSupportNavigateUp(): Boolean {
         return currentNavController?.value?.navigateUp() ?: false
+    }
+
+    fun onLickFavorite(view: View) {
+
     }
 
 

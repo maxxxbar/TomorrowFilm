@@ -1,9 +1,12 @@
 package com.example.mymovies.ui.firstfragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -11,10 +14,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.withTransaction
 import com.example.mymovies.R
 import com.example.mymovies.adapters.LoadStateAdapter
 import com.example.mymovies.adapters.MovieAdapterNew
 import com.example.mymovies.databinding.FirstFragmentBinding
+import com.example.mymovies.db.MovieDatabaseNew
+import com.example.mymovies.model.DiscoverMovieResultsItem
+import com.example.mymovies.model.FavoriteMovies
 import com.example.mymovies.utils.findNavController
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
@@ -78,15 +85,42 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
         flexBoxLayoutManager.flexDirection = FlexDirection.ROW
     }
 
+
+
+
+    private fun qweqwe(movie: DiscoverMovieResultsItem) {
+        val db = MovieDatabaseNew.getInstance(requireContext())
+        getMoviesJob?.cancel()
+        getMoviesJob = lifecycleScope.launch {
+            db.withTransaction {
+/*                val _movie = FavoriteMovies(
+                        movie.uniqueId,
+                        movie.id,
+                        movie.overview,
+                        movie.originalLanguage, movie.originalTitle,
+                        movie.video,
+                        movie.title,
+                        movie.posterPath,
+                        movie.backdropPath,
+                        movie.releaseDate,
+                        movie.popularity,
+                        movie.voteAverage,
+                        movie.adult,
+                        movie.voteCount
+                )
+                db.movieDao().insertFavoriteMovie(_movie)
+                Log.d(TAG, "initAdapter: ${db.movieDao().getAllFavoriteMovies()}")*/
+            }
+        }
+    }
+
     private fun initAdapter() {
         binding.retryButton.setOnClickListener { adapter.retry() }
         adapter.setOnFilmClickListener {
-                viewModel.setFilmForDetailFragment(
-                        movieId = it.id,
-                        posterPath = it.posterPath,
-                        movieTitle = it.title)?.let { bundle ->
-                    findNavController().navigate(R.id.action_firstFragment_to_detailFragment, bundle)
-                }
+            qweqwe(it)
+            viewModel.setFilmForDetailFragment(it)?.let { bundle ->
+                findNavController().navigate(R.id.action_firstFragment_to_detailFragment, bundle)
+            }
         }
         recyclerView.adapter = adapter.withLoadStateFooter(
                 footer = LoadStateAdapter { adapter.retry() }

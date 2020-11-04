@@ -11,7 +11,7 @@ import com.example.mymovies.utils.Extra;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {MovieDB.class, FavoriteMovie.class}, version = 4, exportSchema = false)
+@Database(entities = {MovieDB.class, FavoriteMovie.class}, version = 5, exportSchema = false)
 public abstract class MovieDatabase extends RoomDatabase {
 
     public abstract MovieDao movieDao();

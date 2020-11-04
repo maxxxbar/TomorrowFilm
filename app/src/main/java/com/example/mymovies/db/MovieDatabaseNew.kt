@@ -5,11 +5,12 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.mymovies.model.DiscoverMovieResultsItem
+import com.example.mymovies.model.FavoriteMovies
 import com.example.mymovies.model.RemoteKeys
 
 @Database(
-        entities = [DiscoverMovieResultsItem::class, RemoteKeys::class],
-        version = 1,
+        entities = [DiscoverMovieResultsItem::class, RemoteKeys::class, FavoriteMovies::class],
+        version = 2,
         exportSchema = false
 )
 abstract class MovieDatabaseNew : RoomDatabase() {
@@ -28,7 +29,7 @@ abstract class MovieDatabaseNew : RoomDatabase() {
         private fun buildDatabase(context: Context) =
                 Room.databaseBuilder(
                         context.applicationContext,
-                        MovieDatabaseNew::class.java, "qweqwe.db")
+                        MovieDatabaseNew::class.java, "movies.db")
                         .fallbackToDestructiveMigration()
                         .build()
     }

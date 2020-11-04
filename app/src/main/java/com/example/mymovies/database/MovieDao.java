@@ -8,8 +8,6 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.example.mymovies.etc.DataSource;
-
 import java.util.List;
 
 
@@ -17,9 +15,6 @@ import java.util.List;
 public interface MovieDao {
     @Query("SELECT * FROM movies ORDER BY uniqueId")
     LiveData<MovieDB> getAllMovies();
-
-    @Query("SELECT * FROM movies")
-    DataSource.Factory<Integer, MovieDB> getAllMoviesNew();
 
     @Query("SELECT * FROM favorite_movies")
     LiveData<List<FavoriteMovie>> getAllFavoriteMovie();

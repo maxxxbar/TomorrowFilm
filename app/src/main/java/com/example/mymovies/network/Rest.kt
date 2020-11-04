@@ -2,10 +2,9 @@ package com.example.mymovies.network
 
 import com.example.mymovies.BuildConfig
 import com.example.mymovies.entries.discover.movie.Movies
-import com.example.mymovies.model.DiscoverMovie
 import com.example.mymovies.entries.discover.reviews.Reviews
 import com.example.mymovies.entries.discover.trailer.Trailer
-import com.example.mymovies.utils.Extra
+import com.example.mymovies.model.DiscoverMovie
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Response
 import retrofit2.http.GET
@@ -22,6 +21,7 @@ interface Rest {
         private const val PAGE_QUERY = "page"
         private const val MOVIE_ID_QUERY = "movie_id"
         private const val API_KEY_VALUE = BuildConfig.API_KEY_TMDB
+        private const val LANGUAGE_VALUE = "ru-RU"
     }
 
     @GET("/3/discover/movie")
@@ -34,7 +34,7 @@ interface Rest {
     @GET("/3/discover/movie")
     suspend fun getMovies2(
             @Query(API_KEY_QUERY) apikey: String = API_KEY_VALUE,
-            @Query(LANGUAGE_QUERY) language: String = Extra.LANGUAGE,
+            @Query(LANGUAGE_QUERY) language: String = LANGUAGE_VALUE,
             @Query(SORT_BY_QUERY) sortBy: String,
             @Query(VOTE_COUNT_GTE_QUERY) voteCount: Int,
             @Query(PAGE_QUERY) page: Int): Response<DiscoverMovie>
@@ -43,13 +43,13 @@ interface Rest {
     fun getTrailer(
             @Path(MOVIE_ID_QUERY) movieId: Int,
             @Query(API_KEY_QUERY) apikey: String = API_KEY_VALUE,
-            @Query(LANGUAGE_QUERY) language: String = Extra.LANGUAGE
+            @Query(LANGUAGE_QUERY) language: String = LANGUAGE_VALUE
     ): Single<Trailer>
 
-    @GET("")
+    @GET("/3/discover/movie")
     fun getReviews(
-            @Path("movie_id") movieId: Int,
-            @Query("api_key") apikey: String,
-            @Query("language") language: String
+            @Path(MOVIE_ID_QUERY) movieId: Int,
+            @Query(API_KEY_QUERY) apikey: String = API_KEY_VALUE,
+            @Query(LANGUAGE_QUERY) language: String = LANGUAGE_VALUE
     ): Single<Reviews>
 }

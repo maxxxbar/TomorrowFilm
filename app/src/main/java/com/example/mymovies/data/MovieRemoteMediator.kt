@@ -27,9 +27,9 @@ class MovieRemoteMediator(
         private const val START_PAGE = 1
     }
 
-    override suspend fun initialize(): InitializeAction {
+/*    override suspend fun initialize(): InitializeAction {
         return InitializeAction.SKIP_INITIAL_REFRESH
-    }
+    }*/
 
     override suspend fun load(loadType: LoadType, state: PagingState<Int, DiscoverMovieResultsItem>): MediatorResult {
 

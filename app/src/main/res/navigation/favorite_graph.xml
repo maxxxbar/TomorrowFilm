@@ -9,5 +9,15 @@
         android:id="@+id/favoriteFragment"
         android:name="com.example.mymovies.ui.favoritefragment.FavoriteFragment"
         android:label="favorite_fragment"
-        tools:layout="@layout/favorite_fragment" />
+        tools:layout="@layout/favorite_fragment" >
+        <action
+            android:id="@+id/action_favoriteFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.example.mymovies.ui.detailfragment.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" />
 </navigation>

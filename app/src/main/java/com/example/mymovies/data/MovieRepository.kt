@@ -2,7 +2,7 @@ package com.example.mymovies.data
 
 import androidx.lifecycle.LiveData
 import androidx.paging.*
-import com.example.mymovies.datasource.movie.MoviePagingSource
+import com.example.mymovies.datasource.MoviePagingSource
 import com.example.mymovies.db.MovieDatabaseNew
 import com.example.mymovies.model.DiscoverMovieResultsItem
 import com.example.mymovies.network.Rest

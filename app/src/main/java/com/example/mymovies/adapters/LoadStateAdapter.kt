@@ -3,6 +3,7 @@ package com.example.mymovies.adapters
 import android.view.ViewGroup
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
+import com.example.mymovies.viewholders.LoadStateViewHolder
 
 class LoadStateAdapter(
         private val retry: () -> Unit

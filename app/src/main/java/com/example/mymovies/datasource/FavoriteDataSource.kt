@@ -1,4 +1,4 @@
-package com.example.mymovies.data
+package com.example.mymovies.datasource
 
 import android.util.Log
 import androidx.paging.PagingSource
@@ -16,11 +16,15 @@ class FavoriteDataSource(private val db: MovieDatabaseNew) : PagingSource<Int, F
         val mStartLimit = params.key ?: START_LIMIT
         val mEndLimit = mStartLimit + 10
         return try {
-            val response = db.withTransaction {
-                db.movieDao().getFavoriteMoviesByLimit(mStartLimit, mEndLimit)
+            var response = emptyList<FavoriteMovies>()
+            db.withTransaction {
+                response = db.movieDao().getFavoriteMoviesByLimit(mStartLimit, mEndLimit)
+                Log.d(TAG, "load: ${response.joinToString()}")
             }
+            if (response.isEmpty()) Log.d(TAG, "Response is empty") else Log.d(TAG, "Response not empty")
             Log.d(TAG, "mStartLimit: $mStartLimit")
             Log.d(TAG, "mEndLimit: $mEndLimit")
+
             LoadResult.Page(
                     data = response,
                     prevKey = if (mStartLimit == START_LIMIT) null else mStartLimit - 10,

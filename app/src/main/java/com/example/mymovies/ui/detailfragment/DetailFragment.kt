@@ -43,6 +43,14 @@ class DetailFragment : Fragment() {
             bundle.putString(BUNDLE_MOVIE_AS_JSON, _movie)
             return bundle
         }
+
+        fun setMovieBundle(movie: FavoriteMovies): Bundle {
+            val bundle = Bundle()
+            val gson = Gson()
+            val _movie = gson.toJson(movie)
+            bundle.putString(BUNDLE_MOVIE_AS_JSON, _movie)
+            return bundle
+        }
     }
 
 

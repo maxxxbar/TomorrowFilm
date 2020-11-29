@@ -4,8 +4,15 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.example.mymovies.model.FavoriteMovies
+import com.example.mymovies.viewholders.FavoriteAdapterViewHolder
 
 class FavoriteAdapter : PagingDataAdapter<FavoriteMovies, FavoriteAdapterViewHolder>(COMPARATOR) {
+    private var onClickListener: OnClickListenerForFavoriteAdapter? = null
+
+    fun setOnFavoriteMovieClickListener(l: (FavoriteMovies) -> Unit) {
+        this.onClickListener = OnClickListenerForFavoriteAdapter { l(it) }
+    }
+
     companion object {
         val COMPARATOR = object : DiffUtil.ItemCallback<FavoriteMovies>() {
             override fun areItemsTheSame(oldItem: FavoriteMovies, newItem: FavoriteMovies): Boolean {
@@ -21,9 +28,12 @@ class FavoriteAdapter : PagingDataAdapter<FavoriteMovies, FavoriteAdapterViewHol
 
     override fun onBindViewHolder(holder: FavoriteAdapterViewHolder, position: Int) {
         val favoriteMovie = getItem(position)
-        favoriteMovie?.let { favoriteMovies ->
-            favoriteMovies.posterPath?.let {
+        if (favoriteMovie != null) {
+            favoriteMovie.posterPath?.let {
                 holder.bind(it)
+            }
+            holder.itemView.setOnClickListener {
+                onClickListener?.onClickListener(favoriteMovie)
             }
         }
     }

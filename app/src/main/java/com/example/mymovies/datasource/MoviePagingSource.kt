@@ -1,4 +1,4 @@
-package com.example.mymovies.datasource.movie
+package com.example.mymovies.datasource
 
 import androidx.paging.PagingSource
 import com.bumptech.glide.load.HttpException

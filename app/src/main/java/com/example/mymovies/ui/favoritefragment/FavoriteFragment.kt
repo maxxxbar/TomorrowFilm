@@ -1,30 +1,37 @@
 package com.example.mymovies.ui.favoritefragment
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.mymovies.R
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.example.mymovies.adapters.FavoriteAdapter
+import com.example.mymovies.databinding.FavoriteFragmentBinding
 
 class FavoriteFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = FavoriteFragment()
-    }
-
     private lateinit var viewModel: FavoriteViewModel
-
+    private var _binding: FavoriteFragmentBinding? = null
+    private val binding get() = _binding!!
+    private val adapter = FavoriteAdapter()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.favorite_fragment, container, false)
+        viewModel = ViewModelProvider.AndroidViewModelFactory(requireActivity().application).create(FavoriteViewModel::class.java)
+        _binding = FavoriteFragmentBinding.inflate(inflater, container, false)
+        val recyclerView = binding.rvFavorite
+        recyclerView.adapter = adapter
+        viewModel.getFavoriteMovies().observe(viewLifecycleOwner) {
+            adapter.submitData(lifecycle, it)
+        }
+
+
+
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(FavoriteViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
-
 }

@@ -37,4 +37,7 @@ interface Dao {
 
     @Query("DELETE FROM discover_movies")
     suspend fun clearMovies()
+
+    @Query("SELECT * FROM favorite_movies ORDER BY uniqueId ASC limit :startLimit,:endLimit")
+    fun getFavoriteMoviesByLimit(startLimit: Int, endLimit: Int): List<FavoriteMovies>
 }

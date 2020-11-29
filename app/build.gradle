@@ -108,7 +108,7 @@ dependencies {
     implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
 
 
-    def paging_version = "3.0.0-alpha08"
+    def paging_version = "3.0.0-alpha09"
     implementation "androidx.paging:paging-runtime:$paging_version"
     // For Kotlin use paging-runtime-ktx
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"

@@ -25,14 +25,7 @@ interface Rest {
     }
 
     @GET("/3/discover/movie")
-    fun getMovies(@Query("api_key") apikey: String,
-                  @Query("language") language: String,
-                  @Query("sort_by") sortBy: String,
-                  @Query("vote_count.gte") voteCount: Int,
-                  @Query("page") page: Int): Single<Movies>
-
-    @GET("/3/discover/movie")
-    suspend fun getMovies2(
+    suspend fun getMovies(
             @Query(API_KEY_QUERY) apikey: String = API_KEY_VALUE,
             @Query(LANGUAGE_QUERY) language: String = LANGUAGE_VALUE,
             @Query(SORT_BY_QUERY) sortBy: String,

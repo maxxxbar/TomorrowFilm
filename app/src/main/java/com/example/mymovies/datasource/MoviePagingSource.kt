@@ -15,7 +15,7 @@ class MoviePagingSource(
         val page = params.key ?: 1
         return try {
             val response = restAPI
-                    .getMovies2(sortBy = sortBy, voteCount = voteCount, page = page)
+                    .getMovies(sortBy = sortBy, voteCount = voteCount, page = page)
             val repos = response.body()
             var list = listOf<DiscoverMovieResultsItem>()
             repos?.let { discoverMovie ->

@@ -33,7 +33,7 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
     private lateinit var flexBoxLayoutManager: FlexboxLayoutManager
 
     private val TAG = javaClass.simpleName
-    private val adapter = MovieAdapter()
+    private val movieAdapter = MovieAdapter()
     private var getMoviesJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,10 +41,8 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
         viewModel = ViewModelProvider.AndroidViewModelFactory(requireActivity().application).create(FirstFragmentViewModel::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FirstFragmentBinding.inflate(layoutInflater)
-        flexBoxLayoutManager = FlexboxLayoutManager(requireContext())
-        recyclerView = binding.recyclerViewPosters
         setupFlexLayoutManager()
         setupRecyclerView()
         return binding.root
@@ -60,34 +58,37 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
         getMoviesJob?.cancel()
         getMoviesJob = lifecycleScope.launch {
             viewModel.getMoviesAsLiveData().observe(viewLifecycleOwner) {
-                adapter.submitData(lifecycle, it)
+                movieAdapter.submitData(lifecycle, it)
             }
         }
     }
 
     private fun setupRecyclerView() {
-        recyclerView.adapter = adapter
-        recyclerView.applySystemWindowInsetsToPadding(top = true)
-        recyclerView = binding.recyclerViewPosters
-        recyclerView.layoutManager = flexBoxLayoutManager
+        recyclerView = binding.recyclerViewPosters.apply {
+            adapter = movieAdapter
+            applySystemWindowInsetsToPadding(top = true)
+            layoutManager = flexBoxLayoutManager
+        }
     }
 
     private fun setupFlexLayoutManager() {
-        flexBoxLayoutManager.flexWrap = FlexWrap.WRAP
-        flexBoxLayoutManager.alignItems = AlignItems.STRETCH
-        flexBoxLayoutManager.flexDirection = FlexDirection.ROW
+        flexBoxLayoutManager = FlexboxLayoutManager(requireContext()).apply {
+            flexWrap = FlexWrap.WRAP
+            alignItems = AlignItems.STRETCH
+            flexDirection = FlexDirection.ROW
+        }
     }
 
     private fun initAdapter() {
-        binding.retryButton.setOnClickListener { adapter.retry() }
-        adapter.setOnFilmClickListener {
+        binding.retryButton.setOnClickListener { movieAdapter.retry() }
+        movieAdapter.setOnFilmClickListener {
             findNavController().navigate(R.id.action_firstFragment_to_detailFragment, viewModel.setFilmForDetailFragment(it))
         }
-        recyclerView.adapter = adapter.withLoadStateFooter(
-                footer = LoadStateAdapter { adapter.retry() }
+        recyclerView.adapter = movieAdapter.withLoadStateFooter(
+                footer = LoadStateAdapter { movieAdapter.retry() }
         )
-        adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        adapter.addLoadStateListener { loadState ->
+        movieAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        movieAdapter.addLoadStateListener { loadState ->
             binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
             binding.retryButton.isVisible = loadState.source.refresh is LoadState.Error
         }

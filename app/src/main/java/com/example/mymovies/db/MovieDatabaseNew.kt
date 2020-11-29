@@ -10,7 +10,7 @@ import com.example.mymovies.model.RemoteKeys
 
 @Database(
         entities = [DiscoverMovieResultsItem::class, RemoteKeys::class, FavoriteMovies::class],
-        version = 2,
+        version = 1,
         exportSchema = false
 )
 abstract class MovieDatabaseNew : RoomDatabase() {

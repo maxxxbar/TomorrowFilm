@@ -48,7 +48,7 @@ class MovieRemoteMediator(
         }
 
         try {
-            val movies = restAPI.getMovies2(
+            val movies = restAPI.getMovies(
                     sortBy = sortBy,
                     voteCount = voteCount,
                     page = page)

@@ -1,4 +1,4 @@
-package com.example.mymovies.data
+package com.example.mymovies.datasource
 
 import android.util.Log
 import androidx.paging.ExperimentalPagingApi
@@ -6,25 +6,48 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
+import com.example.mymovies.App
+import com.example.mymovies.BuildConfig
 import com.example.mymovies.db.MovieDatabaseNew
+import com.example.mymovies.di.component.DaggerMediatorComponent
+import com.example.mymovies.di.module.NetworkModule
 import com.example.mymovies.model.DiscoverMovieResultsItem
 import com.example.mymovies.model.RemoteKeys
+import com.example.mymovies.network.ConnectionAPI
 import com.example.mymovies.network.Rest
+import okhttp3.Interceptor
 import retrofit2.HttpException
 import java.io.IOException
 import java.io.InvalidObjectException
+import javax.inject.Inject
 
 @ExperimentalPagingApi
-class MovieRemoteMediator(
-        private val restAPI: Rest,
+class MovieRemoteMediator @Inject constructor(
         private val database: MovieDatabaseNew,
         private val sortBy: String,
         private val voteCount: Int
 ) : RemoteMediator<Int, DiscoverMovieResultsItem>() {
     private val TAG = javaClass.simpleName
 
+    @Inject
+    lateinit var rest: Rest
+
+    init {
+
+        val mediatorComponent = DaggerMediatorComponent.builder()
+                .build()
+                .networkBuilder()
+                .networkModule(NetworkModule(interceptor = interceptor()))
+                .build()
+        mediatorComponent.inject(this)
+        Log.d(TAG, "has code remoteMediator: ${hashCode()}")
+    }
+
+
     companion object {
         private const val START_PAGE = 1
+        const val API_KEY_QUERY = "api_key"
+        const val APP_ID_VALUE = BuildConfig.API_KEY_TMDB
     }
 
 /*    override suspend fun initialize(): InitializeAction {
@@ -32,7 +55,7 @@ class MovieRemoteMediator(
     }*/
 
     override suspend fun load(loadType: LoadType, state: PagingState<Int, DiscoverMovieResultsItem>): MediatorResult {
-
+        Log.d(TAG, rest.toString())
         val page = when (loadType) {
             LoadType.REFRESH -> {
                 val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
@@ -43,12 +66,13 @@ class MovieRemoteMediator(
                 val remoteKeys = getRemoteKeyForLastItem(state)
                 if (remoteKeys == null) {
                     START_PAGE
-                } else remoteKeys.nextKey ?: throw InvalidObjectException("Remote key should not be null for $loadType")
+                } else remoteKeys.nextKey
+                        ?: throw InvalidObjectException("Remote key should not be null for $loadType")
             }
         }
 
         try {
-            val movies = restAPI.getMovies(
+            val movies = rest.getMovies2(
                     sortBy = sortBy,
                     voteCount = voteCount,
                     page = page)
@@ -100,6 +124,22 @@ class MovieRemoteMediator(
             state.closestItemToPosition(position)?.id?.let { movieId ->
                 database.remoteKeysDao().remoteKeysMovieId(movieId)
             }
+        }
+    }
+
+    private fun interceptor(): Interceptor {
+        return Interceptor.invoke { chain ->
+            val original = chain.request()
+            val originalHttpUrl = original.url
+            val url = originalHttpUrl.newBuilder()
+                    .addQueryParameter(
+                            API_KEY_QUERY,
+                            APP_ID_VALUE
+                    )
+                    .build()
+            val requestBuilder = original.newBuilder()
+                    .url(url)
+            chain.proceed(requestBuilder.build())
         }
     }
 

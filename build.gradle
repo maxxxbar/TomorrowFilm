@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = "1.4.10"
+    ext.kotlin_version = "1.4.21"
 
     repositories {
         google()
@@ -29,3 +29,19 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext {
+    daggerVersion = "2.29.1"
+    pagingVersion = "3.0.0-alpha10"
+    navVersion = "2.3.2"
+    roomVersion = "2.3.0-alpha03"
+    lifecycleVersion = "2.2.0"
+    gsonVersion = "2.8.6"
+    retrofitVersion = "2.9.0"
+    okHttp3Version = "4.8.1"
+    rxAndroidVersion = "3.0.0"
+    rxJavaVersion = "3.0.4"
+    glideVersion = "4.11.0"
+    flexBoxVersion = "2.0.1"
+}
+

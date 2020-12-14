@@ -15,7 +15,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.yariksoffice.connectivityplayground.connectivity.base.ConnectivityProvider
 import dev.chrisbanes.insetter.applySystemWindowInsetsToMargin
 import dev.chrisbanes.insetter.setEdgeToEdgeSystemUiFlags
-import kotlinx.android.synthetic.main.fragment_detail.*
 
 class MainActivity : AppCompatActivity(), ConnectivityProvider.ConnectivityStateListener {
     private var currentNavController: LiveData<NavController>? = null

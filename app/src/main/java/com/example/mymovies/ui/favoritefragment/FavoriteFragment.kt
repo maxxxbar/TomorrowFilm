@@ -1,12 +1,16 @@
 package com.example.mymovies.ui.favoritefragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mymovies.App
 import com.example.mymovies.R
 import com.example.mymovies.adapters.FavoriteAdapter
 import com.example.mymovies.databinding.FavoriteFragmentBinding
@@ -15,18 +19,30 @@ import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
+import javax.inject.Inject
 
 class FavoriteFragment : Fragment() {
-    private lateinit var viewModel: FavoriteViewModel
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    private val viewModel by viewModels<FavoriteViewModel> { viewModelFactory }
     private var _binding: FavoriteFragmentBinding? = null
     private val binding get() = _binding!!
     private val favoriteAdapter = FavoriteAdapter()
     private lateinit var flexboxLayoutManager: FlexboxLayoutManager
     private lateinit var recyclerView: RecyclerView
+
+    @ExperimentalPagingApi
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val app = requireActivity().application as App
+        app.appComponent.favoriteFragmentComponent().create().inject(this)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        viewModel = ViewModelProvider.AndroidViewModelFactory(requireActivity().application).create(FavoriteViewModel::class.java)
+        //viewModel = ViewModelProvider.AndroidViewModelFactory(requireActivity().application).create(FavoriteViewModel::class.java)
         _binding = FavoriteFragmentBinding.inflate(inflater, container, false)
         setupFlexLayoutManager()
         setupRecyclerView()
@@ -60,4 +76,5 @@ class FavoriteFragment : Fragment() {
         super.onDestroy()
         _binding = null
     }
+
 }

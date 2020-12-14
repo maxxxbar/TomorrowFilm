@@ -10,7 +10,6 @@ import com.example.mymovies.entries.discover.trailer.Result
 import com.example.mymovies.model.DiscoverMovieResultsItem
 import com.example.mymovies.network.ConnectionAPI
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.flow.Flow
 
 class DetailFragmentViewModel(application: Application) : AndroidViewModel(application) {

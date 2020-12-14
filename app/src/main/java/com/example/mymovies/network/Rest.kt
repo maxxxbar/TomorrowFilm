@@ -5,6 +5,7 @@ import com.example.mymovies.entries.discover.movie.Movies
 import com.example.mymovies.entries.discover.reviews.Reviews
 import com.example.mymovies.entries.discover.trailer.Trailer
 import com.example.mymovies.model.DiscoverMovie
+import dagger.Provides
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Response
 import retrofit2.http.GET
@@ -31,6 +32,14 @@ interface Rest {
             @Query(SORT_BY_QUERY) sortBy: String,
             @Query(VOTE_COUNT_GTE_QUERY) voteCount: Int,
             @Query(PAGE_QUERY) page: Int): Response<DiscoverMovie>
+
+    @GET("/3/discover/movie")
+    suspend fun getMovies2(
+            @Query(LANGUAGE_QUERY) language: String = LANGUAGE_VALUE,
+            @Query(SORT_BY_QUERY) sortBy: String,
+            @Query(VOTE_COUNT_GTE_QUERY) voteCount: Int,
+            @Query(PAGE_QUERY) page: Int): Response<DiscoverMovie>
+
 
     @GET("/3/movie/{movie_id}/videos")
     fun getTrailer(

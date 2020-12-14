@@ -9,5 +9,8 @@
     <color name="shrine_pink_100">#FEDBD0</color>
 
     <color name="toolbarBackground">#f9f9f9</color>
+    <color name="ll_filter_actived_background_color">#EDE7F6</color>
+
+
 
 </resources>

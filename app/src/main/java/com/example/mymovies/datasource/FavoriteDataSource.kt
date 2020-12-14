@@ -5,8 +5,9 @@ import androidx.paging.PagingSource
 import androidx.room.withTransaction
 import com.example.mymovies.db.MovieDatabaseNew
 import com.example.mymovies.model.FavoriteMovies
+import javax.inject.Inject
 
-class FavoriteDataSource(private val db: MovieDatabaseNew) : PagingSource<Int, FavoriteMovies>() {
+class FavoriteDataSource @Inject constructor(private val db: MovieDatabaseNew) : PagingSource<Int, FavoriteMovies>() {
     companion object {
         private const val START_LIMIT = 0
     }

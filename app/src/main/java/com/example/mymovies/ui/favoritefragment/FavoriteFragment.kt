@@ -20,10 +20,11 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import dagger.android.support.DaggerFragment
 import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 import javax.inject.Inject
 
-class FavoriteFragment : Fragment() {
+class FavoriteFragment : DaggerFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private val viewModel by viewModels<FavoriteViewModel> { viewModelFactory }
@@ -36,13 +37,11 @@ class FavoriteFragment : Fragment() {
     @ExperimentalPagingApi
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        val app = requireActivity().application as App
-        app.appComponent.favoriteFragmentComponent().create().inject(this)
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        //viewModel = ViewModelProvider.AndroidViewModelFactory(requireActivity().application).create(FavoriteViewModel::class.java)
         _binding = FavoriteFragmentBinding.inflate(inflater, container, false)
         setupFlexLayoutManager()
         setupRecyclerView()

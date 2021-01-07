@@ -20,5 +20,9 @@
         android:name="com.example.mymovies.ui.detailfragment.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail" />
+    <dialog
+        android:id="@+id/itemListDialogFragment"
+        android:name="com.example.mymovies.ui.bottomsheet.FiltersBottomSheetFragment"
+        android:label="ItemListDialogFragment" />
 
 </navigation>

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/b_on_bottom_sheet"
+        android:id="@+id/btn_apply"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -43,8 +42,8 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_reset"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:id="@+id/tv_reset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -76,31 +75,31 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/b_on_bottom_sheet"
+        app:layout_constraintBottom_toTopOf="@+id/btn_apply"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/materialCardView">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/ll_all_filters"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/ll_popularity_filter"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
                 android:orientation="horizontal">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_popularity_filter"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
                     android:text="По популярности"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -108,20 +107,21 @@
             <LinearLayout
                 android:id="@+id/ll_vote_avg_filter"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
                 android:orientation="horizontal">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_vote_avg_filter"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
                     android:text="Голосов в среднем"
                     android:textSize="16sp" />
             </LinearLayout>
+
+
         </LinearLayout>
 
         <RadioGroup
@@ -134,21 +134,23 @@
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/rb_popularity_filter"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|end"
-                android:layout_weight="2"
+                android:layout_height="50dp"
+                android:layout_marginEnd="10dp"
                 android:checked="false"
                 android:enabled="true" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/rb_vote_avg_filter"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                android:layout_height="50dp"
+                android:layout_marginEnd="10dp"
                 android:checked="false"
                 android:enabled="true" />
 
+
+
         </RadioGroup>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

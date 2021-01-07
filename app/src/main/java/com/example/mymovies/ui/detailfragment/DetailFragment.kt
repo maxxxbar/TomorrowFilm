@@ -96,7 +96,7 @@ class DetailFragment : Fragment() {
         }.attach()
     }
 
-
+    //TODO setFragmentResult
     private fun getMovieIdFromFirstFragment(adapter: DetailFragmentTabsAdapter) {
         arguments?.let { bundle ->
             val movie = bundle.getString(BUNDLE_MOVIE_AS_JSON)
@@ -143,8 +143,10 @@ class DetailFragment : Fragment() {
                 }
             }
         }
+        TODO("viewModel где ???")
     }
 
+    //TODO попроще никак и обязательно тут ?
     private fun castDiscoverMovieResultItemToFavoriteMovies(movie: DiscoverMovieResultsItem): FavoriteMovies {
         return FavoriteMovies(
                 uniqueId = movie.uniqueId,
@@ -164,6 +166,7 @@ class DetailFragment : Fragment() {
         )
     }
 
+    //TODO что за дичь ?
     private suspend fun checkFavoriteMovieInDatabase(movieId: Int): Boolean {
         var result = false
         val waitFor = CoroutineScope(Dispatchers.IO).async {
@@ -186,6 +189,7 @@ class DetailFragment : Fragment() {
 
     }
 
+    //TODO починить
     private fun handleCollapsedToolbarTitle() {
         binding.appbar.addOnOffsetChangedListener(object : OnOffsetChangedListener {
             var isShow = true

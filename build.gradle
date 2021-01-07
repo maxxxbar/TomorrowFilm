@@ -31,10 +31,10 @@ task clean(type: Delete) {
 }
 
 ext {
-    daggerVersion = "2.29.1"
-    pagingVersion = "3.0.0-alpha10"
+    daggerVersion = "2.30.1"
+    pagingVersion = "3.0.0-alpha11"
     navVersion = "2.3.2"
-    roomVersion = "2.3.0-alpha03"
+    roomVersion = "2.3.0-alpha04"
     lifecycleVersion = "2.2.0"
     gsonVersion = "2.8.6"
     retrofitVersion = "2.9.0"

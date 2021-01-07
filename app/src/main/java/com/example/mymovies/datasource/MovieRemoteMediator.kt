@@ -1,20 +1,21 @@
 package com.example.mymovies.datasource
 
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import androidx.room.withTransaction
-import com.example.mymovies.App
 import com.example.mymovies.BuildConfig
+import com.example.mymovies.datasource.sorting.SortingDataSource
+import com.example.mymovies.datasource.sorting.SortingDataSourceImpl
 import com.example.mymovies.db.MovieDatabaseNew
-import com.example.mymovies.di.component.DaggerMediatorComponent
-import com.example.mymovies.di.module.NetworkModule
+import com.example.mymovies.entries.discover.Sorting
 import com.example.mymovies.model.DiscoverMovieResultsItem
 import com.example.mymovies.model.RemoteKeys
-import com.example.mymovies.network.ConnectionAPI
 import com.example.mymovies.network.Rest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.Interceptor
 import retrofit2.HttpException
 import java.io.IOException
@@ -24,27 +25,15 @@ import javax.inject.Inject
 @ExperimentalPagingApi
 class MovieRemoteMediator @Inject constructor(
         private val database: MovieDatabaseNew,
-        private val sortBy: String,
-        private val voteCount: Int
+        private val rest: Rest,
+        private val sp: SharedPreferences
 ) : RemoteMediator<Int, DiscoverMovieResultsItem>() {
     private val TAG = javaClass.simpleName
-
-    @Inject
-    lateinit var rest: Rest
-
-    init {
-
-        val mediatorComponent = DaggerMediatorComponent.builder()
-                .build()
-                .networkBuilder()
-                .networkModule(NetworkModule(interceptor = interceptor()))
-                .build()
-        mediatorComponent.inject(this)
-        Log.d(TAG, "has code remoteMediator: ${hashCode()}")
-    }
-
+    private val sortingDataSource = SortingDataSourceImpl(sp)
 
     companion object {
+        private const val voteCountDefValue = 100
+        private val sortByDefVAlue = Sorting.POPULARITY.sortBy
         private const val START_PAGE = 1
         const val API_KEY_QUERY = "api_key"
         const val APP_ID_VALUE = BuildConfig.API_KEY_TMDB
@@ -70,15 +59,16 @@ class MovieRemoteMediator @Inject constructor(
                         ?: throw InvalidObjectException("Remote key should not be null for $loadType")
             }
         }
-
-        try {
-            val movies = rest.getMovies2(
-                    sortBy = sortBy,
-                    voteCount = voteCount,
-                    page = page)
-                    .body()?.results.orEmpty()
-            val endOfPaginationReached = movies.isEmpty()
-            database.withTransaction {
+        val sortBy = sortingDataSource.getSorting()
+        return withContext(Dispatchers.IO) {
+            try {
+                Log.d(TAG, "load: $sortBy")
+                val movies = rest.getMovies2(
+                        sortBy = sortBy,
+                        voteCount = voteCountDefValue,
+                        page = page)
+                        .body()?.results.orEmpty()
+                val endOfPaginationReached = movies.isEmpty()
                 // clear all tables in the database
                 if (loadType == LoadType.REFRESH) {
                     database.remoteKeysDao().clearRemoteKeys()
@@ -93,13 +83,13 @@ class MovieRemoteMediator @Inject constructor(
                 }
                 database.remoteKeysDao().insertAll(keys)
                 database.movieDao().insertAll(movies)
-            }
 
-            return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
-        } catch (exception: IOException) {
-            return MediatorResult.Error(exception)
-        } catch (exception: HttpException) {
-            return MediatorResult.Error(exception)
+                MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
+            } catch (exception: IOException) {
+                MediatorResult.Error(exception)
+            } catch (exception: HttpException) {
+                MediatorResult.Error(exception)
+            }
         }
 
     }

@@ -71,11 +71,6 @@ class MainActivity : AppCompatActivity(), ConnectivityProvider.ConnectivityState
         return currentNavController?.value?.navigateUp() ?: false
     }
 
-    fun onLickFavorite(view: View) {
-
-    }
-
-
     private fun setMyInsets() {
         val view = binding.root.rootView
         view.setEdgeToEdgeSystemUiFlags(true)
@@ -102,6 +97,12 @@ class MainActivity : AppCompatActivity(), ConnectivityProvider.ConnectivityState
 
     private fun ConnectivityProvider.NetworkState.hasInternet(): Boolean {
         return (this as? ConnectivityProvider.NetworkState.ConnectedState)?.hasInternet == true
+    }
+
+    override fun onBackPressed() {
+        if (currentNavController?.value?.popBackStack() != true) {
+            super.onBackPressed()
+        }
     }
 
 }

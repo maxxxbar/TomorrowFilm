@@ -1,20 +1,19 @@
 package com.example.mymovies.ui.favoritefragment
 
-import android.app.Application
 import android.os.Bundle
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.mymovies.data.FavoriteRepository
-import com.example.mymovies.db.MovieDatabaseNew
 import com.example.mymovies.model.FavoriteMovies
 import com.example.mymovies.ui.detailfragment.DetailFragment
 import javax.inject.Inject
 
-class FavoriteViewModel @Inject constructor (private val favoriteRepository: FavoriteRepository) :ViewModel() {
+class FavoriteViewModel @Inject constructor(
+        private val favoriteRepository: FavoriteRepository
+) : ViewModel() {
 
 
     fun getFavoriteMovies(): LiveData<PagingData<FavoriteMovies>> {

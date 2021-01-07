@@ -1,4 +1,4 @@
-package com.example.mymovies.di.module
+package com.example.mymovies.di.modules
 
 import android.content.Context
 import androidx.room.Room

@@ -5,36 +5,36 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.core.content.ContextCompat
+import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mymovies.App
 import com.example.mymovies.R
 import com.example.mymovies.adapters.LoadStateAdapter
 import com.example.mymovies.adapters.MovieAdapter
 import com.example.mymovies.databinding.FirstFragmentBinding
-import com.example.mymovies.utils.Extra
+import com.example.mymovies.entries.discover.SORTING_KEY
+import com.example.mymovies.entries.discover.Sorting
+import com.example.mymovies.ui.bottomsheet.FiltersBottomSheetFragment
 import com.example.mymovies.utils.findNavController
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import dagger.android.support.DaggerFragment
 import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @ExperimentalPagingApi
-class FirstFragment : Fragment(R.layout.first_fragment) {
+class FirstFragment : DaggerFragment(R.layout.first_fragment) {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -43,46 +43,53 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
     private lateinit var binding: FirstFragmentBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var flexBoxLayoutManager: FlexboxLayoutManager
-
+    var i = 1
     private val TAG = javaClass.simpleName
     private val movieAdapter = MovieAdapter()
-    private var getMoviesJob: Job? = null
+    private var job: Job? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        (requireActivity().application as App).appComponent.firstFragmentComponent().create()
-                .inject(this)
-    }
+        qweqwe()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //viewModel = ViewModelProvider.AndroidViewModelFactory(requireActivity().application).create(FirstFragmentViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FirstFragmentBinding.inflate(layoutInflater)
-        setupFlexLayoutManager()
-        setupRecyclerView()
+        initialSetupFlexLayoutManager()
+        initialSetupRecyclerView()
         bottomSheetDialog()
+
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initAdapter()
+        initialSetupAdapter()
         getMovies()
+
+    }
+
+    private fun qweqwe() {
+        setFragmentResultListener(SORTING_KEY) { requestKey: String, bundle: Bundle ->
+/*            val sortBy = bundle.getString(FiltersBottomSheetFragment.SORT_BY_KEY)
+                    ?: Sorting.POPULARITY.sortBy
+            Toast.makeText(requireContext(), "RequestKey : $requestKey BundleString $sortBy", Toast.LENGTH_SHORT).show()*/
+            getMovies()
+        }
     }
 
     private fun getMovies() {
-        getMoviesJob?.cancel()
-        getMoviesJob = lifecycleScope.launch {
+        job?.cancel()
+        job = lifecycleScope.launch {
             viewModel.getMoviesAsLiveData().observe(viewLifecycleOwner) {
                 movieAdapter.submitData(lifecycle, it)
             }
         }
     }
 
-    private fun setupRecyclerView() {
+    private fun initialSetupRecyclerView() {
         recyclerView = binding.recyclerViewPosters.apply {
             adapter = movieAdapter
             applySystemWindowInsetsToPadding(top = true)
@@ -90,7 +97,7 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
         }
     }
 
-    private fun setupFlexLayoutManager() {
+    private fun initialSetupFlexLayoutManager() {
         flexBoxLayoutManager = FlexboxLayoutManager(requireContext()).apply {
             flexWrap = FlexWrap.WRAP
             alignItems = AlignItems.STRETCH
@@ -98,7 +105,7 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
         }
     }
 
-    private fun initAdapter() {
+    private fun initialSetupAdapter() {
         binding.retryButton.setOnClickListener { movieAdapter.retry() }
         movieAdapter.setOnFilmClickListener {
             findNavController().navigate(R.id.action_firstFragment_to_detailFragment, viewModel.setFilmForDetailFragment(it))
@@ -106,61 +113,19 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
         recyclerView.adapter = movieAdapter.withLoadStateFooter(
                 footer = LoadStateAdapter { movieAdapter.retry() }
         )
-        movieAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        movieAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.ALLOW
         movieAdapter.addLoadStateListener { loadState ->
-            binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
-            binding.retryButton.isVisible = loadState.source.refresh is LoadState.Error
+            binding.progressBar.isVisible = loadState.refresh is LoadState.Loading
+            binding.retryButton.isVisible = loadState.refresh is LoadState.Error
         }
     }
 
-
-    fun bottomSheetDialog() {
-        val bottomSheetDialog = BottomSheetDialog(requireContext())
-        bottomSheetDialog.setContentView(R.layout.bottom_sheet_content)
-        bottomSheetDialog.findViewById<Button>(R.id.btn_close)?.apply {
-            setOnClickListener {
-                bottomSheetDialog.dismiss()
-            }
-        }
-        val radioGroup = bottomSheetDialog.findViewById<RadioGroup>(R.id.rg_filter)
-        val bottomSheetInternal: View = bottomSheetDialog.findViewById(R.id.design_bottom_sheet)!!
-        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetInternal)
-        //  BottomSheetBehavior.from(bottomSheetInternal).peekHeight = 500
-        bottomSheetBehavior.setUpdateImportantForAccessibilityOnSiblings(true)
-        var sortBy: String = Extra.SORT_BY_POPULARITY
-        radioGroup?.setOnCheckedChangeListener { group, checkedId ->
-            val buttonPopularity = group.findViewById<RadioButton>(R.id.rb_popularity_filter)
-            val buttonVoteAvg = group.findViewById<RadioButton>(R.id.rb_vote_avg_filter)
-            when (checkedId) {
-                R.id.rb_popularity_filter -> {
-                    bottomSheetDialog.findViewById<LinearLayout>(R.id.ll_vote_avg_filter)!!.background = null
-                    bottomSheetDialog.findViewById<LinearLayout>(R.id.ll_popularity_filter)!!.background =
-                            ContextCompat.getDrawable(group.context, R.color.ll_filter_actived_background_color)
-                    buttonPopularity.background = ContextCompat.getDrawable(group.context, R.color.ll_filter_actived_background_color)
-                    buttonVoteAvg.background = null
-                    sortBy = Extra.SORT_BY_POPULARITY
-                }
-                R.id.rb_vote_avg_filter -> {
-                    bottomSheetDialog.findViewById<LinearLayout>(R.id.ll_popularity_filter)!!.background = null
-                    bottomSheetDialog.findViewById<LinearLayout>(R.id.ll_vote_avg_filter)!!.background =
-                            ContextCompat.getDrawable(group.context, R.color.ll_filter_actived_background_color)
-                    buttonVoteAvg.background = ContextCompat.getDrawable(group.context, R.color.ll_filter_actived_background_color)
-                    buttonPopularity.background = null
-                    sortBy = Extra.SORT_BY_VOTE_AVERAGE
-                }
-            }
-        }
-
+    private fun bottomSheetDialog() {
         binding.bsFilter.setOnClickListener {
-            bottomSheetDialog.show()
-            bottomSheetDialog.findViewById<TextView>(R.id.b_on_bottom_sheet)?.setOnClickListener {
-                viewModel.resetRepository(sortBy)
-                getMovies()
-                bottomSheetDialog.dismiss()
-            }
+            findNavController().navigate(R.id.itemListDialogFragment)
         }
-
     }
+
 }
 
 

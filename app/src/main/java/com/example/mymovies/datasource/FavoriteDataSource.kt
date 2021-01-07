@@ -14,6 +14,7 @@ class FavoriteDataSource @Inject constructor(private val db: MovieDatabaseNew) :
 
     private val TAG = javaClass.simpleName
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, FavoriteMovies> {
+        // TODO()  Пофиксить лимит Должно быть LIMIT :limit OFFSET :offset
         val mStartLimit = params.key ?: START_LIMIT
         val mEndLimit = mStartLimit + 10
         return try {

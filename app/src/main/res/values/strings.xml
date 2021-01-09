@@ -29,4 +29,6 @@
     <string name="cat_bottomsheet_label_remove">Remove</string>
     <string name="cat_bottomsheet_label_rename">Rename</string>
     <string name="first_fragment_button_sheet_title">Фильтры</string>
+    <string name="iv_poster_the_film">Постер фильма</string>
+    <string name="iv_favorite">Добавить в избранное</string>
 </resources>

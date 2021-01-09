@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/firstFragment"
-        android:name="com.example.mymovies.ui.firstfragment.FirstFragment"
+        android:name="ws.worldshine.tomorrowfilm.ui.firstfragment.FirstFragment"
         android:label="FirstFragment">
         <action
             android:id="@+id/action_firstFragment_to_detailFragment"
@@ -17,12 +17,12 @@
 
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.example.mymovies.ui.detailfragment.DetailFragment"
+        android:name="ws.worldshine.tomorrowfilm.ui.detailfragment.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail" />
     <dialog
         android:id="@+id/itemListDialogFragment"
-        android:name="com.example.mymovies.ui.bottomsheet.FiltersBottomSheetFragment"
+        android:name="ws.worldshine.tomorrowfilm.ui.bottomsheet.FiltersBottomSheetFragment"
         android:label="ItemListDialogFragment" />
 
 </navigation>

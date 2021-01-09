@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-parcelize'
 
 def apiKeyPropertiesFile = rootProject.file("apikey.properties")
 def apiKeyProperties = new Properties()
@@ -10,12 +11,11 @@ android {
     buildToolsVersion '30.0.2'
 
     buildFeatures {
-        dataBinding = true
         viewBinding = true
     }
 
     defaultConfig {
-        applicationId "com.example.mymovies"
+        applicationId "ws.worldshine.tomorrowfilm"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
@@ -66,7 +66,7 @@ dependencies {
 
     // Glide
     implementation "com.github.bumptech.glide:glide:$glideVersion"
-    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
 
     //RxJava
     implementation "io.reactivex.rxjava3:rxjava:$rxJavaVersion"
@@ -119,5 +119,5 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.0-beta01'
     implementation "dev.chrisbanes:insetter-ktx:0.3.1"
 
-
+    implementation "org.jetbrains.kotlin:kotlin-reflect"
 }

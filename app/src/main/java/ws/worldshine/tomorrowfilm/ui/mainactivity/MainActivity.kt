@@ -1,6 +1,8 @@
 package ws.worldshine.tomorrowfilm.ui.mainactivity
 
 import android.os.Bundle
+import android.view.ViewGroup
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
@@ -30,7 +32,16 @@ class MainActivity : AppCompatActivity(), ConnectivityProvider.ConnectivityState
         }
         viewModel = ViewModelProvider.AndroidViewModelFactory(application).create(MainActivityViewModel::class.java)
         setMyInsets()
+/*        val crashButton = Button(this)
+        crashButton.applySystemWindowInsetsToMargin(top = true)
+        crashButton.text = "Crash!"
+        crashButton.setOnClickListener {
+            throw RuntimeException("Test Crash") // Force a crash
+        }
 
+        addContentView(crashButton, ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT))*/
     }
 
 

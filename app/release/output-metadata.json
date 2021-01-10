@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.example.mymovies",
+  "applicationId": "ws.worldshine.tomorrowfilm",
   "variantName": "processReleaseResources",
   "elements": [
     {
@@ -12,7 +12,7 @@
       "filters": [],
       "versionCode": 1,
       "versionName": "1.0",
-      "outputFile": "app-release.apk"
+      "outputFile": "tomorrowfilm_v1.apk"
     }
   ]
 }

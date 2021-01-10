@@ -10,6 +10,9 @@
 .DS_Store
 /build
 /captures
+app/release
+app/release/output-metadata.json
 .externalNativeBuild
 .cxx
 apikey.properties
+app/google-services.json

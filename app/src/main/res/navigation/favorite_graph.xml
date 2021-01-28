@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="ws.worldshine.tomorrowfilm.ui.favoritefragment.FavoriteFragment"
+        android:name="ws.worldshine.tomorrowfilm.ui.favoritefragment.FavoriteListFragment"
         android:label="favorite_fragment"
         tools:layout="@layout/favorite_fragment" >
         <action

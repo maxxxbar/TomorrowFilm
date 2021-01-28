@@ -8,9 +8,14 @@ import ws.worldshine.tomorrowfilm.network.Rest
 class TrailersDataSourceImpl(
         private val rest: Rest
 ) : TrailersDataSource {
-    override suspend fun getTrailers(movieId: Int): Trailer {
-        return withContext(Dispatchers.IO) {
-            rest.getTrailers(movieId)
+    private val TAG = javaClass.simpleName
+    override suspend fun getTrailers(movieId: Int): Trailer? {
+        return try {
+            withContext(Dispatchers.IO) {
+                rest.getTrailers(movieId).body()
+            }
+        } catch (e: Exception) {
+            null
         }
     }
 }

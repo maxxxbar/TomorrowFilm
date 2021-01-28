@@ -1,6 +1,7 @@
 package ws.worldshine.tomorrowfilm.ui.firstfragment
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,14 +13,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.flexbox.AlignItems
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexWrap
-import com.google.android.flexbox.FlexboxLayoutManager
 import dagger.android.support.DaggerFragment
 import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import ws.worldshine.tomorrowfilm.R
 import ws.worldshine.tomorrowfilm.adapters.LoadStateAdapter
@@ -39,49 +39,60 @@ class FirstFragment : DaggerFragment(R.layout.first_fragment) {
 
     private lateinit var binding: FirstFragmentBinding
     private lateinit var recyclerView: RecyclerView
-    private lateinit var flexBoxLayoutManager: FlexboxLayoutManager
-    var i = 1
+    private lateinit var gridLayoutManager: GridLayoutManager
     private val TAG = javaClass.simpleName
     private val movieAdapter = MovieAdapter()
     private var job: Job? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        qweqwe()
-
+        callBackFromBottomSheet()
+        getMovies()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FirstFragmentBinding.inflate(layoutInflater)
-        initialSetupFlexLayoutManager()
+        initialSetupGridLayoutManager()
         initialSetupRecyclerView()
         bottomSheetDialog()
-
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialSetupAdapter()
-        getMovies()
 
     }
 
-    private fun qweqwe() {
+    private fun initialSetupGridLayoutManager() {
+        val orientationPortrait = resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        val spanCount = if (orientationPortrait) 2 else 3
+        gridLayoutManager = GridLayoutManager(requireContext(), spanCount).apply {
+            spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    val viewType = movieAdapter.getItemViewType(position)
+                    return if (orientationPortrait) {
+                        if (viewType == 1) 2 else 1
+                    } else {
+                        if (viewType == 1) 3 else 1
+                    }
+                }
+
+            }
+        }
+    }
+
+    private fun callBackFromBottomSheet() {
         setFragmentResultListener(SORTING_KEY) { requestKey: String, bundle: Bundle ->
-/*            val sortBy = bundle.getString(FiltersBottomSheetFragment.SORT_BY_KEY)
-                    ?: Sorting.POPULARITY.sortBy
-            Toast.makeText(requireContext(), "RequestKey : $requestKey BundleString $sortBy", Toast.LENGTH_SHORT).show()*/
             getMovies()
         }
     }
 
     private fun getMovies() {
         job?.cancel()
-        job = lifecycleScope.launch {
-            viewModel.getMoviesAsLiveData().observe(viewLifecycleOwner) {
-                movieAdapter.submitData(lifecycle, it)
+        job = lifecycleScope.launch() {
+            viewModel.getMoviesAsLiveData().collectLatest {
+                movieAdapter.submitData(it)
             }
         }
     }
@@ -90,15 +101,7 @@ class FirstFragment : DaggerFragment(R.layout.first_fragment) {
         recyclerView = binding.recyclerViewPosters.apply {
             adapter = movieAdapter
             applySystemWindowInsetsToPadding(top = true)
-            layoutManager = flexBoxLayoutManager
-        }
-    }
-
-    private fun initialSetupFlexLayoutManager() {
-        flexBoxLayoutManager = FlexboxLayoutManager(requireContext()).apply {
-            flexWrap = FlexWrap.WRAP
-            alignItems = AlignItems.STRETCH
-            flexDirection = FlexDirection.ROW
+            layoutManager = gridLayoutManager
         }
     }
 
@@ -110,11 +113,24 @@ class FirstFragment : DaggerFragment(R.layout.first_fragment) {
         recyclerView.adapter = movieAdapter.withLoadStateFooter(
                 footer = LoadStateAdapter { movieAdapter.retry() }
         )
-        movieAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.ALLOW
         movieAdapter.addLoadStateListener { loadState ->
             binding.progressBar.isVisible = loadState.refresh is LoadState.Loading
-            binding.retryButton.isVisible = loadState.refresh is LoadState.Error
+            binding.retryButton.isVisible = loadState.refresh is LoadState.Error && movieAdapter.itemCount == 0
+
         }
+    }
+
+    private fun MovieAdapter.withLoadStateFooter2(
+            footer: androidx.paging.LoadStateAdapter<*>
+    ): ConcatAdapter {
+        movieAdapter.addLoadStateListener { loadStates ->
+            footer.loadState = when (loadStates.refresh) {
+                is LoadState.NotLoading -> loadStates.append
+                else -> loadStates.refresh
+            }
+
+        }
+        return ConcatAdapter(this, footer)
     }
 
     private fun bottomSheetDialog() {

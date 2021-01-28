@@ -12,6 +12,7 @@
 /captures
 app/release
 app/release/output-metadata.json
+app/debug
 .externalNativeBuild
 .cxx
 apikey.properties

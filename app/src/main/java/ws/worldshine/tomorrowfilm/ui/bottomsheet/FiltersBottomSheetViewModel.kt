@@ -15,7 +15,7 @@ class FiltersBottomSheetViewModel @Inject constructor(
     fun getCurrentSortBy(): Sorting? {
 
         return Sorting.values().find {
-            it.sortBy == sp.getString(SORTING_KEY, Sorting.POPULARITY.sortBy)
+            it.value == sp.getString(SORTING_KEY, Sorting.POPULARITY.value)
         }
     }
 

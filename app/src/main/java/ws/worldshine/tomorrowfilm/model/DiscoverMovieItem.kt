@@ -1,23 +1,24 @@
 package ws.worldshine.tomorrowfilm.model
 
+import android.os.Parcelable
 import kotlin.reflect.full.memberProperties
 
 
-abstract class DiscoverMovieItem {
+abstract class DiscoverMovieItem : Parcelable {
     abstract val uniqueId: Int
     abstract val id: Int
-    abstract val overview: String
-    abstract val originalLanguage: String
-    abstract val originalTitle: String
-    abstract val video: Boolean
-    abstract val title: String
-    abstract val posterPath: String
-    abstract val backdropPath: String
-    abstract val releaseDate: String
-    abstract val popularity: Double
-    abstract val voteAverage: Float
-    abstract val adult: Boolean
-    abstract val voteCount: Float
+    abstract val overview: String?
+    abstract val originalLanguage: String?
+    abstract val originalTitle: String?
+    abstract val video: Boolean?
+    abstract val title: String?
+    abstract val posterPath: String?
+    abstract val backdropPath: String?
+    abstract val releaseDate: String?
+    abstract val popularity: Double?
+    abstract val voteAverage: Float?
+    abstract val adult: Boolean?
+    abstract val voteCount: Float?
 }
 
 fun DiscoverMovieResultsItem.toFavoriteMovies() = with(::FavoriteMovies) {

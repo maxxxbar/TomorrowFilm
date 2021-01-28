@@ -30,7 +30,7 @@ interface Dao {
     fun getFavoriteMovieByIdAsFLow(id: Int): Flow<FavoriteMovies>
 
     @Query("DELETE FROM favorite_movies WHERE id =:id")
-    fun deleteFavoriteMovieById(id: Int)
+    fun deleteFavoriteMovie(id: Int)
 
     @Query("SELECT * FROM favorite_movies")
     fun getAllFavoriteMovies(): List<FavoriteMovies>

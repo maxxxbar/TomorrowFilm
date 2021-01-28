@@ -9,10 +9,10 @@ class SortingDataSourceImpl(
 ) : SortingDataSource {
 
     override fun updateSorting(sortBy: Sorting) {
-        sp.edit().putString(SORTING_KEY, sortBy.sortBy).apply()
+        sp.edit().putString(SORTING_KEY, sortBy.value).apply()
     }
 
     override fun getSorting(): String {
-        return sp.getString(SORTING_KEY, Sorting.POPULARITY.sortBy) ?: Sorting.POPULARITY.sortBy
+        return sp.getString(SORTING_KEY, Sorting.POPULARITY.value) ?: Sorting.POPULARITY.value
     }
 }

@@ -8,14 +8,14 @@ import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 import ws.worldshine.tomorrowfilm.di.factories.ViewModelBuilder
 import ws.worldshine.tomorrowfilm.di.factories.ViewModelKey
-import ws.worldshine.tomorrowfilm.ui.favoritefragment.FavoriteFragment
+import ws.worldshine.tomorrowfilm.ui.favoritefragment.FavoriteListFragment
 import ws.worldshine.tomorrowfilm.ui.favoritefragment.FavoriteViewModel
 
 @Module
 abstract class FavoriteFragmentModule {
 
     @ContributesAndroidInjector(modules = [ViewModelBuilder::class])
-    internal abstract fun favoriteFragment(): FavoriteFragment
+    internal abstract fun favoriteFragment(): FavoriteListFragment
 
     @ExperimentalPagingApi
     @Binds

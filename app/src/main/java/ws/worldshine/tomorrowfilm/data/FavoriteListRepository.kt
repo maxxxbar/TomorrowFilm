@@ -9,7 +9,7 @@ import ws.worldshine.tomorrowfilm.datasource.FavoriteDataSource
 import ws.worldshine.tomorrowfilm.model.FavoriteMovies
 import javax.inject.Inject
 
-class FavoriteRepository
+class FavoriteListRepository
 @Inject constructor(
         private val favoriteDataSource: FavoriteDataSource
 ) {

@@ -31,4 +31,20 @@
     <string name="first_fragment_button_sheet_title">Фильтры</string>
     <string name="iv_poster_the_film">Постер фильма</string>
     <string name="iv_favorite">Добавить в избранное</string>
+
+
+
+    <!--FCM-->
+    <string name="notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="notification_channel_name" translatable="false">TomorrowFilm</string>
+    <string name="fcm_message">FCM Message</string>
+    <!--FCM-->
+
+    <!--Detail Fragment START-->
+    <string name="df_snackBar_title_delete_completed">Удалено</string>
+    <string name="df_snackBar_action_title_delete_cancel">Отменить</string>
+    <string name="df_tabs_title_description">Описание</string>
+    <string name="df_tabs_title_trailers">Трейлеры</string>
+    <!--Detail Fragment END-->
+
 </resources>

@@ -13,7 +13,6 @@ import retrofit2.HttpException
 import ws.worldshine.tomorrowfilm.BuildConfig
 import ws.worldshine.tomorrowfilm.datasource.sorting.SortingDataSourceImpl
 import ws.worldshine.tomorrowfilm.db.MovieDatabaseNew
-import ws.worldshine.tomorrowfilm.discover.Sorting
 import ws.worldshine.tomorrowfilm.model.DiscoverMovieResultsItem
 import ws.worldshine.tomorrowfilm.model.RemoteKeys
 import ws.worldshine.tomorrowfilm.network.Rest
@@ -32,7 +31,6 @@ class MovieRemoteMediator @Inject constructor(
 
     companion object {
         private const val voteCountDefValue = 100
-        private val sortByDefVAlue = Sorting.POPULARITY.sortBy
         private const val START_PAGE = 1
         const val API_KEY_QUERY = "api_key"
         const val APP_ID_VALUE = BuildConfig.API_KEY_TMDB

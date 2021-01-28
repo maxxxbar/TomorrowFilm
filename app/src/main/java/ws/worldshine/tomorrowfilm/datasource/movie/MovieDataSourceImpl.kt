@@ -1,5 +1,6 @@
 package ws.worldshine.tomorrowfilm.datasource.movie
 
+import android.util.Log
 import androidx.room.withTransaction
 import ws.worldshine.tomorrowfilm.db.MovieDatabaseNew
 import ws.worldshine.tomorrowfilm.model.DiscoverMovieItem
@@ -24,7 +25,15 @@ class MovieDataSourceImpl @Inject constructor(
 
     override suspend fun insertFavoriteMovie(discoverMovieItem: DiscoverMovieItem) {
         database.withTransaction {
+            Log.d("TAG", "insertFavoriteMovie: $discoverMovieItem")
             database.movieDao().insertFavoriteMovie(discoverMovieItem.toFavoriteMovies())
+        }
+    }
+
+    override suspend fun deleteFavoriteMovie(favoriteMovies: DiscoverMovieItem) {
+        Log.d("TAG", "deleteFavoriteMovie: ")
+        database.withTransaction {
+            database.movieDao().deleteFavoriteMovie(favoriteMovies.id)
         }
     }
 }

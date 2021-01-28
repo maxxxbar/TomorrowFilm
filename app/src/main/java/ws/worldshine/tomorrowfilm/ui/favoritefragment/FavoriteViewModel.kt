@@ -6,13 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import ws.worldshine.tomorrowfilm.data.FavoriteRepository
+import ws.worldshine.tomorrowfilm.data.FavoriteListRepository
 import ws.worldshine.tomorrowfilm.model.FavoriteMovies
 import ws.worldshine.tomorrowfilm.ui.detailfragment.DetailFragment
 import javax.inject.Inject
 
 class FavoriteViewModel @Inject constructor(
-        private val favoriteRepository: FavoriteRepository
+        private val favoriteRepository: FavoriteListRepository
 ) : ViewModel() {
 
 

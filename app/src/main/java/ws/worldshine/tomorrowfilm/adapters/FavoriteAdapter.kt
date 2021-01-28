@@ -29,7 +29,7 @@ class FavoriteAdapter : PagingDataAdapter<FavoriteMovies, FavoriteAdapterViewHol
     override fun onBindViewHolder(holder: FavoriteAdapterViewHolder, position: Int) {
         val favoriteMovie = getItem(position)
         if (favoriteMovie != null) {
-            favoriteMovie.posterPath.let {
+            favoriteMovie.posterPath?.let {
                 holder.bind(it)
             }
             holder.itemView.setOnClickListener {

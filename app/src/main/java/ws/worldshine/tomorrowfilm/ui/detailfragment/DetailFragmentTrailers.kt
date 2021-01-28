@@ -48,7 +48,9 @@ class DetailFragmentTrailers : DaggerFragment() {
         arguments?.let { bundle ->
             bundle.getInt(BUNDLE_MOVIE_KEY_AS_INT).let { movieId ->
                 lifecycleScope.launch {
-                    setAdapter(viewModel.getTrailers(movieId))
+                    viewModel.getTrailers(movieId)?.let { result ->
+                        setAdapter(result)
+                    }
                 }
             }
         }

@@ -12,7 +12,7 @@ import ws.worldshine.tomorrowfilm.model.DiscoverMovie
 
 interface Rest {
 
-    companion object {
+    private companion object {
         private const val API_KEY_QUERY = "api_key"
         private const val LANGUAGE_QUERY = "language"
         private const val SORT_BY_QUERY = "sort_by"
@@ -49,9 +49,8 @@ interface Rest {
     @GET("/3/movie/{movie_id}/videos")
     suspend fun getTrailers(
             @Path(MOVIE_ID_QUERY) movieId: Int,
-            @Query(API_KEY_QUERY) apikey: String = API_KEY_VALUE,
             @Query(LANGUAGE_QUERY) language: String = LANGUAGE_VALUE
-    ): Trailer
+    ): Response<Trailer>
 
     @GET("/3/discover/movie")
     fun getReviews(

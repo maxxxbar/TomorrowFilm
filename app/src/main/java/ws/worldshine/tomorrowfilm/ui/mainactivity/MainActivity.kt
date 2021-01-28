@@ -1,8 +1,6 @@
 package ws.worldshine.tomorrowfilm.ui.mainactivity
 
 import android.os.Bundle
-import android.view.ViewGroup
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
@@ -31,17 +29,8 @@ class MainActivity : AppCompatActivity(), ConnectivityProvider.ConnectivityState
             setupBottomNavigationBar()
         }
         viewModel = ViewModelProvider.AndroidViewModelFactory(application).create(MainActivityViewModel::class.java)
-        setMyInsets()
-/*        val crashButton = Button(this)
-        crashButton.applySystemWindowInsetsToMargin(top = true)
-        crashButton.text = "Crash!"
-        crashButton.setOnClickListener {
-            throw RuntimeException("Test Crash") // Force a crash
-        }
-
-        addContentView(crashButton, ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT))*/
+        viewModel.createFCM()
+        initialSetupInsets()
     }
 
 
@@ -80,7 +69,7 @@ class MainActivity : AppCompatActivity(), ConnectivityProvider.ConnectivityState
         return currentNavController?.value?.navigateUp() ?: false
     }
 
-    private fun setMyInsets() {
+    private fun initialSetupInsets() {
         val view = binding.root.rootView
         view.setEdgeToEdgeSystemUiFlags(true)
         binding.bottomNav.applySystemWindowInsetsToMargin(bottom = true)
@@ -96,11 +85,12 @@ class MainActivity : AppCompatActivity(), ConnectivityProvider.ConnectivityState
         provider.removeListener(this)
     }
 
+
     override fun onStateChange(state: ConnectivityProvider.NetworkState) {
         val hasInternet = state.hasInternet()
         if (!hasInternet) {
-            Snackbar.make(binding.root.rootView, "Нет интернета", Snackbar.LENGTH_LONG)
-                    .show()
+            val q = Snackbar.make(findViewById(android.R.id.content), "Нет интернета", Snackbar.LENGTH_LONG)
+            q.show()
         }
     }
 

@@ -21,7 +21,7 @@ import ws.worldshine.tomorrowfilm.databinding.FavoriteFragmentBinding
 import ws.worldshine.tomorrowfilm.utils.findNavController
 import javax.inject.Inject
 
-class FavoriteFragment : DaggerFragment() {
+class FavoriteListFragment : DaggerFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private val viewModel by viewModels<FavoriteViewModel> { viewModelFactory }

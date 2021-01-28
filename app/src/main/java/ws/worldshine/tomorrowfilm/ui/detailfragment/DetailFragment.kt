@@ -1,5 +1,7 @@
 package ws.worldshine.tomorrowfilm.ui.detailfragment
 
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,29 +9,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.room.withTransaction
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.android.support.DaggerFragment
 import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import ws.worldshine.tomorrowfilm.R
 import ws.worldshine.tomorrowfilm.adapters.DetailFragmentTabsAdapter
 import ws.worldshine.tomorrowfilm.databinding.FragmentDetailBinding
-import ws.worldshine.tomorrowfilm.db.MovieDatabaseNew
 import ws.worldshine.tomorrowfilm.model.DiscoverMovieItem
 import ws.worldshine.tomorrowfilm.model.DiscoverMovieResultsItem
 import ws.worldshine.tomorrowfilm.model.FavoriteMovies
-import ws.worldshine.tomorrowfilm.utils.JsonConverter
+import ws.worldshine.tomorrowfilm.utils.createSnackBar
 import ws.worldshine.tomorrowfilm.utils.loadImageWithGlide
 import javax.inject.Inject
 
@@ -44,7 +44,6 @@ class DetailFragment : DaggerFragment() {
     private val binding get() = _binding!!
     private val TAG = javaClass.simpleName
     private var job: Job? = null
-    private var canceled = false
     private var cacheItem: DiscoverMovieItem? = null
     private lateinit var tabsAdapter: DetailFragmentTabsAdapter
 
@@ -52,56 +51,66 @@ class DetailFragment : DaggerFragment() {
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
         tabsAdapter = DetailFragmentTabsAdapter(this)
         binding.appbar.applySystemWindowInsetsToPadding(top = true)
-        setupToolbar()
-        getMovieIdFromFirstFragment()
+        getMovieFromArguments()
+        handleFavoriteMovieIcon()
+        binding.toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.add_to_favorite -> {
+                    addMovieToFavoriteTable()
+                    true
+                }
+                else -> false
+            }
+        }
+        //initialSetupToolbar()
+        handleCollapsedToolbarTitle()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initialSetupTabLayoutMediator()
+    }
+
+    private fun initialSetupTabLayoutMediator() {
         val tabLayout = binding.detailFragmentTabLayout
         val viewPager = binding.detailFragmentViewPager
         viewPager.adapter = tabsAdapter
         viewPager.offscreenPageLimit = 2
-        setTabLayoutMediator(tabLayout, viewPager)
-        binding.ivFavorite.setOnClickListener {
-            addMovieToFavoriteTable()
-
-        }
-    }
-
-    private fun setTabLayoutMediator(tabLayout: TabLayout, viewPager: ViewPager2) {
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             when (position) {
-                0 -> tab.text = "Описание"
-                1 -> tab.text = "Трейлеры"
+                0 -> tab.text = resources.getString(R.string.df_tabs_title_description)
+                1 -> tab.text = resources.getString(R.string.df_tabs_title_trailers)
             }
         }.attach()
     }
 
-    //TODO setFragmentResult
-    private fun getMovieIdFromFirstFragment() {
+    private fun getMovieFromArguments() {
         arguments?.let { bundle ->
-            val movie = bundle.getString(BUNDLE_MOVIE_AS_JSON)
-            movie?.let {
-                cacheItem = JsonConverter.converter<DiscoverMovieResultsItem>(it)
-                cacheItem?.let { discoverMovieItem ->
-                    binding.ivPoster.loadImageWithGlide(discoverMovieItem.posterPath)
-                    tabsAdapter.movieId = discoverMovieItem.id
-                    setFavoriteIconAfterGetMovieData(discoverMovieItem.id)
-                }
+            cacheItem = bundle.getParcelable(BUNDLE_MOVIE_AS_JSON)
+            cacheItem?.let { discoverMovieItem ->
+                viewModel.checkInFavorite(discoverMovieItem.id)
+                tabsAdapter.movieId = discoverMovieItem.id
+                discoverMovieItem.posterPath?.let { binding.ivPoster.loadImageWithGlide(it) }
             }
         }
     }
 
+    @SuppressLint("RestrictedApi")
+    private fun handleFavoriteMovieIcon() {
+        lifecycleScope.launch {
+            viewModel.isFavoriteMovies.collectLatest {
+                switchFavoriteIcon()
+            }
+        }
+    }
 
-    private fun setFavoriteIconAfterGetMovieData(movieId: Int) {
-        job?.cancel()
-        job = lifecycleScope.launch(Dispatchers.Main) {
-            if (viewModel.isFavoriteMovie(movieId)) {
-                binding.ivFavorite.setImageResource(R.drawable.favourite_remove)
+    private suspend fun switchFavoriteIcon() {
+        viewModel.isFavoriteMovies.collectLatest {
+            if (it) {
+                binding.toolbar.menu[0].icon.setTint(Color.YELLOW)
             } else {
-                binding.ivFavorite.setImageResource(R.drawable.favourite_add_to)
+                binding.toolbar.menu[0].icon.setTint(Color.WHITE)
             }
         }
     }
@@ -109,33 +118,49 @@ class DetailFragment : DaggerFragment() {
     private fun addMovieToFavoriteTable() {
         job?.cancel()
         job = lifecycleScope.launch {
-            val db = MovieDatabaseNew.getInstance(requireContext())
-            cacheItem?.let {
-                if (!viewModel.isFavoriteMovie(it.id)) {
-                    binding.ivFavorite.setImageResource(R.drawable.favourite_remove)
-                    Toast.makeText(requireContext(), "Add to favorite", Toast.LENGTH_SHORT).show()
-                    viewModel.insertFavoriteMovie(it)
-                } else {
-                    binding.ivFavorite.setImageResource(R.drawable.favourite_add_to)
+            cacheItem?.let { discoverItem ->
+                if (viewModel.isFavoriteMovies.value) {
                     Toast.makeText(requireContext(), "Delete from favorite", Toast.LENGTH_SHORT).show()
-                    showSnackBar()
-                    db.withTransaction {
-                        db.movieDao().deleteFavoriteMovieById(it.id)
-                    }
+                    deleteFavoriteMovieFromDatabase(discoverItem)
+                } else {
+                    Toast.makeText(requireContext(), "Add to favorite", Toast.LENGTH_SHORT).show()
+                    viewModel.insertFavoriteMovie(discoverItem)
                 }
+
             }
         }
     }
 
     private fun showSnackBar() {
-        Snackbar.make(binding.root.rootView, "Удалено", Snackbar.LENGTH_LONG)
-                .setAction("Отменить") {
-                    Toast.makeText(requireContext(), "Отменено", Toast.LENGTH_SHORT).show()
-                }
-                .show()
+        val snackBarAction: (View) -> Unit = { viewModel.canceled.value = true }
+        val snackBar = createSnackBar(binding.root,
+                resources.getString(R.string.df_snackBar_title_delete_completed),
+                Snackbar.LENGTH_LONG,
+                resources.getString(R.string.df_snackBar_action_title_delete_cancel),
+                snackBarAction)
+        snackBar.show()
     }
 
-    private fun setupToolbar() {
+    private fun deleteFavoriteMovieFromDatabase(favoriteMovies: DiscoverMovieItem) {
+        Log.d(TAG, "deleteFavoriteMovieFromDatabase: $favoriteMovies")
+        showSnackBar()
+        job?.cancel()
+        var deleted = false
+        job = lifecycleScope.launch(Dispatchers.IO) {
+            viewModel.canceled.collectLatest {
+                if (viewModel.canceled.value) {
+                    viewModel.insertFavoriteMovie(favoriteMovies)
+                    viewModel.canceled.value = false
+                }
+                if (!it && !deleted) {
+                    viewModel.deleteFavoriteMovie(favoriteMovies)
+                    deleted = true
+                }
+            }
+        }
+    }
+
+    private fun initialSetupToolbar() {
         val toolbar = binding.toolbar
         toolbar.title = getString(R.string.empty_string)
         val activity = activity as AppCompatActivity
@@ -172,25 +197,21 @@ class DetailFragment : DaggerFragment() {
         _binding = null
     }
 
-
     companion object {
-
-        private const val CANCELED_DURATION_LONG = 2750 //SnackbarManager.LONG_DURATION_MS
         private const val BUNDLE_MOVIE_AS_JSON = "MOVIE_JSON_KEY"
         const val BUNDLE_MOVIE_KEY_AS_INT = "MOVIE_INT_KEY"
 
         fun setMovieBundle(movie: DiscoverMovieResultsItem): Bundle {
             val bundle = Bundle()
-            bundle.putString(BUNDLE_MOVIE_AS_JSON, JsonConverter.converter(movie))
+            bundle.putParcelable(BUNDLE_MOVIE_AS_JSON, movie)
             return bundle
         }
 
         fun setMovieBundle(movie: FavoriteMovies): Bundle {
             val bundle = Bundle()
-            bundle.putString(BUNDLE_MOVIE_AS_JSON, JsonConverter.converter(movie))
+            bundle.putParcelable(BUNDLE_MOVIE_AS_JSON, movie)
             return bundle
         }
     }
 
 }
-

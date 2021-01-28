@@ -52,7 +52,7 @@ class FiltersBottomSheetFragment : BottomSheetDialogFragment() {
 
     /**/
     private val TAG = javaClass.simpleName
-    private var sortBy = Sorting.POPULARITY.sortBy
+    private var sortBy = Sorting.POPULARITY.value
     private var currentSortBy: Sorting? = null
 
     override fun onAttach(context: Context) {
@@ -136,7 +136,7 @@ class FiltersBottomSheetFragment : BottomSheetDialogFragment() {
         * 1 - По голосам в среднем
         * */
         if (childCount < Sorting.values().size) {
-            sortBy = Sorting.values()[childCount].sortBy
+            sortBy = Sorting.values()[childCount].value
         }
     }
 

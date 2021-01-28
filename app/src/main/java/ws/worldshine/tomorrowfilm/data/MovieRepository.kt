@@ -1,8 +1,11 @@
 package ws.worldshine.tomorrowfilm.data
 
 import android.content.SharedPreferences
-import androidx.lifecycle.LiveData
-import androidx.paging.*
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
 import ws.worldshine.tomorrowfilm.datasource.MovieRemoteMediator
 import ws.worldshine.tomorrowfilm.datasource.movie.MovieDataSourceImpl
 import ws.worldshine.tomorrowfilm.datasource.trailer.TrailersDataSourceImpl
@@ -20,7 +23,7 @@ class MovieRepository @Inject constructor(
 ) {
 
     private val TAG = javaClass.simpleName
-    private val config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = true, initialLoadSize = 40)
+    private val config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = true, initialLoadSize = 20)
 
     @ExperimentalPagingApi
     private val remoteMediator = MovieRemoteMediator(database, rest, sp)
@@ -33,19 +36,19 @@ class MovieRepository @Inject constructor(
     }
 
     @ExperimentalPagingApi
-    fun resultAsLiveData(): LiveData<PagingData<DiscoverMovieResultsItem>> {
+    fun resultAsLiveData(): Flow<PagingData<DiscoverMovieResultsItem>> {
         return Pager(
                 config = config,
                 remoteMediator = remoteMediator,
                 pagingSourceFactory = pagingSourceFactory
-        ).liveData
+        ).flow
     }
 
     suspend fun isFavoriteMovie(movieId: Int): Boolean {
         return movieDataSource.isFavoriteMovie(movieId)
     }
 
-    suspend fun getTrailers(movieId: Int): Trailer {
+    suspend fun getTrailers(movieId: Int): Trailer? {
         return trailerDataSource.getTrailers(movieId)
     }
 
@@ -55,6 +58,10 @@ class MovieRepository @Inject constructor(
 
     suspend fun insertFavoriteMovie(discoverMovieItem: DiscoverMovieItem) {
         movieDataSource.insertFavoriteMovie(discoverMovieItem)
+    }
+
+    suspend fun deleteFavoriteMovie(favoriteMovies: DiscoverMovieItem) {
+        movieDataSource.deleteFavoriteMovie(favoriteMovies)
     }
 
 }

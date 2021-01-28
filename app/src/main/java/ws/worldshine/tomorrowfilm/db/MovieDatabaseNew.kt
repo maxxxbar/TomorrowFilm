@@ -10,7 +10,7 @@ import ws.worldshine.tomorrowfilm.model.RemoteKeys
 
 @Database(
         entities = [DiscoverMovieResultsItem::class, RemoteKeys::class, FavoriteMovies::class],
-        version = 6,
+        version = 21,
         exportSchema = false
 )
 abstract class MovieDatabaseNew : RoomDatabase() {

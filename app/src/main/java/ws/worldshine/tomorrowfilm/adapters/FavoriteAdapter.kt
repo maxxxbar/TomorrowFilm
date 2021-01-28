@@ -42,4 +42,5 @@ class FavoriteAdapter : PagingDataAdapter<FavoriteMovies, FavoriteAdapterViewHol
         return FavoriteAdapterViewHolder.create(parent)
     }
 
+
 }

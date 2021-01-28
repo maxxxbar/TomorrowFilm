@@ -2,6 +2,7 @@ package ws.worldshine.tomorrowfilm.datasource
 
 import android.util.Log
 import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import androidx.room.withTransaction
 import ws.worldshine.tomorrowfilm.db.MovieDatabaseNew
 import ws.worldshine.tomorrowfilm.model.FavoriteMovies
@@ -35,5 +36,9 @@ class FavoriteDataSource @Inject constructor(private val db: MovieDatabaseNew) :
         } catch (exception: Exception) {
             LoadResult.Error(exception)
         }
+    }
+
+    override fun getRefreshKey(state: PagingState<Int, FavoriteMovies>): Int? {
+        return null
     }
 }

@@ -1,13 +1,8 @@
 package ws.worldshine.tomorrowfilm.ui.detailfragment
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import androidx.fragment.app.viewModels
@@ -15,18 +10,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.android.support.DaggerFragment
 import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import ws.worldshine.tomorrowfilm.R
 import ws.worldshine.tomorrowfilm.adapters.DetailFragmentTabsAdapter
 import ws.worldshine.tomorrowfilm.databinding.FragmentDetailBinding
-import ws.worldshine.tomorrowfilm.model.DiscoverMovieItem
 import ws.worldshine.tomorrowfilm.model.DiscoverMovieResultsItem
 import ws.worldshine.tomorrowfilm.model.FavoriteMovies
 import ws.worldshine.tomorrowfilm.utils.createSnackBar
@@ -39,37 +32,33 @@ class DetailFragment : DaggerFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private val viewModel by viewModels<DetailFragmentViewModel> { viewModelFactory }
+    /*ViewModel*/
 
+    /*Binding*/
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
+    /*Binding*/
+
     private val TAG = javaClass.simpleName
-    private var job: Job? = null
-    private var cacheItem: DiscoverMovieItem? = null
     private lateinit var tabsAdapter: DetailFragmentTabsAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
         tabsAdapter = DetailFragmentTabsAdapter(this)
-        binding.appbar.applySystemWindowInsetsToPadding(top = true)
+        binding.appbar.applySystemWindowInsetsToPadding(left = true, top = true, right = true)
         getMovieFromArguments()
-        handleFavoriteMovieIcon()
-        binding.toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.add_to_favorite -> {
-                    addMovieToFavoriteTable()
-                    true
-                }
-                else -> false
-            }
-        }
-        //initialSetupToolbar()
-        handleCollapsedToolbarTitle()
+        initialSetupToolbar()
+        setHasOptionsMenu(true)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialSetupTabLayoutMediator()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.detail_menu, menu)
     }
 
     private fun initialSetupTabLayoutMediator() {
@@ -79,7 +68,7 @@ class DetailFragment : DaggerFragment() {
         viewPager.offscreenPageLimit = 2
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             when (position) {
-                0 -> tab.text = resources.getString(R.string.df_tabs_title_description)
+                0 -> tab.text = getString(R.string.df_tabs_title_description)
                 1 -> tab.text = resources.getString(R.string.df_tabs_title_trailers)
             }
         }.attach()
@@ -87,8 +76,8 @@ class DetailFragment : DaggerFragment() {
 
     private fun getMovieFromArguments() {
         arguments?.let { bundle ->
-            cacheItem = bundle.getParcelable(BUNDLE_MOVIE_AS_JSON)
-            cacheItem?.let { discoverMovieItem ->
+            viewModel.cacheItem = bundle.getParcelable(BUNDLE_MOVIE_AS_JSON)
+            viewModel.cacheItem?.let { discoverMovieItem ->
                 viewModel.checkInFavorite(discoverMovieItem.id)
                 tabsAdapter.movieId = discoverMovieItem.id
                 discoverMovieItem.posterPath?.let { binding.ivPoster.loadImageWithGlide(it) }
@@ -96,37 +85,23 @@ class DetailFragment : DaggerFragment() {
         }
     }
 
-    @SuppressLint("RestrictedApi")
     private fun handleFavoriteMovieIcon() {
         lifecycleScope.launch {
             viewModel.isFavoriteMovies.collectLatest {
-                switchFavoriteIcon()
+                runCatching {
+                    switchFavoriteIcon()
+                }
             }
         }
     }
 
     private suspend fun switchFavoriteIcon() {
+        val menuItem: MenuItem = binding.toolbar.menu[0]
         viewModel.isFavoriteMovies.collectLatest {
             if (it) {
-                binding.toolbar.menu[0].icon.setTint(Color.YELLOW)
+                menuItem.icon.setTint(Color.YELLOW)
             } else {
-                binding.toolbar.menu[0].icon.setTint(Color.WHITE)
-            }
-        }
-    }
-
-    private fun addMovieToFavoriteTable() {
-        job?.cancel()
-        job = lifecycleScope.launch {
-            cacheItem?.let { discoverItem ->
-                if (viewModel.isFavoriteMovies.value) {
-                    Toast.makeText(requireContext(), "Delete from favorite", Toast.LENGTH_SHORT).show()
-                    deleteFavoriteMovieFromDatabase(discoverItem)
-                } else {
-                    Toast.makeText(requireContext(), "Add to favorite", Toast.LENGTH_SHORT).show()
-                    viewModel.insertFavoriteMovie(discoverItem)
-                }
-
+                menuItem.icon?.setTint(Color.WHITE)
             }
         }
     }
@@ -141,33 +116,29 @@ class DetailFragment : DaggerFragment() {
         snackBar.show()
     }
 
-    private fun deleteFavoriteMovieFromDatabase(favoriteMovies: DiscoverMovieItem) {
-        Log.d(TAG, "deleteFavoriteMovieFromDatabase: $favoriteMovies")
-        showSnackBar()
-        job?.cancel()
-        var deleted = false
-        job = lifecycleScope.launch(Dispatchers.IO) {
-            viewModel.canceled.collectLatest {
-                if (viewModel.canceled.value) {
-                    viewModel.insertFavoriteMovie(favoriteMovies)
-                    viewModel.canceled.value = false
-                }
-                if (!it && !deleted) {
-                    viewModel.deleteFavoriteMovie(favoriteMovies)
-                    deleted = true
-                }
-            }
+    private fun initialSetupToolbar() {
+        val toolbar = binding.toolbar
+        val activity = activity as AppCompatActivity
+        toolbar.title = getString(R.string.empty_string)
+        activity.setSupportActionBar(toolbar)
+        toolbar.showOverflowMenu()
+        activity.supportActionBar?.setDisplayHomeAsUpEnabled(true).let {
+            handleCollapsedToolbarTitle()
+            handleFavoriteMovieIcon()
+            toolbarMenuHandler(toolbar)
         }
     }
 
-    private fun initialSetupToolbar() {
-        val toolbar = binding.toolbar
-        toolbar.title = getString(R.string.empty_string)
-        val activity = activity as AppCompatActivity
-        activity.setSupportActionBar(toolbar)
-        toolbar.showOverflowMenu()
-        activity.supportActionBar?.setDisplayHomeAsUpEnabled(true).let { handleCollapsedToolbarTitle() }
-
+    private fun toolbarMenuHandler(toolbar: MaterialToolbar) {
+        toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.add_to_favorite -> {
+                    viewModel.addMovieToFavoriteTable(showSnackBar = { showSnackBar() })
+                    true
+                }
+                else -> super.onOptionsItemSelected(it)
+            }
+        }
     }
 
     private fun handleCollapsedToolbarTitle() {
@@ -180,7 +151,7 @@ class DetailFragment : DaggerFragment() {
                 }
                 // verify if the toolbar is completely collapsed and set the movie name as the title
                 if (scrollRange + verticalOffset == 0) {
-                    binding.collapsingToolbar.title = cacheItem?.title
+                    binding.collapsingToolbar.title = viewModel.cacheItem?.title
                             ?: resources.getString(R.string.app_name)
                     isShow = true
                 } else if (isShow) {

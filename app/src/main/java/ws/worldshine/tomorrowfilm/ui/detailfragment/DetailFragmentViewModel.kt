@@ -3,7 +3,10 @@ package ws.worldshine.tomorrowfilm.ui.detailfragment
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import ws.worldshine.tomorrowfilm.data.MovieRepository
 import ws.worldshine.tomorrowfilm.db.MovieDatabaseNew
@@ -21,7 +24,8 @@ class DetailFragmentViewModel @Inject constructor(
     val isFavoriteMovies = MutableStateFlow(false)
     private val repository = MovieRepository(database, rest, sp)
     private val TAG = javaClass.simpleName
-
+    private var job: Job? = null
+    var cacheItem: DiscoverMovieItem? = null
 
     fun checkInFavorite(movieId: Int) {
         viewModelScope.launch {
@@ -46,9 +50,40 @@ class DetailFragmentViewModel @Inject constructor(
         isFavoriteMovies.value = true
     }
 
-    suspend fun deleteFavoriteMovie(favoriteMovies: DiscoverMovieItem) {
+    private suspend fun deleteFavoriteMovie(favoriteMovies: DiscoverMovieItem) {
         repository.deleteFavoriteMovie(favoriteMovies)
         isFavoriteMovies.value = false
+    }
+
+    fun deleteFavoriteMovieFromDatabase(favoriteMovies: DiscoverMovieItem, showSnackBar: () -> Unit) {
+        var deleted = false
+        showSnackBar()
+        job?.cancel()
+        job = viewModelScope.launch(Dispatchers.IO) {
+            canceled.collectLatest {
+                if (canceled.value) {
+                    insertFavoriteMovie(favoriteMovies)
+                    canceled.value = false
+                }
+                if (!it && !deleted) {
+                    deleteFavoriteMovie(favoriteMovies)
+                    deleted = true
+                }
+            }
+        }
+    }
+
+    fun addMovieToFavoriteTable(showSnackBar: () -> Unit) {
+        job?.cancel()
+        job = viewModelScope.launch {
+            cacheItem?.let { discoverItem ->
+                if (isFavoriteMovies.value) {
+                    deleteFavoriteMovieFromDatabase(discoverItem) { showSnackBar() }
+                } else {
+                    insertFavoriteMovie(discoverItem)
+                }
+            }
+        }
     }
 
 }
